@@ -1,0 +1,585 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="C++," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="传统 interface想要实现 interface，在绝大多数 OOP 语言中，会被认为只有一种。如 java 和 C# 的 interface specifier，C++ 的 pure virtual function。通常接口类中强制的不能拥有实现，继承接口的子类至少享有两个名字，一个是自身定义的命名，一个是接口名。通常子类转父类（up-cast）在编译期（compile-time）决定，父">
+<meta property="og:type" content="article">
+<meta property="og:title" content="C++ 的三种实现接口的方式">
+<meta property="og:url" content="http://yoursite.com/2016/03/11/C-的三种实现接口的方式/index.html">
+<meta property="og:site_name" content="I++ 俱乐部官方博客">
+<meta property="og:description" content="传统 interface想要实现 interface，在绝大多数 OOP 语言中，会被认为只有一种。如 java 和 C# 的 interface specifier，C++ 的 pure virtual function。通常接口类中强制的不能拥有实现，继承接口的子类至少享有两个名字，一个是自身定义的命名，一个是接口名。通常子类转父类（up-cast）在编译期（compile-time）决定，父">
+<meta property="og:updated_time" content="2016-07-02T17:55:22.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="C++ 的三种实现接口的方式">
+<meta name="twitter:description" content="传统 interface想要实现 interface，在绝大多数 OOP 语言中，会被认为只有一种。如 java 和 C# 的 interface specifier，C++ 的 pure virtual function。通常接口类中强制的不能拥有实现，继承接口的子类至少享有两个名字，一个是自身定义的命名，一个是接口名。通常子类转父类（up-cast）在编译期（compile-time）决定，父">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2016/03/11/C-的三种实现接口的方式/"/>
+
+  <title> C++ 的三种实现接口的方式 | I++ 俱乐部官方博客 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">I++ 俱乐部官方博客</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">Here We Code</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                C++ 的三种实现接口的方式
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-03-11T21:45:12+08:00" content="2016-03-11">
+              2016-03-11
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="传统-interface"><a href="#传统-interface" class="headerlink" title="传统 interface"></a>传统 interface</h2><p>想要实现 interface，在绝大多数 OOP 语言中，会被认为只有一种。如 java 和 C# 的 <code>interface</code> specifier，C++ 的 pure virtual function。通常接口类中强制的不能拥有实现，继承接口的子类至少享有<strong>两个名字</strong>，一个是自身定义的命名，一个是接口名。通常子类转父类（up-cast）在编译期（compile-time）决定，父类转子类（down-cast）在运行时（run-time）决定。</p>
+<p>我们太过于习惯这种接口的方式，而这种接口方式也确实能十分灵活地应用在编程中，以至于我们常常不自觉的在设计中增加不必要的层数。如果你也喜欢 “flat is better than nested” 的理念的话，我接下来将会介绍两种 alternatives，用来代替传统的接口实现。</p>
+<h2 id="Functor"><a href="#Functor" class="headerlink" title="Functor"></a>Functor</h2><p>使用 C 语言同样也可以进行 OOP，思路就是 function pointer。通过注册回调函数，用来替代传统的通过继承来实现接口。 C++11 所提供的<code>std::function</code>，<code>std::bind</code> 和 lambda function 为此提供了极大的便利。</p>
+<h4 id="Example"><a href="#Example" class="headerlink" title="Example"></a>Example</h4><figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">class</span> Comparator &#123;</div><div class="line"> <span class="keyword">public</span>:</div><div class="line"></div><div class="line">  <span class="keyword">typedef</span> <span class="built_in">std</span>::function&lt;<span class="keyword">int</span>(<span class="keyword">const</span> Slice &amp;, <span class="keyword">const</span> Slice &amp;)&gt; CompareFunc;</div><div class="line"></div><div class="line">  Comparator(<span class="keyword">const</span> CompareFunc &amp;compare_fn) :</div><div class="line">      compare_(compare_fn)</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  <span class="comment">// Three-way comparison.</span></div><div class="line">  <span class="function"><span class="keyword">virtual</span> <span class="keyword">int</span> <span class="title">Compare</span><span class="params">(<span class="keyword">const</span> <span class="built_in">std</span>::<span class="built_in">string</span> &amp;lhs,</span></span></div><div class="line">                      <span class="keyword">const</span> <span class="built_in">std</span>::<span class="built_in">string</span> &amp;rhs) <span class="keyword">const</span> &#123;</div><div class="line">    <span class="keyword">return</span> compare_(lhs, rhs);</div><div class="line">  &#125;</div><div class="line"></div><div class="line"> <span class="keyword">private</span>:</div><div class="line">  <span class="keyword">const</span> CompareFunc compare_;</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<p>每种 <code>Comparator</code> 的示例都可能实现某一种策略(Strategy)。而如果为每一个策略都定义一个子类，会将问题复杂化(flat is better than nested)。</p>
+<h4 id="限制"><a href="#限制" class="headerlink" title="限制"></a>限制</h4><ul>
+<li>所有实例只能拥有父类的名字，不拥有自己的名字。当然设计上也不应该使实例拥有自己的名字。</li>
+</ul>
+<h4 id="适用"><a href="#适用" class="headerlink" title="适用"></a>适用</h4><ul>
+<li><a href="https://en.wikipedia.org/wiki/Strategy_pattern" target="_blank" rel="external">Strategy Pattern</a></li>
+<li>可以通过<a href="https://en.wikipedia.org/wiki/Decorator_pattern" target="_blank" rel="external">Decorator Pattern</a>来进行向下扩展。</li>
+</ul>
+<h2 id="CRTP"><a href="#CRTP" class="headerlink" title="CRTP"></a>CRTP</h2><p>所谓接口其实是一种协议，换言之就是，继承接口的子类必须<strong>全部</strong>实现某些功能（函数），由于子类必须不可妥协地全部实现，因此从设计的角度讲，接口的粒度也应该越细越好。</p>
+<p>为了某一个类去实现多个接口，可能不是一种干净的方法，因为这些接口将来可能不一定会被使用。C++ 的设计者为我们提供了无比强大的 template，用来更灵活地设计模块间关系。</p>
+<p>CRTP，即 <a href="https://en.wikipedia.org/wiki/Curiously_recurring_template_pattern" target="_blank" rel="external">Curiously recurring template pattern</a>。简单说就是将类自身作为自身模板的参数。 <a href="http://www.boost.org/doc/libs/1_54_0/libs/iterator/doc/iterator_facade.html" target="_blank" rel="external">boost::iterator_facade</a> 就利用了这种方法设计了一个 iterator 的抽象类，我们可以通过继承 <code>boost::iterator_facade</code> 轻易地实现一个 iterator。（吐槽一下，Boost.Iterator 这个库实在是太臃肿了，实际工程上完全可以写一个简易版本）</p>
+<p>我们通过实现一个 <code>IteratorFacade</code> 来介绍这种方法，然而这种方法的实例较长，所以我们分开来讲。</p>
+<h4 id="IteratorFacade"><a href="#IteratorFacade" class="headerlink" title="IteratorFacade"></a>IteratorFacade</h4><figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">template</span>&lt;<span class="keyword">class</span> Derived, <span class="keyword">class</span> T&gt;</div><div class="line"><span class="keyword">class</span> IteratorFacade &#123;</div></pre></td></tr></table></figure>
+<p>我们自己定义的 <code>Iterator</code> 只要继承 <code>IteratorFacade</code> 就能拥有一堆跟标准库容器一样的细枝末节的功能了（这些功能确实多而且杂）。我们首先假设 <code>Iterator</code>需要是一个 <a href="http://en.cppreference.com/w/cpp/concept/ForwardIterator" target="_blank" rel="external">forward iterator</a>。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">class Iterator:</div><div class="line">    public IteratorFacade&lt;</div><div class="line">        Iterator,</div><div class="line">        int,</div><div class="line">        std::forward_iterator_tag&gt; &#123;</div></pre></td></tr></table></figure></p>
+<p>其中 <code>Derived</code> 参数就是 <code>Iterator</code> 自己了，而 <code>int</code> 对应的 <code>T</code> 参数表示这个 iterator 所指的值。</p>
+<p>现在我们来仔细看看 <code>IteratorFacade</code> 的定义：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line">template&lt;</div><div class="line">    class Derived,</div><div class="line">    class T,</div><div class="line">    class Category&gt;</div><div class="line">class IteratorFacade &#123;</div><div class="line"> public:</div><div class="line">  typedef T&amp; Reference;</div><div class="line">  Derived Next() &#123;</div><div class="line">    Derived tmp(derived());</div><div class="line">    IteratorCoreAccess::increment(derived());</div><div class="line">    return tmp;</div><div class="line">  &#125;</div><div class="line">  template&lt;class Facade&gt;</div><div class="line">  static typename Facade::reference dereference(Facade const &amp;f) &#123;</div><div class="line">    return f.dereference();</div><div class="line">  &#125;</div><div class="line">  Reference Value() const &#123;</div><div class="line">    return IteratorCoreAccess::dereference(derived());</div><div class="line">  &#125;</div><div class="line"> protected:</div><div class="line">  Derived &amp;derived() &#123;</div><div class="line">    return *static_cast&lt;Derived *&gt;(this);</div><div class="line">  &#125;</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<p>这里为了方便，我们使用 <code>Next</code> 而非 <code>operator++</code>（因为 ++ 操作符还分 postfix 和 prefix…），希望阅读到此处的读者不要奇怪。</p>
+<h4 id="实现接口"><a href="#实现接口" class="headerlink" title="实现接口"></a>实现接口</h4><p>我们要在 <code>IteratorFacade</code> 中实现的就是，用户只需实现 <code>increment</code>，<code>dereference</code> 函数，并且将 <code>IteratorCoreAccess</code> 设为友元类，即可实现一个 forward iterator（<code>Next()</code>函数可用）。如果我们想要实现一个 <a href="http://en.cppreference.com/w/cpp/concept/BidirectionalIterator" target="_blank" rel="external">bidirectional iterator</a>，我们可以实现 <code>decrement</code>，这样 <code>Prev()</code>函数即可用。</p>
+<p>这里的秘密在于 <code>IteratorCoreAccess</code>，由于其中的成员函数用 static 声明，例如只有在 <code>decrement</code> 被调用时，编译器才会去检查 <code>Facade</code> 类型是否具有 member function <code>decrement</code>。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">class IteratorCoreAccess &#123;</div><div class="line">  template&lt;class D, class T, class C&gt; friend</div><div class="line">  class IteratorFacade;</div><div class="line"> private:</div><div class="line">  template&lt;class Facade&gt;</div><div class="line">  static void increment(Facade &amp;f) &#123;</div><div class="line">    f.increment();</div><div class="line">  &#125;</div><div class="line">  template&lt;class Facade&gt;</div><div class="line">  static void decrement(Facade &amp;f) &#123;</div><div class="line">    f.decrement();</div><div class="line">  &#125;</div><div class="line">  template&lt;class Facade&gt;</div><div class="line">  static typename Facade::reference dereference(Facade const &amp;f) &#123;</div><div class="line">    return f.dereference();</div><div class="line">  &#125;</div><div class="line">  // Objects of this class are useless.</div><div class="line">  IteratorCoreAccess() = delete;</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<p>相对于传统的 interface，这种方法（或者说设计模式）是强耦合的。它提供给用户有限的几种方案，用户根据自身需求（比如需要 forward iterator 还是 bidirectional iterator），实现相应的函数。</p>
+<h4 id="限制-1"><a href="#限制-1" class="headerlink" title="限制"></a>限制</h4><ul>
+<li>这种方法几乎没有多态可言，因为父类的名字不可被使用（由于模板参数的不同，<code>IteratorFacade</code> 的两个子类不一定享有同一个父类）。这导致一定程度上扩展性降低，适用于需求极其稳定的情形。</li>
+<li>不可向下扩展。</li>
+</ul>
+<h4 id="优点"><a href="#优点" class="headerlink" title="优点"></a>优点</h4><ul>
+<li>灵活性强。</li>
+<li>简化了接口的设计。有点像 @叛逆者 曾经在知乎上回答的，<a href="https://www.zhihu.com/question/37208466/answer/71549555" target="_blank" rel="external">游戏主机效率PC高的回答</a>中提到的，把原先积木拼装结构，变成电焊焊死的，更加结实，也失去了可扩展性。</li>
+</ul>
+
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/C/" rel="tag">#C++</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2015/12/26/Swift之AnyClass与动态类型/" rel="next" title="Swift之AnyClass与动态类型">
+                <i class="fa fa-chevron-left"></i> Swift之AnyClass与动态类型
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/05/05/读-leveldb-的感悟-：Cache的设计/" rel="prev" title="读 leveldb 的感悟 ：Cache的设计">
+                读 leveldb 的感悟 ：Cache的设计 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/ippclub.jpg"
+               alt="I++ 俱乐部" />
+          <p class="site-author-name" itemprop="name">I++ 俱乐部</p>
+          <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">12</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#传统-interface"><span class="nav-number">1.</span> <span class="nav-text">传统 interface</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Functor"><span class="nav-number">2.</span> <span class="nav-text">Functor</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Example"><span class="nav-number">2.0.1.</span> <span class="nav-text">Example</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#限制"><span class="nav-number">2.0.2.</span> <span class="nav-text">限制</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#适用"><span class="nav-number">2.0.3.</span> <span class="nav-text">适用</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CRTP"><span class="nav-number">3.</span> <span class="nav-text">CRTP</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#IteratorFacade"><span class="nav-number">3.0.1.</span> <span class="nav-text">IteratorFacade</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#实现接口"><span class="nav-number">3.0.2.</span> <span class="nav-text">实现接口</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#限制-1"><span class="nav-number">3.0.3.</span> <span class="nav-text">限制</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#优点"><span class="nav-number">3.0.4.</span> <span class="nav-text">优点</span></a></li></ol></li></ol></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">I++ 俱乐部</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+  
+  
+
+</body>
+</html>
