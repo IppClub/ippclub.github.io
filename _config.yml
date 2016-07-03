@@ -13,7 +13,7 @@ avatar: /images/ippclub.jpg
 
 # URL
 ## If your site is put in a subdirectory, set url as 'http://yoursite.com/child' and root as '/child/'
-url: http://yoursite.com
+url: http://ippclub.org
 root: /
 permalink: :year/:month/:day/:title/
 permalink_defaults:
@@ -71,5 +71,5 @@ theme: next
 ## Docs: https://hexo.io/docs/deployment.html
 deploy:
   type: git
-  repo: https://github.com/IppClub/ippclub.github.io.git
+  repo: git@github.com/IppClub/ippclub.github.io.git
   branch: master
