@@ -1,0 +1,610 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="C++," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="Inet4Address 在 .net 和 facebook/folly 中也叫做 IPAddress。（顺便黑一下，muduo 中居然把 SocketAddress 叫做 InetAddress 真是有失偏颇。
+
+构造ip地址
+ip 地址的构造，比较麻烦的地方就是网络序和主机序之间的问题。
+我们的 raw ipv4 address 存储在一个 uint32_t 的整数中，按照 linux 官方手">
+<meta property="og:type" content="article">
+<meta property="og:title" content="用 C++ 写一个 Inet4Address 类">
+<meta property="og:url" content="http://yoursite.com/2015/11/01/用-C-写一个-Inet4Address-类/index.html">
+<meta property="og:site_name" content="I++ 俱乐部官方博客">
+<meta property="og:description" content="Inet4Address 在 .net 和 facebook/folly 中也叫做 IPAddress。（顺便黑一下，muduo 中居然把 SocketAddress 叫做 InetAddress 真是有失偏颇。
+
+构造ip地址
+ip 地址的构造，比较麻烦的地方就是网络序和主机序之间的问题。
+我们的 raw ipv4 address 存储在一个 uint32_t 的整数中，按照 linux 官方手">
+<meta property="og:updated_time" content="2016-07-02T17:55:22.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="用 C++ 写一个 Inet4Address 类">
+<meta name="twitter:description" content="Inet4Address 在 .net 和 facebook/folly 中也叫做 IPAddress。（顺便黑一下，muduo 中居然把 SocketAddress 叫做 InetAddress 真是有失偏颇。
+
+构造ip地址
+ip 地址的构造，比较麻烦的地方就是网络序和主机序之间的问题。
+我们的 raw ipv4 address 存储在一个 uint32_t 的整数中，按照 linux 官方手">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2015/11/01/用-C-写一个-Inet4Address-类/"/>
+
+  <title> 用 C++ 写一个 Inet4Address 类 | I++ 俱乐部官方博客 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">I++ 俱乐部官方博客</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">Here We Code</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                用 C++ 写一个 Inet4Address 类
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2015-11-01T14:12:00+08:00" content="2015-11-01">
+              2015-11-01
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><code>Inet4Address</code> 在 .net 和 facebook/folly 中也叫做 <code>IPAddress</code>。<br>（顺便黑一下，muduo 中居然把 <code>SocketAddress</code> 叫做 <code>InetAddress</code> 真是有失偏颇。</p>
+<hr>
+<h3 id="构造ip地址"><a href="#构造ip地址" class="headerlink" title="构造ip地址"></a>构造ip地址</h3><p><br></p>
+<p>ip 地址的构造，比较麻烦的地方就是网络序和主机序之间的问题。</p>
+<p>我们的 raw ipv4 address 存储在一个 <code>uint32_t</code> 的整数中，按照 <a href="http://man7.org/linux/man-pages/man7/ip.7.html" target="_blank" rel="external">linux 官方手册</a>中的描述，以下结构体表示 ipv4 address：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/* Internet address. */</span></div><div class="line"><span class="keyword">struct</span> in_addr &#123;</div><div class="line">    <span class="keyword">uint32_t</span> s_addr; <span class="comment">/* address in network byte order */</span></div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<p><code>s_addr</code> 是按网络序存储的，然而在下面的测试中，有与我预期不符合的地方：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">BOOST_AUTO_TEST_CASE(test_byteorder_inaddr) &#123;</div><div class="line">  in_addr addr;</div><div class="line">  inet_pton(AF_INET, <span class="string">"192.168.0.1"</span>, &amp;addr);</div><div class="line">  BOOST_CHECK_EQUAL(addr.s_addr, <span class="number">0x0100A8C0</span>);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>我原先以为高位的 192 应该在 b3，而实际上在 b0。在 Java 中 的 <code>Inet4Address.getAddress()</code> 也有注释说明<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/**</span></div><div class="line"> * Returns the raw IP address of this &#123;<span class="doctag">@code</span> InetAddress&#125;</div><div class="line"> * object. The result is in network byte order: the highest order</div><div class="line"> * byte of the address is in &#123;<span class="doctag">@code</span> getAddress()[0]&#125;.</div><div class="line"> *</div><div class="line"> * <span class="doctag">@return</span>  the raw IP address of this object.</div><div class="line"> */</div><div class="line"><span class="keyword">public</span> <span class="keyword">byte</span>[] getAddress() &#123;</div><div class="line">    <span class="keyword">return</span> <span class="keyword">null</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>（一开始没有理解这一点，我在 s_addr 存储的是 little-endian 值，以至于<a href="https://github.com/neverchanje/sugen/blob/master/sugen/net/EndianConv.h" target="_blank" rel="external">我引入了 redis 的 endianconv</a> 作为工具函数，现在看来暂时没有用武之地了）</p>
+<p>我们首先规定<strong>我们将使用 big-endian 存储 IP 地址</strong>，并统一使用</p>
+<p>对于 IP 地址：<strong>b0.b1.b2.b3</strong>，我们用</p>
+<p><strong>0x b3 b2 b1 b0 来构造大端序</strong></p>
+<p><strong>0x b0 b1 b2 b3 来构造小端序</strong></p>
+<ol>
+<li><p>我们允许使用者通过 <code>Byte4</code> 类型，也就是 <code>std::array&lt;uint8_t, 4&gt;</code> 作为参数来构造 <code>Inet4Address</code>，前提是 <code>Byte4</code> 参数是网络序：</p>
+<p> <strong>即对于 “192.168.0.1”， b0 = 192, b1 = 168, b2 = 0, b3 = 1</strong></p>
+</li>
+<li><p>我们也允许使用者通过 NBO 的 <code>uint32_t</code> 类型的地址进行构造，这时候我们该用  <code>ntohl</code> 或 <code>htonl</code> 来实现。</p>
+<hr>
+</li>
+</ol>
+<h3 id="特殊的-ip-地址"><a href="#特殊的-ip-地址" class="headerlink" title="特殊的 ip 地址"></a>特殊的 ip 地址</h3><p><br></p>
+<ul>
+<li><p><a href="https://github.com/neverchanje/sugen/blob/master/sugen/net/Inet4Address.h#L82" target="_blank" rel="external">loopback address</a><br>环回地址。也就是<code>127.0.0.1</code></p>
+</li>
+<li><p><a href="https://github.com/neverchanje/sugen/blob/master/sugen/net/Inet4Address.h#L88" target="_blank" rel="external">link local address</a></p>
+</li>
+<li><p><a href="https://github.com/neverchanje/sugen/blob/master/sugen/net/Inet4Address.h#L76" target="_blank" rel="external">multicast address</a></p>
+</li>
+<li><p><a href="https://github.com/neverchanje/sugen/blob/master/sugen/net/Inet4Address.h#L96" target="_blank" rel="external">private address</a></p>
+</li>
+</ul>
+<p>这些地址在代码注释中有提供描述他们的 RFC 文档。</p>
+<hr>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p><br></p>
+<p>因为理解的偏差，造轮子的时候走了一些远路（但不是歧路）：</p>
+<ul>
+<li><p><code>in_addr.s_addr</code> 是否为 NBO</p>
+</li>
+<li><p>b0 为 ipv4 的高8位地址，而不是 b3</p>
+</li>
+<li><p>引入 redis 的 endianconv，写了一些无用代码，希望以后会派上用场。</p>
+</li>
+<li><p>当然还有阅读 RFC 文档，理解这些特殊 IP 地址的定义和用途。</p>
+</li>
+</ul>
+
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/C/" rel="tag">#C++</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2015/10/04/Implementing-an-unique-ptr/" rel="next" title="Implementing an unique_ptr">
+                <i class="fa fa-chevron-left"></i> Implementing an unique_ptr
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2015/11/03/Random-Binary-Search-Tree-Treap/" rel="prev" title="Random Binary Search Tree - Treap">
+                Random Binary Search Tree - Treap <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/ippclub.jpg"
+               alt="I++ 俱乐部" />
+          <p class="site-author-name" itemprop="name">I++ 俱乐部</p>
+          <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">12</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#构造ip地址"><span class="nav-number">1.</span> <span class="nav-text">构造ip地址</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#特殊的-ip-地址"><span class="nav-number">2.</span> <span class="nav-text">特殊的 ip 地址</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#总结"><span class="nav-number">3.</span> <span class="nav-text">总结</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">I++ 俱乐部</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+  
+  
+
+</body>
+</html>

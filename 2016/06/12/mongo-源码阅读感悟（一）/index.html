@@ -1,0 +1,577 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="C++,mongo," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="其实开头的这一篇不完全是阅读 mongo 时的感悟，也包括了我在 leveldb 中学到的技巧。看过 leveldb 的应该都知道，这份代码的注释不算清楚，文档也少，阅读体验不算好，需要 C++ 开发者有足够的经验。因此有些东西我到了mongo才真正了解它们的作用。也是十分惭愧。
+最近在阅读 mongo/bson 的源码，我试图去实现一个 bson，在造轮子的过程中学习他们的编程技巧，事实证明阅读">
+<meta property="og:type" content="article">
+<meta property="og:title" content="mongo 源码阅读感悟（一）">
+<meta property="og:url" content="http://yoursite.com/2016/06/12/mongo-源码阅读感悟（一）/index.html">
+<meta property="og:site_name" content="I++ 俱乐部官方博客">
+<meta property="og:description" content="其实开头的这一篇不完全是阅读 mongo 时的感悟，也包括了我在 leveldb 中学到的技巧。看过 leveldb 的应该都知道，这份代码的注释不算清楚，文档也少，阅读体验不算好，需要 C++ 开发者有足够的经验。因此有些东西我到了mongo才真正了解它们的作用。也是十分惭愧。
+最近在阅读 mongo/bson 的源码，我试图去实现一个 bson，在造轮子的过程中学习他们的编程技巧，事实证明阅读">
+<meta property="og:updated_time" content="2016-07-02T17:55:22.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="mongo 源码阅读感悟（一）">
+<meta name="twitter:description" content="其实开头的这一篇不完全是阅读 mongo 时的感悟，也包括了我在 leveldb 中学到的技巧。看过 leveldb 的应该都知道，这份代码的注释不算清楚，文档也少，阅读体验不算好，需要 C++ 开发者有足够的经验。因此有些东西我到了mongo才真正了解它们的作用。也是十分惭愧。
+最近在阅读 mongo/bson 的源码，我试图去实现一个 bson，在造轮子的过程中学习他们的编程技巧，事实证明阅读">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2016/06/12/mongo-源码阅读感悟（一）/"/>
+
+  <title> mongo 源码阅读感悟（一） | I++ 俱乐部官方博客 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">I++ 俱乐部官方博客</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">Here We Code</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                mongo 源码阅读感悟（一）
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-06-12T19:03:17+08:00" content="2016-06-12">
+              2016-06-12
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>其实开头的这一篇不完全是阅读 mongo 时的感悟，也包括了我在 leveldb 中学到的技巧。看过 leveldb 的应该都知道，这份代码的注释不算清楚，文档也少，阅读体验不算好，需要 C++ 开发者有足够的经验。因此有些东西我到了mongo才真正了解它们的作用。也是十分惭愧。</p>
+<p>最近在阅读 mongo/bson 的源码，我试图去实现一个 bson，在造轮子的过程中学习他们的编程技巧，事实证明阅读大型且较新的项目的源码要远远好过阅读小而老的项目。</p>
+<p>这篇文章我来介绍两个很小的类，<code>Status</code> 和 <code>StringData</code>，<code>StringData</code> 在 leveldb 中是 <code>Slice</code>，为了方便，之后我都会用 <code>Slice</code>。</p>
+<h3 id="Status"><a href="#Status" class="headerlink" title="Status"></a>Status</h3><p>许多大型 C++ 项目的编程规范要求 exception free，在实际的编程中，开发者会发现使用 error 来代替 exception 其实十分实用（golang开发中更多使用 error 而非 exception），因为很多的编程错误被强行放到了 exception 中，比如 java 的 <code>IndexOutOfBoundException</code>。再者，exception 也常常拉低了执行效率。对于不在意性能的语言（比如Java），exception 的罪状更多的在于如果不将异常及时catch，exception会蔓延到外部。</p>
+<p>这里我们介绍一个设施，它可以保证错误只会被手动的抛到外部，甚至我们可以保存错误的状态，延迟抛出（异常能做这件事吗？）。</p>
+<p>在 mongo 和 leveldb 中，都用了 Status 封装错误信息。</p>
+<p>Status 封装了 enum 类型的错误码，并且可以为每个错误绑定它的具体错误信息。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">static</span> Status <span class="title">FailedToParse</span><span class="params">(<span class="keyword">const</span> Slice &amp;msg)</span></span>;</div></pre></td></tr></table></figure>
+<p>一个 FailedToParse 错误就可以这样被抛出来。</p>
+<p>为了节约内存，enum 被转为 <code>unsigned char</code>，用以存储至多 256 种错误。当然，大型项目可以多于这个数。</p>
+<p><code>Status::OK()</code> 表示这个函数调用没有错误，跟 C 语言里返回值为 0 类似，Status 通常也是通过函数返回值抛出。我们要尽量使得成功的函数调用几乎无需处理错误，只有在错误发生的时候才去处理错误。因此我们这样实现：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">class</span> Status &#123;</div><div class="line"> <span class="keyword">private</span>:</div><div class="line">  <span class="built_in">std</span>::<span class="built_in">unique_ptr</span>&lt;ErrorInfo&gt; info_;</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<p><code>Status</code> 内部只保存指向错误信息的指针。<code>Status::OK()</code> 抛出一个未初始化的指针（指向 null），只有在错误的信息抛出时，才会生成信息给指针。</p>
+<h3 id="Slice"><a href="#Slice" class="headerlink" title="Slice"></a>Slice</h3><p><code>Slice</code> 是对字符串的一种简单的 reference 的封装，它仅保存字符串的指针（<code>char*</code>）和字符串的长度。与 <code>std::string</code> 用途不同，它不会对字符串进行复制操作，在这一点上比 <code>std::string</code> 要好用许多。当然，我们也可以在整个项目中，完全使用 <code>std::string</code>，并且在函数接口中使用 <code>const std::string&amp;</code>，这样在一个需要大量使用字符串的代码中，函数的接口会变得混乱不堪。</p>
+<p>使用了 <code>Slice</code> 之后，我们可以这样编写一个函数的接口。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Parser::parseInt(Slice int_string);</div></pre></td></tr></table></figure>
+<p>一方面这样可以简化函数接口（如果要 forward declaration 则需要引用），一方面这样可以兼容 raw string 和 <code>std::string</code>，不会出现 raw string 传参给 <code>const std::string &amp;</code> 时，出现复制的情况。</p>
+<p>唯一的缺点是我们需要去重新实现一些基本的工具函数。好在有 <code>&lt;cstring&gt;</code>，使得这一切并不算难。</p>
+<h3 id="附录"><a href="#附录" class="headerlink" title="附录"></a>附录</h3><p>附上我的实现：</p>
+<ul>
+<li><p>Slice: <a href="https://github.com/neverchanje/bson-cpp11/blob/master/src%2FSlice.h" target="_blank" rel="external">github link</a></p>
+</li>
+<li><p>Status: <a href="https://github.com/neverchanje/bson-cpp11/blob/master/src%2FStatus.h" target="_blank" rel="external">github link</a></p>
+</li>
+</ul>
+
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/C/" rel="tag">#C++</a>
+          
+            <a href="/tags/mongo/" rel="tag">#mongo</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/05/05/读-leveldb-的感悟-：Cache的设计/" rel="next" title="读 leveldb 的感悟 ：Cache的设计">
+                <i class="fa fa-chevron-left"></i> 读 leveldb 的感悟 ：Cache的设计
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/ippclub.jpg"
+               alt="I++ 俱乐部" />
+          <p class="site-author-name" itemprop="name">I++ 俱乐部</p>
+          <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">12</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Status"><span class="nav-number">1.</span> <span class="nav-text">Status</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Slice"><span class="nav-number">2.</span> <span class="nav-text">Slice</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#附录"><span class="nav-number">3.</span> <span class="nav-text">附录</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">I++ 俱乐部</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+  
+  
+
+</body>
+</html>

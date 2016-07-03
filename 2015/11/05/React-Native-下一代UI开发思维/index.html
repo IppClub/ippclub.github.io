@@ -1,0 +1,592 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="React-Native,IOS,Javascript,Swift," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="React 与状态React.js自从Facebook一推出，就受到Web前端工程师的强烈推崇。虽说曾经火过一时的Angular.js颠覆了前端的工程，但是React更多颠覆的，是下一代UI编程的思维。
+传统UI编程，基本很多地方都需要将数据来源，绑定到对应的UI对象，比如用户点击了一个操作，更改了名称，那么你需要更新执行一个回调函数来处理点击操作，并且把新的数据更新原有的UI对象的属性，比如大概">
+<meta property="og:type" content="article">
+<meta property="og:title" content="React-Native -- 下一代UI开发思维">
+<meta property="og:url" content="http://yoursite.com/2015/11/05/React-Native-下一代UI开发思维/index.html">
+<meta property="og:site_name" content="I++ 俱乐部官方博客">
+<meta property="og:description" content="React 与状态React.js自从Facebook一推出，就受到Web前端工程师的强烈推崇。虽说曾经火过一时的Angular.js颠覆了前端的工程，但是React更多颠覆的，是下一代UI编程的思维。
+传统UI编程，基本很多地方都需要将数据来源，绑定到对应的UI对象，比如用户点击了一个操作，更改了名称，那么你需要更新执行一个回调函数来处理点击操作，并且把新的数据更新原有的UI对象的属性，比如大概">
+<meta property="og:image" content="https://facebook.github.io/react-native/img/TutorialFinal.png">
+<meta property="og:image" content="https://facebook.github.io/react-native/img/TutorialFinal2.png">
+<meta property="og:updated_time" content="2016-07-02T17:55:22.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="React-Native -- 下一代UI开发思维">
+<meta name="twitter:description" content="React 与状态React.js自从Facebook一推出，就受到Web前端工程师的强烈推崇。虽说曾经火过一时的Angular.js颠覆了前端的工程，但是React更多颠覆的，是下一代UI编程的思维。
+传统UI编程，基本很多地方都需要将数据来源，绑定到对应的UI对象，比如用户点击了一个操作，更改了名称，那么你需要更新执行一个回调函数来处理点击操作，并且把新的数据更新原有的UI对象的属性，比如大概">
+<meta name="twitter:image" content="https://facebook.github.io/react-native/img/TutorialFinal.png">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2015/11/05/React-Native-下一代UI开发思维/"/>
+
+  <title> React-Native -- 下一代UI开发思维 | I++ 俱乐部官方博客 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">I++ 俱乐部官方博客</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">Here We Code</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                React-Native -- 下一代UI开发思维
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2015-11-05T01:30:17+08:00" content="2015-11-05">
+              2015-11-05
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="React-与状态"><a href="#React-与状态" class="headerlink" title="React 与状态"></a>React 与状态</h2><p><code>React.js</code>自从Facebook一推出，就受到Web前端工程师的强烈推崇。虽说曾经火过一时的<code>Angular.js</code>颠覆了前端的工程，但是<code>React</code>更多颠覆的，是下一代UI编程的思维。</p>
+<p>传统UI编程，基本很多地方都需要将数据来源，绑定到对应的UI对象，比如用户点击了一个操作，更改了名称，那么你需要更新执行一个回调函数来处理点击操作，并且把新的数据更新原有的UI对象的属性，比如大概就是这样的东西</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">func onClick(sender) &#123;</div><div class="line">	var data = getData(sender);</div><div class="line">	self.button.title = data.name;</div><div class="line">	self.button.color = data.color;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这样虽然说直观，但是有很大的问题。试想，假如有很多种的回调函数，每个回调函数监听不同的操作，比如<code>onMounseDown</code>,<code>onMouseUp</code>,<code>onKeyDown</code>,<code>onScroll</code>……甚至根据不同的sender，我们会有不同的操作，我们就必须得手写很多机械的</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">self.xx = data.xx</div><div class="line">self.xy = data.xy</div></pre></td></tr></table></figure>
+<p>这类的代码，这就给日后维护和扩展带来了灾难，假如我要换一个UI组件，又得一个个检查是否赋值成功；假如我要把这个UI组件在新的UIView里面重用，我又得改动所有的赋值代码，对于大型项目这种UI对象成百上千，UI属性上万，这样是非常可怕的。</p>
+<p>而<code>React</code>，就将所有的赋值，数据绑定，抽象成为一个个状态，不同的事件监听，就是不同的状态而已，而这些状态之间相互独立，不会受到某些全局变量更改而造成UI混乱的情况，更好的是，开发者不需要考虑到底这个属性什么时候赋值，是在数据更新之前还是之后，需不需要定时刷新这种无意义的苦力活上。</p>
+<h2 id="React-Native-示例"><a href="#React-Native-示例" class="headerlink" title="React-Native 示例"></a>React-Native 示例</h2><blockquote>
+<p>完整代码：<a href="https://facebook.github.io/react-native/docs/tutorial.html#content" target="_blank" rel="external">Tutorial</a></p>
+</blockquote>
+<p>看看<code>React-Native</code>的sample，需求就是实现一个电影列表显示的View。类似这样：</p>
+<p><img src="https://facebook.github.io/react-native/img/TutorialFinal.png" alt="iOS"> <img src="https://facebook.github.io/react-native/img/TutorialFinal2.png" alt="Android"></p>
+<p>这段代码中，只有View和ViewModel（Model就是临时的JSON），React用状态把UI属性和数据绑定起来，从而避免了事件监听手动判断时机来赋值</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> AwesomeProject = React.createClass(&#123;</div><div class="line">  <span class="comment">//初始状态，不渲染</span></div><div class="line">  getInitialState: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="keyword">return</span> &#123;</div><div class="line">      dataSource: <span class="keyword">new</span> ListView.DataSource(&#123;</div><div class="line">        rowHasChanged: (row1, row2) =&gt; row1 !== row2,</div><div class="line">      &#125;),</div><div class="line">      loaded: <span class="literal">false</span>,</div><div class="line">    &#125;;</div><div class="line">  &#125;,</div><div class="line"></div><div class="line">  <span class="comment">//模型层变动导致状态改变，渲染</span></div><div class="line"></div><div class="line">  fetchData: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">    fetch(REQUEST_URL)</div><div class="line">      .then((response) =&gt; response.json())</div><div class="line">      .then((responseData) =&gt; &#123;</div><div class="line">        <span class="keyword">this</span>.setState(&#123;</div><div class="line">          dataSource: <span class="keyword">this</span>.state.dataSource.cloneWithRows(responseData.movies),</div><div class="line">          loaded: <span class="literal">true</span>,</div><div class="line">        &#125;);</div><div class="line">      &#125;)</div><div class="line">      .done();</div><div class="line">  &#125;,</div><div class="line"></div><div class="line">  <span class="comment">//渲染层，绑定状态和UI属性</span></div><div class="line"></div><div class="line">  render: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="keyword">return</span> (</div><div class="line">      &lt;ListView	//这里是JSX语法，在JS里面返回标签</div><div class="line">        dataSource=&#123;this.state.dataSource&#125;</div><div class="line">        renderRow=&#123;this.renderMovie&#125;</div><div class="line">        style=&#123;styles.listView&#125;</div><div class="line">      /&gt;</div><div class="line">    );</div><div class="line">  &#125;</div><div class="line"> &#125;</div></pre></td></tr></table></figure>
+<blockquote>
+<p>完整代码：<a href="https://github.com/lizhuoli1126/iOS-Demo-Project" target="_blank" rel="external">iOS Demo</a></p>
+</blockquote>
+<p>相比来说，原生Cocoa Touch的实现，就要丑陋的多了，尤其是渲染部分绑定UI对象的属性和数据来源，假如你有多处数据来源，多种UI属性，你就得写很多判断来保证你的UI对象的属性符合预期的赋值顺序。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//初始化UI对象，调用模型去获取数据</span></div><div class="line">override func viewDidLoad() &#123;</div><div class="line">   <span class="keyword">super</span>.viewDidLoad()</div><div class="line">   fetchData()</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">//获取数据，需要手动维护状态，比如开启indicator(旋转等待条)，数据获取成功后渲染</span></div><div class="line">func fetchData() &#123;</div><div class="line">   indicator.startAnimating()</div><div class="line">   request(.GET, API_URL, parameters: [<span class="string">"apikey"</span>: API_KEY, <span class="string">"page_limit"</span>: PAGE_SIZE])</div><div class="line">       .responseJSON&#123; _, _, data, _ <span class="keyword">in</span></div><div class="line">           self.render(<span class="built_in">JSON</span>(data!))</div><div class="line">   &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">//渲染UI对象，需要手动维护状态，比如关闭indicator(旋转等待条)</span></div><div class="line">func render(result:<span class="built_in">JSON</span>) &#123;</div><div class="line">   indicator.stopAnimating()</div><div class="line">   movieJSON = result</div><div class="line">   self.tableView.reloadData()</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">//这都算好的了，TableView会自动回调你的代码，返回这个TableView里面的Cell个数</span></div><div class="line">func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -&gt; Int &#123;</div><div class="line">   <span class="keyword">var</span> movieNum = movieJSON[<span class="string">"movies"</span>].arrayValue.count</div><div class="line">   <span class="keyword">return</span> movieNum</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">//可怕的地方，需要手动赋值给UI对象的属性</span></div><div class="line">func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -&gt; UITableViewCell &#123;</div><div class="line">   <span class="keyword">let</span> cell = self.tableView.dequeueReusableCellWithIdentifier(<span class="string">"movieIdentifier"</span>, forIndexPath: indexPath)</div><div class="line">   		<span class="keyword">as</span>! MovieTableViewCell</div><div class="line"></div><div class="line">   <span class="keyword">let</span> row = indexPath.row</div><div class="line"></div><div class="line">   <span class="comment">//手动维护状态，JSON解析再赋值给对应的UI对象，这里省略了UI对象的代码和样式</span></div><div class="line">   <span class="comment">//（一般可以通过Interface Builder做或者专门一个类写UI代码）</span></div><div class="line">   cell.movieTitle.text = movieJSON[<span class="string">"movies"</span>][row][<span class="string">"title"</span>].stringValue</div><div class="line">   cell.movieYear.text = movieJSON[<span class="string">"movies"</span>][row][<span class="string">"year"</span>].stringValue</div><div class="line">   <span class="keyword">var</span> movieImageUrl = movieJSON[<span class="string">"movies"</span>][row][<span class="string">"posters"</span>][<span class="string">"thumbnail"</span>].stringValue</div><div class="line"></div><div class="line">   <span class="comment">//最可怕是渲染中还需要新的数据，再回调模型，就很难维护了</span></div><div class="line">   <span class="keyword">if</span> cell.movieImage.image == nil &#123;</div><div class="line">       request(.GET, movieImageUrl).response&#123; _, _, data, _ <span class="keyword">in</span></div><div class="line">           <span class="keyword">let</span> movieImage = UIImage(data: data <span class="keyword">as</span>! NSData)</div><div class="line">           cell.movieImage.image = movieImage</div><div class="line">       &#125;</div><div class="line">   &#125;</div><div class="line"></div><div class="line">   <span class="keyword">return</span> cell</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h1 id="React-与函数式"><a href="#React-与函数式" class="headerlink" title="React 与函数式"></a>React 与函数式</h1><p><code>React</code>更多的，就是一种类似函数式的想法，把UI对象属性，数据来源，当作一个Monad包裹起来，传统意义上的不同数据来源进行UI属性赋值，相当于这个Monad经过不同的函数作用，达到状态的切换，好处就是大大减少了开发者手动维护UI属性的工作，而且可以达到更高的开发效率。而且再也不怕扩展了，因为这时候可以把多个组件分配给不同的人，每个人完全不需要管别人内部的变量名是什么，UI属性是什么，只要把自己的状态管理好，Model层接口统一，剩下的合并即可。</p>
+<h1 id="React-与效率"><a href="#React-与效率" class="headerlink" title="React 与效率"></a>React 与效率</h1><p>既然提到了状态，因为<code>React</code>采取<code>VirtualDOM</code>来diff需要进行状态更新的UI对象，每次确保了只更新属性发生改变的部分。实现也很高效，使用了一个普通的二叉树<code>vtree</code>。每个结点<code>vnode</code>就是对应的Tag，比如<image>之类，结点还存储了一个struct用来保存这些Tag的属性（比如Image的size）</image></p>
+<p>其中的diff算法可以一看……代码地址在：<a href="https://github.com/Matt-Esch/virtual-dom/blob/master/vtree/diff.js" target="_blank" rel="external">GitHub-vtree</a></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//主要逻辑，就是对b树进行reorder，找出a树与b树的同结点不同属性的diff</span></div><div class="line"><span class="comment">//剩下可以无痛patch的部分只需要下面的for循环就可以处理</span></div><div class="line"><span class="keyword">var</span> aChildren = a.children</div><div class="line"><span class="keyword">var</span> orderedSet = reorder(aChildren, b.children)</div><div class="line"><span class="keyword">var</span> bChildren = orderedSet.children</div><div class="line"></div><div class="line"><span class="keyword">var</span> len = aLen &gt; bLen ? aLen : bLen</div><div class="line"></div><div class="line"><span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; len; i++) &#123;</div><div class="line">   <span class="keyword">var</span> leftNode = aChildren[i]</div><div class="line">   <span class="keyword">var</span> rightNode = bChildren[i]</div><div class="line">   index += <span class="number">1</span></div><div class="line"></div><div class="line">   <span class="keyword">if</span> (!leftNode) &#123;</div><div class="line">       <span class="keyword">if</span> (rightNode) &#123;</div><div class="line">           <span class="comment">//这里处理的多余的结点，直接加到b树上即可</span></div><div class="line">           apply = appendPatch(apply,</div><div class="line">               <span class="keyword">new</span> VPatch(VPatch.INSERT, <span class="literal">null</span>, rightNode))</div><div class="line">       &#125;</div><div class="line">   &#125; <span class="keyword">else</span> &#123;</div><div class="line">       walk(leftNode, rightNode, patch, index)</div><div class="line">   &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这是核心reorder代码，目标找到是同一结点不同属性的diff，多出来的不需要管</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//遍历a树，如果b树中结点集合含有a的key，标记下b树中这些key，更新旧的标记</span></div><div class="line"><span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span> ; i &lt; aChildren.length; i++) &#123;</div><div class="line">   <span class="keyword">var</span> aItem = aChildren[i]</div><div class="line">   <span class="keyword">var</span> itemIndex</div><div class="line"></div><div class="line">   <span class="keyword">if</span> (aItem.key) &#123;</div><div class="line">       <span class="keyword">if</span> (bKeys.hasOwnProperty(aItem.key)) &#123;</div><div class="line">           <span class="comment">// Match up the old keys</span></div><div class="line">           itemIndex = bKeys[aItem.key]</div><div class="line">           newChildren.push(bChildren[itemIndex])</div><div class="line"></div><div class="line">       &#125; <span class="keyword">else</span> &#123;</div><div class="line">           <span class="comment">// Remove old keyed items</span></div><div class="line">           itemIndex = i - deletedItems++</div><div class="line">           newChildren.push(<span class="literal">null</span>)</div><div class="line">       &#125;</div><div class="line">   &#125;</div><div class="line">   <span class="comment">//......</span></div><div class="line">	&#125;</div><div class="line"></div><div class="line"></div><div class="line"><span class="comment">//遍历b树，添加上面标记的所有key到一个集合，暂时未排序</span></div><div class="line"><span class="keyword">for</span> (<span class="keyword">var</span> j = <span class="number">0</span>; j &lt; bChildren.length; j++) &#123;</div><div class="line">   <span class="keyword">var</span> newItem = bChildren[j]</div><div class="line">   <span class="keyword">if</span> (newItem.key) &#123;</div><div class="line">       <span class="keyword">if</span> (!aKeys.hasOwnProperty(newItem.key)) &#123;</div><div class="line">           newChildren.push(newItem)</div><div class="line">       &#125;</div><div class="line">       <span class="comment">//......</span></div><div class="line"> &#125;</div><div class="line"></div><div class="line"><span class="comment">//对上述集合，真实的b树删除多余结点，直到上述集合为空为止，复杂度O(n)</span></div><div class="line"><span class="keyword">var</span> simulate = newChildren.slice()</div><div class="line"></div><div class="line"><span class="keyword">for</span> (<span class="keyword">var</span> k = <span class="number">0</span>; k &lt; bChildren.length;) &#123;</div><div class="line"><span class="keyword">var</span> wantedItem = bChildren[k]</div><div class="line">simulateItem = simulate[simulateIndex]</div><div class="line"></div><div class="line"><span class="comment">//最后删除剩下虚拟的结点</span></div><div class="line"><span class="keyword">while</span>(simulateIndex &lt; simulate.length) &#123;</div><div class="line">   simulateItem = simulate[simulateIndex]</div><div class="line">   removes.push(remove(simulate, simulateIndex, simulateItem &amp;&amp; simulateItem.key))</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>整体的时间复杂度，达到了<br>$$ O(M+N) $$<br>已经是理论下界了。比起手动管理状态来说，效率可以说是直接持平，甚至对部分滥用事件监听的写法效率会更高。</p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>虽然我并不喜欢UI编程，但是自从图形化出现之后，UI已经成为了继数据结构、算法外，面向终端用户的应用又一个大工程。</p>
+<p>从最早的指令式跳转赋值UI，函数指针响应处理，到中期的面向对象，消息发送回调事件，手动管理属性，在到如今的React以状态和VirualDOM来绑定数据和组件。</p>
+<p>UI编程其实也是在不断进化的，也许今后会有更好的开发方式让我们这群不会写UI的人也能够轻松写起来UI。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/React-Native/" rel="tag">#React-Native</a>
+          
+            <a href="/tags/IOS/" rel="tag">#IOS</a>
+          
+            <a href="/tags/Javascript/" rel="tag">#Javascript</a>
+          
+            <a href="/tags/Swift/" rel="tag">#Swift</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2015/11/03/Random-Binary-Search-Tree-Treap/" rel="next" title="Random Binary Search Tree - Treap">
+                <i class="fa fa-chevron-left"></i> Random Binary Search Tree - Treap
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2015/12/23/我对C-的编程思考/" rel="prev" title="我对C++的编程思考">
+                我对C++的编程思考 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/ippclub.jpg"
+               alt="I++ 俱乐部" />
+          <p class="site-author-name" itemprop="name">I++ 俱乐部</p>
+          <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">12</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#React-与状态"><span class="nav-number">1.</span> <span class="nav-text">React 与状态</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#React-Native-示例"><span class="nav-number">2.</span> <span class="nav-text">React-Native 示例</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#React-与函数式"><span class="nav-number"></span> <span class="nav-text">React 与函数式</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#React-与效率"><span class="nav-number"></span> <span class="nav-text">React 与效率</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#总结"><span class="nav-number"></span> <span class="nav-text">总结</span></a></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">I++ 俱乐部</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+  
+  
+
+</body>
+</html>
