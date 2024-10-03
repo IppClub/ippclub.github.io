@@ -4,6 +4,31 @@
   
   
   <entry>
+    <title>提交文章格式要求</title>
+    <link href="/%E6%8F%90%E4%BA%A4%E6%96%87%E7%AB%A0%E6%A0%BC%E5%BC%8F%E8%A6%81%E6%B1%82/"/>
+    <url>/%E6%8F%90%E4%BA%A4%E6%96%87%E7%AB%A0%E6%A0%BC%E5%BC%8F%E8%A6%81%E6%B1%82/</url>
+    
+    <content type="html"><![CDATA[<h1 id="提交文章格式要求"><a href="#提交文章格式要求" class="headerlink" title="提交文章格式要求"></a>提交文章格式要求</h1><h2 id="front-matter"><a href="#front-matter" class="headerlink" title="front-matter"></a>front-matter</h2><figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs markdown">---<br>title: &#123;&#123; title &#125;&#125;<br>date: &#123;&#123; date &#125;&#125;<br>tags:<br>categories: <br>author: <br>index<span class="hljs-emphasis">_img: </span><br><span class="hljs-emphasis">banner_</span>img: <br>---<br></code></pre></td></tr></table></figure><ul><li><p>title直接跟字符串名称，不需要引号，建议不要使用特殊符号、表情等</p></li><li><p>date格式符合 <code>YYYY-MM-DD HH:mm:ss</code> ，这个有很多工具可以生成</p></li><li><p>tags是标签，有多个需要采用数组写法</p><figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs markdown">tags:<br><span class="hljs-bullet">-</span> tag1<br><span class="hljs-bullet">-</span> tag2<br></code></pre></td></tr></table></figure></li><li><p>categories是分类，写法同上</p></li><li><p>author是作者，不支持多个，但其实逗号连接也行</p></li><li><p>index_img是封面，建议：国内图床 &gt; 国外图床 &gt;&#x3D; 相对路径引用（可以留空）</p></li><li><p>banner_img是页面顶部大图，要求同上（可以留空）</p></li></ul><h2 id="注意"><a href="#注意" class="headerlink" title="注意"></a>注意</h2><ul><li>author 和 index_img 和 banner_img 可以为空</li><li>有latex公式则需要添加 <code>math: true</code></li><li>需要引用的资源放入文章同名文件夹中</li></ul>]]></content>
+    
+    
+    <categories>
+      
+      <category>未分类</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>blog</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>mongo 源码阅读感悟（一）</title>
     <link href="/mongo-%E6%BA%90%E7%A0%81%E9%98%85%E8%AF%BB%E6%84%9F%E6%82%9F%EF%BC%88%E4%B8%80%EF%BC%89/"/>
     <url>/mongo-%E6%BA%90%E7%A0%81%E9%98%85%E8%AF%BB%E6%84%9F%E6%82%9F%EF%BC%88%E4%B8%80%EF%BC%89/</url>
@@ -149,13 +174,13 @@
     
     <tags>
       
-      <tag>Swift</tag>
-      
       <tag>React-Native</tag>
       
       <tag>IOS</tag>
       
       <tag>Javascript</tag>
+      
+      <tag>Swift</tag>
       
     </tags>
     
