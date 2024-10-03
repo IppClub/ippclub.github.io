@@ -1,79 +1,191 @@
+
+
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <meta name="theme-color" content="#3367D6"/>
-  <link rel="apple-touch-icon" href="/icons-192.png">
-  <link rel="manifest" href="/manifest.json">
-  
-  <meta name="generator" content="Hexo 7.3.0">
 
-  
-    <meta name="description" content="I++ 俱乐部官方博客">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.ico">
+  <link rel="icon" href="/img/favicon.ico">
   
 
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="我最近想要这样一个分享平台：它既可以作为我的笔记工具，记录一些文字不太多又不太少的技术知识，又可以作为一个社交平台让别人认识我，让我可以装逼。微博限制字数，朋友圈也不太合适，于是我还是在博客里开一个以后可能会继续更新的文章。现在 I++ 里的博文只有我在做 C++ 的分享，以后如果有人做同样的事情，甚至写了同名的文章，那就可能要给这整个博客做点修改了，比如在博客的 timeline 上加上作者头像">
+<meta property="og:type" content="article">
+<meta property="og:title" content="我对C++的编程思考">
+<meta property="og:url" content="http://ippclub.github.io/%E6%88%91%E5%AF%B9C-%E7%9A%84%E7%BC%96%E7%A8%8B%E6%80%9D%E8%80%83/index.html">
+<meta property="og:site_name" content="I++ Club">
+<meta property="og:description" content="我最近想要这样一个分享平台：它既可以作为我的笔记工具，记录一些文字不太多又不太少的技术知识，又可以作为一个社交平台让别人认识我，让我可以装逼。微博限制字数，朋友圈也不太合适，于是我还是在博客里开一个以后可能会继续更新的文章。现在 I++ 里的博文只有我在做 C++ 的分享，以后如果有人做同样的事情，甚至写了同名的文章，那就可能要给这整个博客做点修改了，比如在博客的 timeline 上加上作者头像">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2015-12-23T13:38:41.000Z">
+<meta property="article:modified_time" content="2024-10-03T14:16:44.473Z">
+<meta property="article:tag" content="C++">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>我对C++的编程思考 - I++ Club</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
   
 
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"ippclub.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
   
 
-  
 
   
+<meta name="generator" content="Hexo 7.3.0"></head>
 
-  <title>我对C++的编程思考 | I++ Club</title>
 
-  
-
-  
-    <link rel="shortcut icon" href="/favicon.ico">
-  
-
-  <!--mathjax latex数学公式显示支持-->
-  
-  
-
-  
-
-  
-
-  
-<link rel="stylesheet" href="/css/style.css">
-
-</head>
 <body>
-  <div class="root-container">
-    
-<!-- header container -->
-<header class="header-container post">
-  
-    <div class="post-image" style="background-image: url(/img/mainbg.png)"></div>
   
 
-  <!-- navbar -->
-<nav class="navbar">
-  <div class="navbar-content">
-    <!-- logo -->
-    <div class="navbar-logo">
-      <a href="/">
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>I++ Club</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
         
-          I++ Club
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
         
-      </a>
-    </div>
-    <!-- link -->
-    <div class="navbar-link">
-      <div class="navbar-btn">
-        <div></div>
-        <div></div>
-        <div></div>
-      </div>
-      <ul class="navbar-list">
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
         
-          <li class="navbar-list-item"><a href="/">首页</a></li>
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
         
-          <li class="navbar-list-item"><a href="/about">关于</a></li>
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
         
       </ul>
     </div>
@@ -81,67 +193,99 @@
 </nav>
 
   
-  
 
-  
-  
-
-  
-  
-
-  
-  
-
-  
-  
-    <div class="header-content">
-      <div class="post-text layout-block">
-        <div class="layout-margin">
-          <h1 class="title-wrap">我对C++的编程思考</h1>
-          <h2 class="title-sub-wrap">
-            <strong></strong>
-            <span>发布于</span>
-            <time  class="article-date" datetime="2015-12-23T13:38:41.000Z" itemprop="datePublished">2015-12-23</time>
-          </h2>
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/mainbg.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
           
-            <h2 class="last-time">
-              <span>最后更新于</span>
-              <time  class="article-updated" datetime="2024-10-03T14:16:44.473Z" itemprop="dateUpdated">2024-10-03</time>
-            </h2>
+            <span id="subtitle" data-typed-text="我对C++的编程思考"></span>
           
-          
-          <ul class="wrap-list dark">
-  
-    <li><a href="/categories/%E6%9C%AA%E5%88%86%E7%B1%BB/">📒 未分类</a></li>
-  
-</ul>
-          <ul class="wrap-list dark">
-  
-    <li><a href="/tags/C/">🏷️ C++</a></li>
-  
-</ul>
         </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2015-12-23 21:38" pubdate>
+          2015年12月23日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          3k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          37 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
       </div>
+
+      
     </div>
-  
+  </div>
+</div>
 
-  
-  
-  
-</header>
+</div>
 
-    <!-- 文章 -->
+  </header>
 
-<!-- 文章内容 -->
-<div class="body-container">
-  <article class="content-container layout-block post-container">
-    <div class="article-info">
+  <main>
+    
       
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
       
-      
-      
-      <section class="article-entry markdown-body layout-margin content-padding--large soft-size--large soft-style--box">
-        <p>我最近想要这样一个分享平台：它既可以作为我的笔记工具，记录一些文字不太多又不太少的技术知识，又可以作为一个社交平台让别人认识我，让我可以装逼。微博限制字数，朋友圈也不太合适，于是我还是在博客里开一个以后可能会继续更新的文章。现在 I++ 里的博文只有我在做 C++ 的分享，以后如果有人做同样的事情，甚至写了同名的文章，那就可能要给这整个博客做点修改了，比如在博客的 timeline 上加上作者头像和信息，以前一直想做，因为比较懒所以搁置了。</p>
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">我对C++的编程思考</h1>
+            
+              <p id="updated-time" class="note note-info" style="">
+                
+                  
+                    本文最后更新于 2024年10月3日 晚上
+                  
+                
+              </p>
+            
+            
+              <div class="markdown-body">
+                
+                <p>我最近想要这样一个分享平台：它既可以作为我的笔记工具，记录一些文字不太多又不太少的技术知识，又可以作为一个社交平台让别人认识我，让我可以装逼。微博限制字数，朋友圈也不太合适，于是我还是在博客里开一个以后可能会继续更新的文章。现在 I++ 里的博文只有我在做 C++ 的分享，以后如果有人做同样的事情，甚至写了同名的文章，那就可能要给这整个博客做点修改了，比如在博客的 timeline 上加上作者头像和信息，以前一直想做，因为比较懒所以搁置了。</p>
 <h3 id="应该使用-Returned-Value-Optimization-还是-std-move"><a href="#应该使用-Returned-Value-Optimization-还是-std-move" class="headerlink" title="应该使用 Returned Value Optimization 还是 std::move"></a>应该使用 Returned Value Optimization 还是 <code>std::move</code></h3><hr>
 <p>分享一篇我读过的文章 <a target="_blank" rel="noopener" href="https://www.ibm.com/developerworks/community/blogs/5894415f-be62-4bc0-81c5-3956e82276f3/entry/RVO_V_S_std_move?lang=zh">RVO V.S. std::move</a></p>
 <p>这里讲到了几个以前我未曾求解的顾虑和疑惑：</p>
@@ -158,7 +302,7 @@
 <li>延迟分配内存（动态分配内存）</li>
 </ul>
 <p>简单的情况是</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Object  arr[100];</span><br><span class="line">Object* arr[100];</span><br></pre></td></tr></table></figure>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs css"><span class="hljs-selector-tag">Object</span>  arr<span class="hljs-selector-attr">[100]</span>;<br><span class="hljs-selector-tag">Object</span>* arr<span class="hljs-selector-attr">[100]</span>;<br></code></pre></td></tr></table></figure>
 <p>对比于上下两种情况，后者在数组初始化的时候开销更小，在有些时候是更好的做法。</p>
 <ul>
 <li>用于 forward declaration</li>
@@ -180,38 +324,38 @@
 <li>在 stl 容器中存储 unique_ptr</li>
 </ul>
 <p>我们以 <code>std::set</code> 来举例。</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span> &lt; <span class="keyword">class</span> <span class="title class_">T</span>,                        <span class="comment">// set::key_type/value_type</span></span><br><span class="line">           <span class="keyword">class</span> <span class="title class_">Compare</span> = less&lt;T&gt;,        <span class="comment">// set::key_compare/value_compare</span></span><br><span class="line">           <span class="keyword">class</span> Alloc = allocator&lt;T&gt;      <span class="comment">// set::allocator_type</span></span><br><span class="line">           &gt; <span class="keyword">class</span> set;</span><br></pre></td></tr></table></figure>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-keyword">template</span> &lt; <span class="hljs-keyword">class</span> <span class="hljs-title class_">T</span>,                        <span class="hljs-comment">// set::key_type/value_type</span><br>           <span class="hljs-keyword">class</span> <span class="hljs-title class_">Compare</span> = less&lt;T&gt;,        <span class="hljs-comment">// set::key_compare/value_compare</span><br>           <span class="hljs-keyword">class</span> Alloc = allocator&lt;T&gt;      <span class="hljs-comment">// set::allocator_type</span><br>           &gt; <span class="hljs-keyword">class</span> set;<br></code></pre></td></tr></table></figure>
 
 <p>这个接口告诉我们，用户需要在 <code>std::set</code> 声明处定义比较函数 comparator。换句话说，一个 <code>std::set</code> 由两个东西定义，一个是元素类型，一个是元素之间比较的方法（不考虑 allocator）。</p>
 <p>我们其实可以将 comparator 从 set 的定义中解耦出来。实际上 C++ 有多种实现自定义比较的方法。如这篇文章所讲 <a target="_blank" rel="noopener" href="http://fusharblog.com/3-ways-to-define-comparison-functions-in-cpp/">3 Ways to Define Comparison Functions in C++</a>。简单说就是通过重载 <code>operator&lt;</code> 来自定义比较方法，这样做就<strong>无需显式定义 comparator</strong>。当然，更多的时候，我还是喜欢显式定义 comparator，这样能更清楚的表明，<strong>一个 set 只允许一种comparator</strong>。</p>
 <p>然而，这与 Java 不同。Java 的模板类型会<a target="_blank" rel="noopener" href="http://www.infoq.com/cn/articles/cf-java-generics">在运行时用具体的类型代替</a>。也就是说，给定集合 <code>set&lt;T&gt;</code> 可以代表的不只是 T 的集合，也可以是 T 的子类 SubT1 的集合，SubT2 的集合等等，并且他们之间也互相 compatible（可以直接用等号赋值）。这对面向对象来说是十分自然的一种设计，这意味着当我们将 SubT 继承自 T 之后，我们也同时将 SubT 的 container 继承自 T 的 container。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//Example Code</span></span><br><span class="line">TreeSet&lt;E&gt; treeSet = <span class="keyword">new</span> <span class="title class_">TreeSet</span>&lt;E&gt;();</span><br><span class="line"><span class="type">SubE</span> <span class="variable">se</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">SubE</span>(<span class="number">1</span>, <span class="number">2</span>);</span><br><span class="line">treeSet.add(se);</span><br><span class="line"><span class="comment">// E 的 print 会输出 E</span></span><br><span class="line"><span class="comment">// SubE 的 print 会输出 SubE</span></span><br><span class="line"><span class="comment">// 这里输出的是 SubE</span></span><br><span class="line">treeSet.first().print();</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">//Example Code</span><br>TreeSet&lt;E&gt; treeSet = <span class="hljs-keyword">new</span> <span class="hljs-title class_">TreeSet</span>&lt;E&gt;();<br><span class="hljs-type">SubE</span> <span class="hljs-variable">se</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">SubE</span>(<span class="hljs-number">1</span>, <span class="hljs-number">2</span>);<br>treeSet.add(se);<br><span class="hljs-comment">// E 的 print 会输出 E</span><br><span class="hljs-comment">// SubE 的 print 会输出 SubE</span><br><span class="hljs-comment">// 这里输出的是 SubE</span><br>treeSet.first().print();<br></code></pre></td></tr></table></figure>
 
 <p>而在 C++ 中，我们却需要显式地声明 <code>set&lt;T&gt;</code> 和 <code>set&lt;SubT1&gt;</code>, <code>set&lt;SubT2&gt;</code> … 遇到这个问题，我们可能会开始想到使用 <code>dynamic_cast</code>，然后随即又被<a target="_blank" rel="noopener" href="https://www.zhihu.com/question/22445339">它的低效率</a>（见 effective c++ 中的条款27）给吓跑。如果我们想要避免 <code>dynamic_cast</code>，本质上，我们就需要一些 workaround **避免 <code>dynamic_cast</code>**。</p>
 <p>整理一下思路，我们希望能在 <code>std::set</code> 中实现多态（Polymorphism），这其中的核心问题在于实现多态的 comparator。而我们又不希望通过 RTTI 实现 downcast(dynamic_cast)，这意味着，我们<strong>不能直接使用子类 SubT 进行自定义比较</strong>。</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//Example Code</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">A</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="type">int</span> a;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">B</span> : <span class="keyword">public</span> A &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="type">int</span> b;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">inline</span> <span class="type">bool</span> <span class="keyword">operator</span>&lt;(<span class="type">const</span> std::unique_ptr&lt;A&gt; &amp;i1,</span><br><span class="line">					  <span class="type">const</span> std::unique_ptr&lt;A&gt; &amp;i2) &#123;</span><br><span class="line">	<span class="keyword">return</span> i1-&gt;a &lt; i2-&gt;a;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">typedef</span> std::set&lt;std::unique_ptr&lt;A&gt; &gt; ASet;</span><br></pre></td></tr></table></figure>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-comment">//Example Code</span><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">A</span> &#123;<br><span class="hljs-keyword">public</span>:<br>	<span class="hljs-type">int</span> a;<br>&#125;;<br><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">B</span> : <span class="hljs-keyword">public</span> A &#123;<br><span class="hljs-keyword">public</span>:<br>	<span class="hljs-type">int</span> b;<br>&#125;;<br><br><span class="hljs-keyword">inline</span> <span class="hljs-type">bool</span> <span class="hljs-keyword">operator</span>&lt;(<span class="hljs-type">const</span> std::unique_ptr&lt;A&gt; &amp;i1,<br>					  <span class="hljs-type">const</span> std::unique_ptr&lt;A&gt; &amp;i2) &#123;<br>	<span class="hljs-keyword">return</span> i1-&gt;a &lt; i2-&gt;a;<br>&#125;<br><br><br><span class="hljs-keyword">typedef</span> std::set&lt;std::unique_ptr&lt;A&gt; &gt; ASet;<br></code></pre></td></tr></table></figure>
 
 <p>上面的代码中，在 <code>ASet</code> 中插入 B 的指针时，不会对属性 <code>b</code> 的值进行比较。简单说，相同 <code>a</code> 值，不同 <code>b</code> 值的 B 会被视作相同。</p>
 <p>排除了几种选择之后，我们可以想到用 virtual function，利用指针保留继承链。最终我使用的方法是<em><strong>留后门</strong></em>：既然不能直接比较 <code>b</code> 的值，就只能绕弯路，<strong>间接地进行比较</strong>。</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">A</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="function"><span class="keyword">virtual</span> boost::any <span class="title">Others</span><span class="params">()</span> <span class="type">const</span> </span>&#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">virtual</span> <span class="type">bool</span> <span class="title">CompareOthers</span><span class="params">(<span class="type">const</span> A&amp; a)</span> <span class="type">const</span> </span>&#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="type">int</span> a;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">B</span> : <span class="keyword">public</span> A &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="function"><span class="keyword">virtual</span> boost::any <span class="title">Others</span><span class="params">()</span> <span class="type">const</span> </span>&#123;</span><br><span class="line">		<span class="keyword">return</span> b;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">virtual</span> <span class="type">bool</span> <span class="title">CompareOthers</span><span class="params">(<span class="type">const</span> A&amp; a)</span> <span class="type">const</span> </span>&#123;</span><br><span class="line">		<span class="keyword">return</span> b &lt; boost::<span class="built_in">any_cast</span>&lt;<span class="type">int</span>&gt;(rhs.<span class="built_in">Others</span>());</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="type">int</span> b;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-keyword">class</span> <span class="hljs-title class_">A</span> &#123;<br><span class="hljs-keyword">public</span>:<br>	<span class="hljs-function"><span class="hljs-keyword">virtual</span> boost::any <span class="hljs-title">Others</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> </span>&#123;<br>		<span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>	&#125;<br><br>	<span class="hljs-function"><span class="hljs-keyword">virtual</span> <span class="hljs-type">bool</span> <span class="hljs-title">CompareOthers</span><span class="hljs-params">(<span class="hljs-type">const</span> A&amp; a)</span> <span class="hljs-type">const</span> </span>&#123;<br>		<span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;<br>	&#125;<br><br>	<span class="hljs-type">int</span> a;<br>&#125;;<br><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">B</span> : <span class="hljs-keyword">public</span> A &#123;<br><span class="hljs-keyword">public</span>:<br>	<span class="hljs-function"><span class="hljs-keyword">virtual</span> boost::any <span class="hljs-title">Others</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> </span>&#123;<br>		<span class="hljs-keyword">return</span> b;<br>	&#125;<br><br>	<span class="hljs-function"><span class="hljs-keyword">virtual</span> <span class="hljs-type">bool</span> <span class="hljs-title">CompareOthers</span><span class="hljs-params">(<span class="hljs-type">const</span> A&amp; a)</span> <span class="hljs-type">const</span> </span>&#123;<br>		<span class="hljs-keyword">return</span> b &lt; boost::<span class="hljs-built_in">any_cast</span>&lt;<span class="hljs-type">int</span>&gt;(rhs.<span class="hljs-built_in">Others</span>());<br>	&#125;<br><br>	<span class="hljs-type">int</span> b;<br>&#125;;<br></code></pre></td></tr></table></figure>
 <p>这里就可以看到我们留后门的两个函数 <code>Others</code> 和 <code>CompareOthers</code>，间接地利用类型转换来实现。最终的自定义比较函数就可以这么写：</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">inline</span> <span class="type">bool</span> <span class="keyword">operator</span>&lt;(<span class="type">const</span> std::unique_ptr&lt;A&gt; &amp;i1,</span><br><span class="line">					  <span class="type">const</span> std::unique_ptr&lt;A&gt; &amp;i2) &#123;</span><br><span class="line">	<span class="keyword">if</span>(i1-&gt;a == i2-&gt;a) &#123;</span><br><span class="line">		<span class="keyword">return</span> i1-&gt;<span class="built_in">CompareOthers</span>(*i2);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> i1-&gt;a &lt; i2-&gt;a;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-keyword">inline</span> <span class="hljs-type">bool</span> <span class="hljs-keyword">operator</span>&lt;(<span class="hljs-type">const</span> std::unique_ptr&lt;A&gt; &amp;i1,<br>					  <span class="hljs-type">const</span> std::unique_ptr&lt;A&gt; &amp;i2) &#123;<br>	<span class="hljs-keyword">if</span>(i1-&gt;a == i2-&gt;a) &#123;<br>		<span class="hljs-keyword">return</span> i1-&gt;<span class="hljs-built_in">CompareOthers</span>(*i2);<br>	&#125;<br>	<span class="hljs-keyword">return</span> i1-&gt;a &lt; i2-&gt;a;<br>&#125;<br></code></pre></td></tr></table></figure>
 <p>这样我们算是基本完成了需求的实现。</p>
 <p>还有一点。上面我们使用了 <code>boost::any</code> 表示可以接受任何值。这样写比较直观，但是<a target="_blank" rel="noopener" href="http://www.nullptr.me/2011/05/10/boostany/"><code>any_cast</code> 的实际性能上貌似与 <code>dynamic_cast</code> 相差不大</a>，都是使用 RTTI。在 benchmark 下，甚至可能出现 <a target="_blank" rel="noopener" href="https://felipedelamuerte.wordpress.com/2012/04/06/why-you-shouldnt-use-boostany-especially-not-in-time-critical-code/"><code>boost::any</code> 比 <code>void *</code> 性能相差近50倍的情况</a>。不过这里有充足的优化空间，我们可以完全不必使用 <code>boost::any_cast</code>，而是简单使用 <code>static_cast</code> 就可完成任务。所以这个方法可行。</p>
 <p>看上去，我们好像漂亮地完成了一个（可以不使用 RTTI 的）<a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Type_erasure"><em><strong>Type Erasure</strong></em></a>。然而，这意味着我们依然需要使用 downcast 来实现 <em><strong>Type inference</strong></em>，否则，我们的子类 SubT 将无法在任何使用了 <code>std::set&lt;std::unique_ptr&lt;T&gt; &gt;</code> 的地方使用。除非我们可以将 T 与其子类完全地从它们的 caller 中解耦出来，这种方案才有意义。换句话说，我们需要让 caller 完全不必在乎它们使用的类型是 T，还是 SubT1，SubT2，所有的细节都由虚函数来完成。如果可以做到这样，我们就能在不使用 RTTI 的情况下，像 Java 那样完成工作。</p>
 <p>当然，如果使用了 RTTI，那 C++ 和 Java 的区别就很小了。</p>
 <p>多数情况下，我们没有办法不使用 downcast。那么现在问题的核心在于，有没有其他的方法，可以在不使用 RTTI 的前提下，实现 downcast。</p>
 <p>如果在对象较小的情况下，我们可以使用 <a target="_blank" rel="noopener" href="http://www.cplusplus.com/forum/articles/18757/"><em><strong>the clone pattern</strong></em></a> 来实现，但在这里不是 clone，我们定义一个 DownCast 函数。</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span>&lt;<span class="keyword">class</span> <span class="title class_">T</span>&gt;</span><br><span class="line"><span class="keyword">typename</span> std::enable_if&lt;std::is_same&lt;T, B&gt;::value, B&gt;::<span class="function">type</span></span><br><span class="line"><span class="function"><span class="title">DownCast</span><span class="params">(<span class="type">const</span> std::unique_ptr&lt;A&gt; &amp;pA)</span> </span>&#123;</span><br><span class="line">  <span class="function">B <span class="title">ret</span><span class="params">(pA-&gt;a, boost::any_cast&lt;<span class="type">int</span>&gt;(pA-&gt;Others()))</span></span>;</span><br><span class="line">  <span class="keyword">return</span> ret;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 我们在这里利用复制来进行 downcast，不使用 RTTI</span></span><br><span class="line">B b = <span class="built_in">DownCast</span>&lt;B&gt;(pA);</span><br></pre></td></tr></table></figure>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-keyword">template</span>&lt;<span class="hljs-keyword">class</span> <span class="hljs-title class_">T</span>&gt;<br><span class="hljs-keyword">typename</span> std::enable_if&lt;std::is_same&lt;T, B&gt;::value, B&gt;::<span class="hljs-function">type</span><br><span class="hljs-function"><span class="hljs-title">DownCast</span><span class="hljs-params">(<span class="hljs-type">const</span> std::unique_ptr&lt;A&gt; &amp;pA)</span> </span>&#123;<br>  <span class="hljs-function">B <span class="hljs-title">ret</span><span class="hljs-params">(pA-&gt;a, boost::any_cast&lt;<span class="hljs-type">int</span>&gt;(pA-&gt;Others()))</span></span>;<br>  <span class="hljs-keyword">return</span> ret;<br>&#125;<br><br><span class="hljs-comment">// 我们在这里利用复制来进行 downcast，不使用 RTTI</span><br>B b = <span class="hljs-built_in">DownCast</span>&lt;B&gt;(pA);<br></code></pre></td></tr></table></figure>
 <p>当然，我们这里依然假设 <code>boost::any_cast</code> 是一个 exception safe 且 without RTTI 的转换函数。因为我们在这里完全可以优化到这样。</p>
 <p>顺便扔出一个刚刚学会的名词：<a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Substitution_failure_is_not_an_error">SFINAE</a></p>
 <hr>
 <h3 id="更新一下"><a href="#更新一下" class="headerlink" title="更新一下"></a>更新一下</h3><p>之前在 <a target="_blank" rel="noopener" href="https://felipedelamuerte.wordpress.com/2012/04/06/why-you-shouldnt-use-boostany-especially-not-in-time-critical-code/"><code>boost::any</code> 比 <code>void *</code> 性能相差近50倍</a><br>的链接里，博主提供了测试代码。测试程序测试对基本类型<code>size_t</code>转换所用时长。</p>
 <p>benchmark的结果和我的差不太多。<br>在我的 MacBook Air (13-inch, Early 2014)，clang version 3.6.2 下</p>
 <p>debug mode 的数据是：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">boost::any - 18.8269</span><br><span class="line">boost::spirit::hold_any - 3.50993</span><br><span class="line">void ptr - 0.860663</span><br></pre></td></tr></table></figure>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">boost</span>::any - <span class="hljs-number">18</span>.<span class="hljs-number">8269</span><br><span class="hljs-attribute">boost</span>::spirit::hold_any - <span class="hljs-number">3</span>.<span class="hljs-number">50993</span><br><span class="hljs-attribute">void</span> ptr - <span class="hljs-number">0</span>.<span class="hljs-number">860663</span><br></code></pre></td></tr></table></figure>
 <p>release mode 的数据是</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">boost::any - 8.41195</span><br><span class="line">boost::spirit::hold_any - 0.499917</span><br><span class="line">void ptr - 0.043697</span><br></pre></td></tr></table></figure>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">boost</span>::any - <span class="hljs-number">8</span>.<span class="hljs-number">41195</span><br><span class="hljs-attribute">boost</span>::spirit::hold_any - <span class="hljs-number">0</span>.<span class="hljs-number">499917</span><br><span class="hljs-attribute">void</span> ptr - <span class="hljs-number">0</span>.<span class="hljs-number">043697</span><br></code></pre></td></tr></table></figure>
 
 <p>公有变量 x 也用了 <code>volatile</code> 修饰，结果应该可靠，可见，<code>boost::any</code> 确实较慢。拖累性能的地方在于exception，可能还因为一部分中间的执行代码，但应该与代码中极少数使用 <code>typeid</code> 的地方无关，知乎上 R大 也曾经解释过，<a target="_blank" rel="noopener" href="https://www.zhihu.com/question/38997922/answer/79179526">而当typeid运算符应用在一个指向多态类型对象的指针上的时候，typeid的实现才需要有运行时行为。</a></p>
 <p>所以我们在上面实现 CompareOthers 和 DownCast 的时候，完全可以不用考虑异常，类型转换失败则程序应停止运行而不是抛出异常。</p>
@@ -222,229 +366,378 @@
 <p>如果这被 C++ 标准认为是自然的行为的话，那么，我们来看看它会带来的不便之处。</p>
 <p>不便之处在我们使用 <code>std::set&lt;std::set&lt;std::unique_ptr&gt; &gt;</code> 时尤为突出。虽然 <code>unique_ptr</code> 禁止 copy，但是 set<br>是允许 copy 的，这就意味这我们可能需要重新编写 set<unique_ptr> 的复制函数。这让我很疑惑为什么 unique_ptr<br>没有提供默认的 deep copy 接口来复制所指的对象。</p>
 <p>我们为了使用 <code>std::set&lt;std::unique_ptr&gt;</code>，编写了custom comparator。在使用 <code>std::set&lt;std::set&lt;std::unique_ptr&gt; &gt;</code> 时，我们无需再次编写 comparator（stl 为提供 <code>std::set</code> 了 rational operator）。然而，如果我们使用的是 <code>std::unordered_set&lt;std::set&lt;std::unique_ptr&lt;A&gt; &gt; &gt;</code>，我们可能会这么写：</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">struct</span> <span class="title class_">AHasher</span> &#123;</span><br><span class="line">  <span class="function"><span class="type">size_t</span></span></span><br><span class="line"><span class="function">  <span class="title">operator</span><span class="params">()</span><span class="params">(<span class="type">const</span> std::set&lt;std::unique_ptr&lt;A&gt; &amp;val)</span> <span class="type">const</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> boost::<span class="built_in">hash_value</span>(val);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-keyword">struct</span> <span class="hljs-title class_">AHasher</span> &#123;<br>  <span class="hljs-function"><span class="hljs-type">size_t</span></span><br><span class="hljs-function">  <span class="hljs-title">operator</span><span class="hljs-params">()</span><span class="hljs-params">(<span class="hljs-type">const</span> std::set&lt;std::unique_ptr&lt;A&gt; &amp;val)</span> <span class="hljs-type">const</span> </span>&#123;<br>    <span class="hljs-keyword">return</span> boost::<span class="hljs-built_in">hash_value</span>(val);<br>  &#125;<br>&#125;;<br></code></pre></td></tr></table></figure>
 <p>这里使用了 <code>boost/functional/hash.hpp</code>。这里看起来合理，但程序运行的时候，我们会发现这与我们预期的不符。这是因为，我们忽略了为 <code>std::unique_ptr&lt;A&gt;</code> 自定义 hasher。这里默认地是对指针的值进行 hash，而不是对对象进行 hash。</p>
 <p>重写一下：</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">struct</span> <span class="title class_">AHasher</span> &#123;</span><br><span class="line">  <span class="function"><span class="type">size_t</span></span></span><br><span class="line"><span class="function">  <span class="title">operator</span><span class="params">()</span><span class="params">(<span class="type">const</span> std::set&lt;std::unique_ptr&lt;A&gt; &amp;val)</span> <span class="type">const</span> </span>&#123;</span><br><span class="line">    std::<span class="type">size_t</span> seed = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">const</span> <span class="keyword">auto</span> &amp;it : val) &#123;</span><br><span class="line">      boost::<span class="built_in">hash_combine</span>(seed, it-&gt;<span class="built_in">HashValue</span>());</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> seed;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-keyword">struct</span> <span class="hljs-title class_">AHasher</span> &#123;<br>  <span class="hljs-function"><span class="hljs-type">size_t</span></span><br><span class="hljs-function">  <span class="hljs-title">operator</span><span class="hljs-params">()</span><span class="hljs-params">(<span class="hljs-type">const</span> std::set&lt;std::unique_ptr&lt;A&gt; &amp;val)</span> <span class="hljs-type">const</span> </span>&#123;<br>    std::<span class="hljs-type">size_t</span> seed = <span class="hljs-number">0</span>;<br>    <span class="hljs-keyword">for</span> (<span class="hljs-type">const</span> <span class="hljs-keyword">auto</span> &amp;it : val) &#123;<br>      boost::<span class="hljs-built_in">hash_combine</span>(seed, it-&gt;<span class="hljs-built_in">HashValue</span>());<br>    &#125;<br>    <span class="hljs-keyword">return</span> seed;<br>  &#125;<br>&#125;;<br></code></pre></td></tr></table></figure>
 
 <p>原来我们在 set 中存储本来的对象，只需要定义好对象本身的 rational operator 和 copy function，亦或者是 <code>unordered_set</code><br>中的 hasher，就可以很自然地使用了。使用了 <code>unique_ptr</code> 之后，我们还需要重新定义 unique_ptr 的对应函数，才能将 <code>unique_ptr</code> 完全视作对象。</p>
 
-      </section>
-
-      
-      
-        <nav class="article-nav">
-          
-            <div class="article-nav-item layout-padding">
-  <article class="card-container article-nav-card content-padding--primary soft-size--large soft-style--box">
-    
-    <div class="card-text">
-      
-        <a href="/Swift%E4%B9%8BAnyClass%E4%B8%8E%E5%8A%A8%E6%80%81%E7%B1%BB%E5%9E%8B/" itemprop="url">
-          <h2 class="card-text--title text-ellipsis">Swift之AnyClass与动态类型</h2>
-        </a>
-      
-      <div class="card-text--row">Newer</div>
-    </div>
-  </article>
-</div>
-          
-          
-            <div class="article-nav-item layout-padding">
-  <article class="card-container article-nav-card content-padding--primary soft-size--large soft-style--box">
-    
-    <div class="card-text">
-      
-        <a href="/React-Native-%E4%B8%8B%E4%B8%80%E4%BB%A3UI%E5%BC%80%E5%8F%91%E6%80%9D%E7%BB%B4/" itemprop="url">
-          <h2 class="card-text--title text-ellipsis">React-Native -- 下一代UI开发思维</h2>
-        </a>
-      
-      <div class="card-text--row">Older</div>
-    </div>
-  </article>
-</div>
-          
-        </nav>
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
       
 
-      <section class="page-message-container layout-padding">
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
         
-
-
+  <a href="/categories/%E6%9C%AA%E5%88%86%E7%B1%BB/" class="category-chain-item">未分类</a>
   
   
 
-  
-  
-
-
-      </section>
-    </div>
-    <div class="widget-info">
-      <section class="widget-author widget-item layout-margin content-padding--primary soft-size--large soft-style--box">
-  <div class="widget-body">
+      </span>
     
-    
-    
+  
+</span>
 
-    <div class="count-box">
-      <div class="count-box--item">
-        <svg class="icon icon-article" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg">
-  <path d="M240.51564747 647.74217627h196.07203239c16.59071043 0 30.16492806-13.57421762 30.16492805-30.16492806V165.10332731c0-33.18142087-30.16492806-60.32985613-60.32985612-60.32985611H245.04038668C225.43318342 104.7734712 210.35071939 119.85593522 210.35071939 139.46313845V617.57724821c0 16.59071043 13.57421762 30.16492806 30.16492808 30.16492806z m663.62841731-452.47392089v482.63884894c0 33.18142087-27.14843525 60.32985613-60.32985612 60.32985613H180.18579134c-33.18142087 0-60.32985613-27.14843525-60.32985612-60.32985613V195.26825538c-49.77213131 0-90.49478418 40.72265287-90.49478417 90.49478417v452.4739209c0 49.77213131 40.72265287 90.49478418 90.49478417 90.49478417h286.56681657c16.59071043 0 30.16492806 13.57421762 30.16492807 30.16492807s13.57421762 30.16492806 30.16492805 30.16492806h90.49478418c16.59071043 0 30.16492806-13.57421762 30.16492805-30.16492806s13.57421762-30.16492806 30.16492807-30.16492807h286.56681657c49.77213131 0 90.49478418-40.72265287 90.49478417-90.49478417V285.76303955c0-49.77213131-40.72265287-90.49478418-90.49478417-90.49478417zM587.41232014 647.74217627h191.54729318c19.60720323 0 34.68966726-15.08246403 34.68966729-34.68966727V134.93839925c0-16.59071043-13.57421762-30.16492806-30.16492808-30.16492805H617.57724821c-30.16492806 0-60.32985613 27.14843525-60.32985612 60.32985611v452.4739209c0 16.59071043 13.57421762 30.16492806 30.16492805 30.16492806z" fill="currentColor"></path>
-</svg>
-        <span>12</span>
-      </div>
-      <div class="count-box--item">
-        <svg class="icon icon-categories" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg">
-  <path d="M900.3614811 257.09082106h-339.81629553l-67.96326003-101.9448889c-19.41807444-29.12711113-48.54518557-43.69066667-82.52681443-43.69066667H123.6385189c-53.39970333 0-97.09036999 43.69066667-97.09037113 97.09036999v582.54222222c0 53.39970333 43.69066667 97.09036999 97.09037113 97.09037002h776.7229622c53.39970333 0 97.09036999-43.69066667 97.09037113-97.09037002V354.18119104c0-53.39970333-43.69066667-97.09036999-97.09037113-97.09036998z m-97.09036999 242.72592554H220.72888889c-24.27259221 0-48.54518557-24.27259221-48.54518556-48.54518556s24.27259221-48.54518557 48.54518556-48.54518444h582.54222222c24.27259221 0 48.54518557 24.27259221 48.54518556 48.54518444s-24.27259221 48.54518557-48.54518556 48.54518556z" fill="currentColor"></path>
-</svg>
-        1
-      </div>
-      <div class="count-box--item">
-        <svg class="icon icon-tags" viewBox="0 0 1098 1024" version="1.1" xmlns="http://www.w3.org/2000/svg">
-  <path d="M283.42180005 272q0-28.38857157-20.09142843-48.48000001t-48.47999998-20.09142842-48.48000002 20.09142842-20.09142846 48.48000001 20.09142846 48.48 48.48000002 20.09142843 48.47999998-20.09142843 20.09142843-48.48zM855.0332285 580.57142843q0 28.38857157-19.81714313 48.2057147l-263.03999997 263.58857157q-20.9142853 19.81714313-48.75428534 19.81714312-28.38857157 0-48.20571468-19.81714312l-383.04-383.58857157q-20.36571468-19.81714313-34.55999999-54.10285688t-14.19428534-62.6742853l0-222.85714313q0-27.84000002 20.36571469-48.20571469t48.2057147-20.36571466l222.85714313 0q28.38857157 0 62.6742853 14.19428529t54.65142842 34.55999999l383.04000001 382.49142843q19.81714313 20.9142853 19.81714314 48.75428532zM1060.74751475 580.57142843q0 28.38857157-19.81714313 48.2057147l-263.04 263.58857157q-20.9142853 19.81714313-48.75428531 19.81714312-19.26857155 0-31.61142843-7.47428531t-28.38857159-24.13714314l251.79428534-251.7942853q19.81714313-19.81714313 19.81714308-48.20571469 0-27.84000002-19.81714308-48.75428531l-383.04000001-382.49142845q-20.36571468-20.36571468-54.65142842-34.55999999t-62.67428532-14.19428534l120 0q28.38857157 0 62.67428532 14.19428534t54.65142842 34.55999999l383.03999998 382.49142845q19.81714313 20.9142853 19.81714314 48.75428531z" fill="currentColor"></path>
-</svg>
-        10
-      </div>
     </div>
-  </div>
-</section>
-
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
       
-
+        <a href="/tags/C/" class="print-no-link">#C++</a>
       
-<section class="widet-notice widget-item layout-margin content-padding--primary soft-size--large soft-style--box">
-  <div class="widget-title">
-    <svg class="icon icon-notice" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg">
-  <path d="M512 945.02305225v28.15620663a24.27259221 24.27259221 0 0 1-24.27259221 24.27259335H394.0352a48.54518557 48.54518557 0 0 1-41.74885888-23.78714112l-110.68302222-184.47170332a132.04290333 132.04290333 0 0 1-17.47626667-48.54518557h118.4502511a200.97706667 200.97706667 0 0 1 76.21594113 14.56355556l20.38897777 133.49925888a48.54518557 48.54518557 0 0 0 36.40888888 27.67075555l16.01991111 2.91271112a24.27259221 24.27259221 0 0 1 20.38897778 25.72894889zM997.45185223 463.45481443a194.18074112 194.18074112 0 0 1-38.8361489 116.50844445 24.75804445 24.75804445 0 0 1-36.4088889 0l-34.95253333-34.95253333a24.27259221 24.27259221 0 0 1-2.91271111-30.58346667 97.09036999 97.09036999 0 0 0 0-106.79940665 24.27259221 24.27259221 0 0 1 2.91271111-30.58346666l34.95253333-34.95253334a24.75804445 24.75804445 0 0 1 18.93262223-7.28177777 26.2144 26.2144 0 0 1 17.47626667 9.70903665A194.18074112 194.18074112 0 0 1 997.45185223 463.45481443z m-194.18074112-388.36148111v776.72296335a48.54518557 48.54518557 0 0 1-48.54518556 48.54518443h-28.64165888a48.54518557 48.54518557 0 0 1-33.98163001-14.07810332l-145.63555556-143.20829668A291.27111111 291.27111111 0 0 0 342.57730333 657.63555556H172.18370333a145.63555556 145.63555556 0 0 1-145.63555556-145.63555556v-97.09036999a145.63555556 145.63555556 0 0 1 145.63555556-145.63555556h170.3936a291.27111111 291.27111111 0 0 0 206.31703779-85.43952668l145.63555555-143.20829554a48.54518557 48.54518557 0 0 1 33.98162888-14.07810446H754.72592555a48.54518557 48.54518557 0 0 1 48.54518556 48.54518555z" fill="currentColor"></path>
-</svg>
-    <span>NOTICE</span>
-  </div>
-  <div class="widget-body">
-    <p>2024招新ing, 加入QQ群了解详情：488725276</p>
-  </div>
-</section>
-
-
-      <section class="widget-categorys widget-item layout-margin content-padding--primary soft-size--large soft-style--box">
-  <div class="widget-title">
-    <svg class="icon icon-categories" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg">
-  <path d="M900.3614811 257.09082106h-339.81629553l-67.96326003-101.9448889c-19.41807444-29.12711113-48.54518557-43.69066667-82.52681443-43.69066667H123.6385189c-53.39970333 0-97.09036999 43.69066667-97.09037113 97.09036999v582.54222222c0 53.39970333 43.69066667 97.09036999 97.09037113 97.09037002h776.7229622c53.39970333 0 97.09036999-43.69066667 97.09037113-97.09037002V354.18119104c0-53.39970333-43.69066667-97.09036999-97.09037113-97.09036998z m-97.09036999 242.72592554H220.72888889c-24.27259221 0-48.54518557-24.27259221-48.54518556-48.54518556s24.27259221-48.54518557 48.54518556-48.54518444h582.54222222c24.27259221 0 48.54518557 24.27259221 48.54518556 48.54518444s-24.27259221 48.54518557-48.54518556 48.54518556z" fill="currentColor"></path>
-</svg>
-    <span>CATEGORYS</span>
-  </div>
-  <div class="widget-body">
-    <ul class="categorys-list">
-      
-        <li class="categorys-list-item">
-          <a href="/categories/%E6%9C%AA%E5%88%86%E7%B1%BB/">
-            未分类 (12)
-          </a>
-        </li>
-      
-    </ul>
-  </div>
-</section>
-
-      <section class="widget-tags widget-item  layout-margin content-padding--primary soft-size--large soft-style--box">
-  <div class="widget-title">
-    <svg class="icon icon-tags" viewBox="0 0 1098 1024" version="1.1" xmlns="http://www.w3.org/2000/svg">
-  <path d="M283.42180005 272q0-28.38857157-20.09142843-48.48000001t-48.47999998-20.09142842-48.48000002 20.09142842-20.09142846 48.48000001 20.09142846 48.48 48.48000002 20.09142843 48.47999998-20.09142843 20.09142843-48.48zM855.0332285 580.57142843q0 28.38857157-19.81714313 48.2057147l-263.03999997 263.58857157q-20.9142853 19.81714313-48.75428534 19.81714312-28.38857157 0-48.20571468-19.81714312l-383.04-383.58857157q-20.36571468-19.81714313-34.55999999-54.10285688t-14.19428534-62.6742853l0-222.85714313q0-27.84000002 20.36571469-48.20571469t48.2057147-20.36571466l222.85714313 0q28.38857157 0 62.6742853 14.19428529t54.65142842 34.55999999l383.04000001 382.49142843q19.81714313 20.9142853 19.81714314 48.75428532zM1060.74751475 580.57142843q0 28.38857157-19.81714313 48.2057147l-263.04 263.58857157q-20.9142853 19.81714313-48.75428531 19.81714312-19.26857155 0-31.61142843-7.47428531t-28.38857159-24.13714314l251.79428534-251.7942853q19.81714313-19.81714313 19.81714308-48.20571469 0-27.84000002-19.81714308-48.75428531l-383.04000001-382.49142845q-20.36571468-20.36571468-54.65142842-34.55999999t-62.67428532-14.19428534l120 0q28.38857157 0 62.67428532 14.19428534t54.65142842 34.55999999l383.03999998 382.49142845q19.81714313 20.9142853 19.81714314 48.75428531z" fill="currentColor"></path>
-</svg>
-    <span>TAGS</span>
-  </div>
-  <div class="widget-body">
-    <div class="tags-cloud">
-      <a href="/tags/Boost/" style="font-size: 10px;" class="tags-cloud-0">Boost</a> <a href="/tags/C/" style="font-size: 20px;" class="tags-cloud-10">C++</a> <a href="/tags/IOS/" style="font-size: 10px;" class="tags-cloud-0">IOS</a> <a href="/tags/Javascript/" style="font-size: 10px;" class="tags-cloud-0">Javascript</a> <a href="/tags/LevelDB/" style="font-size: 10px;" class="tags-cloud-0">LevelDB</a> <a href="/tags/React-Native/" style="font-size: 10px;" class="tags-cloud-0">React-Native</a> <a href="/tags/Redis/" style="font-size: 10px;" class="tags-cloud-0">Redis</a> <a href="/tags/Swift/" style="font-size: 15px;" class="tags-cloud-5">Swift</a> <a href="/tags/mongo/" style="font-size: 10px;" class="tags-cloud-0">mongo</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" style="font-size: 10px;" class="tags-cloud-0">数据结构</a>
     </div>
-  </div>
-</section>
-    </div>
-  </article>
+  
 </div>
 
-    <!-- footer container -->
-<footer id="footer" class="footer">
-  <div class="footer-container">
-    
-    <div class="social-icons">
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>我对C++的编程思考</div>
+      <div>http://ippclub.github.io/我对C-的编程思考/</div>
+    </div>
+    <div class="license-meta">
       
-        
       
-        
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2015年12月23日</div>
+        </div>
       
-        
       
-        
-          <a href="https://github.com/IppClub/" class="soft-size--primary soft-style--box" target="_blank" rel="noopener noreferrer">
-            <svg class="icon icon-github" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg">
-  <path d="M64.6 512c0 195.6 125.4 361.9 300.1 422.9 23.5 5.9 19.9-10.8 19.9-22.2v-77.6c-135.8 15.9-141.3-74-150.5-89-18.5-31.5-61.9-39.5-49-54.5 31-15.9 62.5 4 98.9 58 26.4 39.1 77.9 32.5 104.1 26 5.7-23.5 17.9-44.5 34.7-60.9-140.7-25.2-199.4-111.1-199.4-213.3 0-49.5 16.4-95.1 48.4-131.8-20.4-60.6 1.9-112.4 4.9-120.1 58.2-5.2 118.5 41.6 123.3 45.3 33.1-8.9 70.8-13.7 112.9-13.7 42.4 0 80.3 4.9 113.5 13.9 11.3-8.6 67.3-48.8 121.4-43.9 2.9 7.7 24.7 58.3 5.5 118.1 32.5 36.8 49 82.8 49 132.4 0 102.3-59 188.3-200.2 213.2 23.5 23.3 38.1 55.5 38.1 91.1v112.7c0.8 9 0 17.9 15.1 17.9C832.7 877 960.4 709.4 960.4 512.1c0-247.5-200.6-447.9-447.9-447.9C265 64.1 64.6 264.5 64.6 512z"></path>
-</svg>
-          </a>
-        
+        <div class="license-meta-item license-meta-date">
+          <div>更新于</div>
+          <div>2024年10月3日</div>
+        </div>
       
-        
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
       
     </div>
-     
-    <p>&copy; 2024 <a href="/" target="_blank"></a></p>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/Swift%E4%B9%8BAnyClass%E4%B8%8E%E5%8A%A8%E6%80%81%E7%B1%BB%E5%9E%8B/" title="Swift之AnyClass与动态类型">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Swift之AnyClass与动态类型</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/React-Native-%E4%B8%8B%E4%B8%80%E4%BB%A3UI%E5%BC%80%E5%8F%91%E6%80%9D%E7%BB%B4/" title="React-Native -- 下一代UI开发思维">
+                        <span class="hidden-mobile">React-Native -- 下一代UI开发思维</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
 
     
 
-    <p>Powered by <a href="https://hexo.io" target="_blank" rel="noopener noreferrer">Hexo</a> Theme - <a href="https://github.com/miiiku/flex-block" target="_blank" rel="noopener noreferrer author">flex-block</a></p>
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
 
-    <p>
-      <a href="javascript:;" id="theme-light">🌞 浅色</a>
-      <a href="javascript:;" id="theme-dark">🌛 深色</a>
-      <a href="javascript:;" id="theme-auto">🤖️ 自动</a>
-    </p>
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
   </div>
-</footer>
-  </div>
+</div>
 
-  <div class="back-to-top-fixed soft-size--round soft-style--box">
-    <svg class="icon icon-back-to-top" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg">
-      <path d="M725.333333 426.666667c-12.8 0-21.333333-4.266667-29.866667-12.8l-213.333333-213.333333c-17.066667-17.066667-17.066667-42.666667 0-59.733333s42.666667-17.066667 59.733333 0l213.333333 213.333333c17.066667 17.066667 17.066667 42.666667 0 59.733333C746.666667 422.4 738.133333 426.666667 725.333333 426.666667z"></path>
-      <path d="M298.666667 426.666667c-12.8 0-21.333333-4.266667-29.866667-12.8-17.066667-17.066667-17.066667-42.666667 0-59.733333l213.333333-213.333333c17.066667-17.066667 42.666667-17.066667 59.733333 0s17.066667 42.666667 0 59.733333l-213.333333 213.333333C320 422.4 311.466667 426.666667 298.666667 426.666667z"></path>
-      <path d="M512 896c-25.6 0-42.666667-17.066667-42.666667-42.666667L469.333333 170.666667c0-25.6 17.066667-42.666667 42.666667-42.666667s42.666667 17.066667 42.666667 42.666667l0 682.666667C554.666667 878.933333 537.6 896 512 896z"></path>
-    </svg>
-  </div>
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
 
   
-  <!-- aplayer -->
-
-
-<!-- dplayer -->
-
-
-<!-- copy button  -->
-<script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.11/dist/clipboard.min.js"></script>
-
-<!-- https://clipboardjs.com/ -->
-
-
-
-
-
-
-
-
-
-  
-
-
-  
-
-
+    <script  src="/js/img-lazyload.js" ></script>
   
 
 
 
 
-<script src="/js/script.js"></script>
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
 
 
   
-  <!-- 尾部用户自定义相关内容 -->
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
 </body>
 </html>
