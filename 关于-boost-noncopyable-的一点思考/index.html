@@ -22,7 +22,7 @@
 
   
 
-  <title>I++ 俱乐部 | I++ Club</title>
+  <title>关于 boost::noncopyable 的一点思考 | I++ Club</title>
 
   
 
@@ -46,7 +46,7 @@
   <div class="root-container">
     
 <!-- header container -->
-<header class="header-container">
+<header class="header-container post">
   
     <div class="post-image" style="background-image: url(/img/mainbg.png)"></div>
   
@@ -94,44 +94,136 @@
 
   
   
-
-  
-  
     <div class="header-content">
-      <div class="post-text layout-block layout-padding">
-        <h1 class="title-wrap">I++ 俱乐部</h1>
-        
+      <div class="post-text layout-block">
+        <div class="layout-margin">
+          <h1 class="title-wrap">关于 boost::noncopyable 的一点思考</h1>
+          <h2 class="title-sub-wrap">
+            <strong></strong>
+            <span>发布于</span>
+            <time  class="article-date" datetime="2015-10-01T13:16:00.000Z" itemprop="datePublished">2015-10-01</time>
+          </h2>
+          
+            <h2 class="last-time">
+              <span>最后更新于</span>
+              <time  class="article-updated" datetime="2024-10-03T13:38:54.000Z" itemprop="dateUpdated">2024-10-03</time>
+            </h2>
+          
+          
+          <ul class="wrap-list dark">
+  
+</ul>
+          <ul class="wrap-list dark">
+  
+    <li><a href="/tags/C/">🏷️ C++</a></li>
+  
+    <li><a href="/tags/Boost/">🏷️ Boost</a></li>
+  
+</ul>
+        </div>
       </div>
     </div>
+  
+
+  
   
   
 </header>
 
-    <!-- 分页(其他自定义页面) -->
+    <!-- 文章 -->
 
-<!-- 自定义页面 -->
-
+<!-- 文章内容 -->
 <div class="body-container">
   <article class="content-container layout-block post-container">
     <div class="article-info">
       
+      
+      
+      
       <section class="article-entry markdown-body layout-margin content-padding--large soft-size--large soft-style--box">
-        <h3 id="我们是谁"><a href="#我们是谁" class="headerlink" title="我们是谁"></a>我们是谁</h3><p>2015 常驻用户</p>
-<p>吴涛</p>
-<p>2016 常驻用户</p>
-<p>吕炀</p>
-<p><img src="/img/people/lvyang.jpg" alt="LvYang"></p>
-<p>2024 常驻用户</p>
-<p>何山</p>
-<h3 id="联系我们"><a href="#联系我们" class="headerlink" title="联系我们"></a>联系我们</h3><p>I++ 俱乐部是东南大学计软智学院的技术俱乐部。南京江宁区东南大学九龙湖校区计算机拔尖基地。</p>
+        <p>一般通过继承 <code>boost::noncopyable</code> 来保证类的对象不会被复制。我们会采用如下写法：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Buffer</span> : boost::noncopyable &#123;</span><br></pre></td></tr></table></figure>
+
+<p>注意的是，我们既可以采用公有继承 (public)，也可以采用默认继承方式 (private)，具体使用哪一种方式，需要我们的思考。</p>
+<p>譬如，当父类拥有了 noncopyable 的特性，一般情况下，我们希望子类在继承父类的同时，也能继承其 noncopyable 的特性，于是子类就 <strong>无需重复继承 <code>boost::noncoyable</code></strong> 。举个例子：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">FixedSizeBuffer</span> : <span class="keyword">public</span> Buffer &#123;</span><br></pre></td></tr></table></figure>
+
+<p>由于 <code>Buffer</code> 不应该被复制，在 <code>FixedSizeBuffer</code> 公有继承了 <code>Buffer</code>之后，我们希望 <code>FixedSizeBuffer</code> 能够 <strong>同时继承 <code>Buffer</code> 的 noncopyable 的特性</strong>。我们就不必这样写：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">FixedSizeBuffer</span> : <span class="keyword">public</span> Buffer, boost::noncopyable &#123;</span><br></pre></td></tr></table></figure>
+
+<p>我们可以做到吗？</p>
+<p>首先我们来了解 boost::noncopyable 的内部实现。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">noncopyable</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="keyword">protected</span>:</span><br><span class="line">      <span class="built_in">noncopyable</span>() &#123;&#125;</span><br><span class="line">      ~<span class="built_in">noncopyable</span>() &#123;&#125;</span><br><span class="line">  <span class="keyword">private</span>:  <span class="comment">// emphasize the following members are private</span></span><br><span class="line">      <span class="built_in">noncopyable</span>( <span class="type">const</span> noncopyable&amp; );</span><br><span class="line">      noncopyable&amp; <span class="keyword">operator</span>=( <span class="type">const</span> noncopyable&amp; );</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这是 C++99 的版本，如果是 C++11 则会使用如下写法：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">protected</span>:</span><br><span class="line">    <span class="built_in">noncopyable</span>( <span class="type">const</span> noncopyable&amp; ) = <span class="keyword">delete</span>;</span><br><span class="line">    noncopyable&amp; <span class="keyword">operator</span>=( <span class="type">const</span> noncopyable&amp; ) = <span class="keyword">delete</span>;</span><br></pre></td></tr></table></figure>
+
+<p>我们知道 protected 声明的成员在公有继承下依然可见，而 private 不再可见，那是否意味着 C++99 和 C++11 的两种实现有所不同？</p>
+<hr>
+<p>以上是我们平时的思考。如果已知答案，这些思考只是矫情跟无聊而已。</p>
+<p>实际上，这两种方法完全相同，使用 public 继承与使用 private 继承也 <strong>完全没有任何区别</strong>。</p>
+<p>因为子类在使用 copy constructor 和 assignment operator 的时候，必须调用父类的相应函数。显然，如果把相应函数</p>
+<ul>
+<li>放在 private 内，或者</li>
+<li>放在 protected 块内，并用 <code>=delete</code> 标识；</li>
+</ul>
+<p>那子类即使实现了相应函数也无法成功调用。</p>
+<hr>
+<p>所以我们得出一个结论：只要父类继承了 <code>boost::noncopyable</code>，那么子类就无需重复继承。另一方面，我们一般使用 private 继承来为类增加功能，所以我们一般使用默认继承方式（private 继承）来继承 <code>boost::noncopyable</code>，即：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Buffer</span> : boost::noncopyable</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">FixedSizeBuffer</span> : <span class="keyword">public</span> Buffer</span><br></pre></td></tr></table></figure>
 
       </section>
 
       
       
+        <nav class="article-nav">
+          
+            <div class="article-nav-item layout-padding">
+  <article class="card-container article-nav-card content-padding--primary soft-size--large soft-style--box">
+    
+    <div class="card-text">
+      
+        <a href="/Implementing-an-unique-ptr/" itemprop="url">
+          <h2 class="card-text--title text-ellipsis">Implementing an unique_ptr</h2>
+        </a>
+      
+      <div class="card-text--row">Newer</div>
+    </div>
+  </article>
+</div>
+          
+          
+            <div class="article-nav-item layout-padding">
+  <article class="card-container article-nav-card content-padding--primary soft-size--large soft-style--box">
+    
+    <div class="card-text">
+      
+        <a href="/%E5%85%B3%E4%BA%8E-Redis-3-0-%E4%B8%AD%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" itemprop="url">
+          <h2 class="card-text--title text-ellipsis">关于 Redis 3.0 中的数据结构</h2>
+        </a>
+      
+      <div class="card-text--row">Older</div>
+    </div>
+  </article>
+</div>
+          
+        </nav>
+      
 
-      
-      
+      <section class="page-message-container layout-padding">
+        
+
+
+  
+  
+
+  
+  
+
+
+      </section>
     </div>
     <div class="widget-info">
       <section class="widget-author widget-item layout-margin content-padding--primary soft-size--large soft-style--box">
@@ -165,6 +257,8 @@
 
       
 
+      
+
       <section class="widget-categorys widget-item layout-margin content-padding--primary soft-size--large soft-style--box">
   <div class="widget-title">
     <svg class="icon icon-categories" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg">
@@ -195,7 +289,6 @@
     </div>
   </article>
 </div>
-
 
     <!-- footer container -->
 <footer id="footer" class="footer">

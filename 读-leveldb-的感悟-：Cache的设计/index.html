@@ -22,7 +22,7 @@
 
   
 
-  <title>I++ 俱乐部 | I++ Club</title>
+  <title>读 leveldb 的感悟 ：Cache的设计 | I++ Club</title>
 
   
 
@@ -46,7 +46,7 @@
   <div class="root-container">
     
 <!-- header container -->
-<header class="header-container">
+<header class="header-container post">
   
     <div class="post-image" style="background-image: url(/img/mainbg.png)"></div>
   
@@ -94,44 +94,137 @@
 
   
   
-
-  
-  
     <div class="header-content">
-      <div class="post-text layout-block layout-padding">
-        <h1 class="title-wrap">I++ 俱乐部</h1>
-        
+      <div class="post-text layout-block">
+        <div class="layout-margin">
+          <h1 class="title-wrap">读 leveldb 的感悟 ：Cache的设计</h1>
+          <h2 class="title-sub-wrap">
+            <strong></strong>
+            <span>发布于</span>
+            <time  class="article-date" datetime="2016-05-05T13:00:13.000Z" itemprop="datePublished">2016-05-05</time>
+          </h2>
+          
+            <h2 class="last-time">
+              <span>最后更新于</span>
+              <time  class="article-updated" datetime="2024-10-03T13:38:54.000Z" itemprop="dateUpdated">2024-10-03</time>
+            </h2>
+          
+          
+          <ul class="wrap-list dark">
+  
+</ul>
+          <ul class="wrap-list dark">
+  
+    <li><a href="/tags/C/">🏷️ C++</a></li>
+  
+    <li><a href="/tags/LevelDB/">🏷️ LevelDB</a></li>
+  
+</ul>
+        </div>
       </div>
     </div>
+  
+
+  
   
   
 </header>
 
-    <!-- 分页(其他自定义页面) -->
+    <!-- 文章 -->
 
-<!-- 自定义页面 -->
-
+<!-- 文章内容 -->
 <div class="body-container">
   <article class="content-container layout-block post-container">
     <div class="article-info">
       
+      
+      
+      
       <section class="article-entry markdown-body layout-margin content-padding--large soft-size--large soft-style--box">
-        <h3 id="我们是谁"><a href="#我们是谁" class="headerlink" title="我们是谁"></a>我们是谁</h3><p>2015 常驻用户</p>
-<p>吴涛</p>
-<p>2016 常驻用户</p>
-<p>吕炀</p>
-<p><img src="/img/people/lvyang.jpg" alt="LvYang"></p>
-<p>2024 常驻用户</p>
-<p>何山</p>
-<h3 id="联系我们"><a href="#联系我们" class="headerlink" title="联系我们"></a>联系我们</h3><p>I++ 俱乐部是东南大学计软智学院的技术俱乐部。南京江宁区东南大学九龙湖校区计算机拔尖基地。</p>
+        <p>leveldb允许Cache（一个缓冲区的抽象）作为一个Option，用户可以自定义它的实现。具体来说就是这样：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Options</span> &#123;</span><br><span class="line">    ...</span><br><span class="line">    Cache *block_cache;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>这是一个难度较高的设计需求。</p>
+<p>表面上按照逻辑，首先我们定义好Cache的接口，用户可以自行设置Cache的实现，leveldb默认用自己的 <code>ShardedLRUCache</code>（也是LRU Cache的一种）。</p>
+<p>然而我们会遇到几个问题：</p>
+<ol>
+<li><p>Cache无法使用模板，因为它是一个Option。当然，这意味着Cache就是一个包含纯虚函数的接口类。</p>
+</li>
+<li><p>Cache中所存储的key&#x2F;value的value类型不确定，key的类型已知是 string</p>
+</li>
+<li><p>Cache查询时返回一个句柄（Handle），这个Handle应该是什么</p>
+</li>
+<li><p>Handle的内容可以被用户自定义吗？如果是的话，那如何设计？</p>
+</li>
+</ol>
+<p>这几个问题的本质在于Option中无法得到Cache的更多信息，由于模板与继承不同，我们无法使用未指定类型的模板类的指针。简单说就是，我们不能这样写：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Cache&lt;K, V&gt; *block_cache;</span><br></pre></td></tr></table></figure>
+
+<p>在其他一切开源的Cache实现里，Cache通常设计为模板类，他们可以这样：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span> &lt; <span class="keyword">class</span> <span class="title class_">TKey</span>, <span class="keyword">class</span> <span class="title class_">TValue</span>, <span class="keyword">class</span> <span class="title class_">TStrategy</span>&gt;</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">AbstractCache</span></span><br></pre></td></tr></table></figure>
+
+<p>我们通过问题的解决慢慢来解释我们的设计。</p>
+<p>问题2 的解决可以引入 <code>boost::any</code>（其实<code>void*</code>也可以），使用Cache的用户需要知道自己的Value是什么类型，并且要保证自己只加入了一种类型的值。这个做法让我们依然无力控制value的类型。</p>
+<p>问题3  我们定义Handle。Handle 的定义与 Iterator 有区别，Iterator的Concept指出Iterator是一种可以用来遍历容器内每个元素的抽象，而Handle是不可遍历的，我们只能取得Handle所指的元素的值，这点和Iterator一样。</p>
+<p>问题4 Handle 的内容。首先要知道，Handle在一个接口类中定义，那么它本身就无法包含任何信息(It doesn’t carry any properties)。如果是这样，那么它只能是一个 opaque object。或许它可以包含纯虚函数，但与其在Handle中定义，不如在Cache中定义，因为这意味着Handle对象构造时会多一个vptr，而Cache本来已经有vptr了，Handle的纯虚函数定义在Cache中就无所谓，比如说leveldb这样来获取一个Handle所指元素的value的：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">virtual</span> <span class="title">Cache::Value</span><span class="params">(Handle* h)</span> <span class="type">const</span> </span>= <span class="number">0</span>;</span><br></pre></td></tr></table></figure>
+<p>其次，Handle的内容并不重要。可以说，Handle是C++的一种设计模式。Handle自身不能做任何事，它只能用来与Cache交互。具体的思路可以参照 windows 的 <code>HWND</code>。其实原理很简单，我们在Cache的子类，例如 LRUCache，实现一个 LRUHandle，它与 <code>Cache::Handle</code> 没有任何继承关系，然后我们只要用 <code>reinterpret_cast&lt;Handle*&gt;</code>就能将 LRUHandle 在内部转为 Handle。</p>
+<p>按照这个思路，Cache的value类型不确定是一个隐患，这是由于Cache是一个Option所导致的。我们要如何设计Cache的抽象？</p>
+<p>Cache的值类型不确定导致它不能像 <code>poco::AbstractCache</code> 或者 guava 的 cache 那样，定义一个全套的Cache所应该有的标准API，它只能作为一个组件来使用，我们采用组合模式来使用它。<br>按照这个思路设计，Cache应该是主要算法的抽象，我们需要将算法，和其他组件一起组装起来才能构成一个真正的Cache，因此，我将leveldb 的Cache改名为 CacheStrategy，由此就符合了我们的设计思路：CacheStrategy 不保证Cache里值的类型都一样，这由Cache来做。</p>
+<p>总结一下我们的设计：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Options</span> &#123;</span><br><span class="line">	…</span><br><span class="line">	CacheStategy *block_cache_strategy; <span class="comment">//</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p><code>class CacheStrategy</code> 代替 <code>leveldb::Cache</code>。</p>
 
       </section>
 
       
       
+        <nav class="article-nav">
+          
+            <div class="article-nav-item layout-padding">
+  <article class="card-container article-nav-card content-padding--primary soft-size--large soft-style--box">
+    
+    <div class="card-text">
+      
+        <a href="/mongo-%E6%BA%90%E7%A0%81%E9%98%85%E8%AF%BB%E6%84%9F%E6%82%9F%EF%BC%88%E4%B8%80%EF%BC%89/" itemprop="url">
+          <h2 class="card-text--title text-ellipsis">mongo 源码阅读感悟（一）</h2>
+        </a>
+      
+      <div class="card-text--row">Newer</div>
+    </div>
+  </article>
+</div>
+          
+          
+            <div class="article-nav-item layout-padding">
+  <article class="card-container article-nav-card content-padding--primary soft-size--large soft-style--box">
+    
+    <div class="card-text">
+      
+        <a href="/C-%E7%9A%84%E4%B8%89%E7%A7%8D%E5%AE%9E%E7%8E%B0%E6%8E%A5%E5%8F%A3%E7%9A%84%E6%96%B9%E5%BC%8F/" itemprop="url">
+          <h2 class="card-text--title text-ellipsis">C++ 的三种实现接口的方式</h2>
+        </a>
+      
+      <div class="card-text--row">Older</div>
+    </div>
+  </article>
+</div>
+          
+        </nav>
+      
 
-      
-      
+      <section class="page-message-container layout-padding">
+        
+
+
+  
+  
+
+  
+  
+
+
+      </section>
     </div>
     <div class="widget-info">
       <section class="widget-author widget-item layout-margin content-padding--primary soft-size--large soft-style--box">
@@ -165,6 +258,8 @@
 
       
 
+      
+
       <section class="widget-categorys widget-item layout-margin content-padding--primary soft-size--large soft-style--box">
   <div class="widget-title">
     <svg class="icon icon-categories" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg">
@@ -195,7 +290,6 @@
     </div>
   </article>
 </div>
-
 
     <!-- footer container -->
 <footer id="footer" class="footer">

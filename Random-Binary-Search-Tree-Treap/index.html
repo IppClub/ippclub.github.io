@@ -22,7 +22,7 @@
 
   
 
-  <title>I++ 俱乐部 | I++ Club</title>
+  <title>Random Binary Search Tree - Treap | I++ Club</title>
 
   
 
@@ -46,7 +46,7 @@
   <div class="root-container">
     
 <!-- header container -->
-<header class="header-container">
+<header class="header-container post">
   
     <div class="post-image" style="background-image: url(/img/mainbg.png)"></div>
   
@@ -94,44 +94,158 @@
 
   
   
-
-  
-  
     <div class="header-content">
-      <div class="post-text layout-block layout-padding">
-        <h1 class="title-wrap">I++ 俱乐部</h1>
-        
+      <div class="post-text layout-block">
+        <div class="layout-margin">
+          <h1 class="title-wrap">Random Binary Search Tree - Treap</h1>
+          <h2 class="title-sub-wrap">
+            <strong></strong>
+            <span>发布于</span>
+            <time  class="article-date" datetime="2015-11-03T05:07:00.000Z" itemprop="datePublished">2015-11-03</time>
+          </h2>
+          
+            <h2 class="last-time">
+              <span>最后更新于</span>
+              <time  class="article-updated" datetime="2024-10-03T13:38:54.000Z" itemprop="dateUpdated">2024-10-03</time>
+            </h2>
+          
+          
+          <ul class="wrap-list dark">
+  
+</ul>
+          <ul class="wrap-list dark">
+  
+    <li><a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">🏷️ 数据结构</a></li>
+  
+</ul>
+        </div>
       </div>
     </div>
+  
+
+  
   
   
 </header>
 
-    <!-- 分页(其他自定义页面) -->
+    <!-- 文章 -->
 
-<!-- 自定义页面 -->
-
+<!-- 文章内容 -->
 <div class="body-container">
   <article class="content-container layout-block post-container">
     <div class="article-info">
       
+      
+      
+      
       <section class="article-entry markdown-body layout-margin content-padding--large soft-size--large soft-style--box">
-        <h3 id="我们是谁"><a href="#我们是谁" class="headerlink" title="我们是谁"></a>我们是谁</h3><p>2015 常驻用户</p>
-<p>吴涛</p>
-<p>2016 常驻用户</p>
-<p>吕炀</p>
-<p><img src="/img/people/lvyang.jpg" alt="LvYang"></p>
-<p>2024 常驻用户</p>
-<p>何山</p>
-<h3 id="联系我们"><a href="#联系我们" class="headerlink" title="联系我们"></a>联系我们</h3><p>I++ 俱乐部是东南大学计软智学院的技术俱乐部。南京江宁区东南大学九龙湖校区计算机拔尖基地。</p>
+        <h2 id="BST插入顺序与平衡性"><a href="#BST插入顺序与平衡性" class="headerlink" title="BST插入顺序与平衡性"></a>BST插入顺序与平衡性</h2><p>众所周知，二查搜索树(BST)的搜索、插入、删除的复杂度等于树高，所以平衡度越高，越接近$ O(nlogn) $，越有序越退化为$ O(n) $<br><img src="http://opendatastructures.org/ods-java/img2843.png" alt="线性BST"> ……………………<img src="http://opendatastructures.org/ods-java/img2844.png" alt="随机BST"></p>
+<ul>
+<li>对于左侧的BST来说，只有唯一的构造序列：$ &lt;1,2,\dots,14&gt; $</li>
+<li>但对于右侧的BST，可以存在21964800种不同序列</li>
+</ul>
+<p>也就是说，随即插入序列到二叉树所形成的平衡度，将大于部分有序插入所形成的二叉树</p>
+<p>形式化证明可以得到（具体证明过程，参见<a target="_blank" rel="noopener" href="http://opendatastructures.org/ods-java/7_1_Random_Binary_Search_Tr.html#fig:rbst-records">Open Data Structures</a>：</p>
+<p>对每个$ x \in{0,\ldots,{n}-1} $, x所需要的搜索长度（即深度）是$ H_{x+1} + H_{n-x} - O(1) $</p>
+<p>对每个$ x \in(-1,n)\setminus{0,\ldots,n-1} $，x所需要的搜索长度是$ H_{\lceil x \rceil} H_{n-\lceil x \rceil} $</p>
+<h2 id="Treap-Random-BST实现"><a href="#Treap-Random-BST实现" class="headerlink" title="Treap - Random BST实现"></a>Treap - Random BST实现</h2><blockquote>
+<p><a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Treap">Treap-wikipedia</a></p>
+</blockquote>
+<p>Treap，顾名思义，就是<code>Tree</code>和<code>Head</code>的结合体，除了要满足BST的要求外，还需要满足堆的要求，即</p>
+<ol>
+<li><code>BST</code>: 对每个结点，左子女的值 &lt; 根的值 &lt; 右子女的值</li>
+<li><code>Heap</code>: 对除了跟结点的每个结点，双亲结点的优先级要小于该结点的优先级</li>
+</ol>
+<p>所以Treap的每个结点除了包括BST结点的值value外，还需要包括一个唯一的优先级p</p>
+<p>比如这样就是一个典型的Treap，每个结点表示为(value,p)<br><img src="http://opendatastructures.org/versions/edition-0.1e/ods-java/img1086.png" alt="Treap"></p>
+<p>并且可以证明，由Heap的约束，最小优先级将成为根结点，而BST又保证了小于根的值将在左子树上，大于根的值在右子树</p>
+<p>由于Heap的约束，我们可以认为Treap是按照优先级排序插入BST的，比如上述Treap可以由以下序列构造</p>
+<p>$ (3,1), (1,6), (0,9), (5,11), (4,14), (9,17), (7,22), (6,42), (8,49), (2,99) $</p>
+<h2 id="旋转"><a href="#旋转" class="headerlink" title="旋转"></a>旋转</h2><p>为了确保<code>Heap原则</code>，那么就需要对树进行旋转，在旋转中同时还要确保<code>BST原则</code>，比如这样的例子：</p>
+<p><img src="http://opendatastructures.org/versions/edition-0.1e/ods-java/img1102.png" alt="BST旋转"></p>
+<p>对w.value &lt; u.value，旋转将交换w和u的父子关系，同时将把原来的B放在新的儿子上。比如右旋，可以看作左旋和右旋是一个对称的操作</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">rotateRight</span><span class="params">(Node *u)</span> </span>&#123;</span><br><span class="line">    Node* w = u-&gt;left;</span><br><span class="line">    w-&gt;parent = u-&gt;parent;  <span class="comment">//parent -&gt; w</span></span><br><span class="line">    <span class="keyword">if</span> (w-&gt;parent != <span class="literal">NULL</span>) &#123;</span><br><span class="line">        <span class="keyword">if</span> (w-&gt;parent-&gt;left == u) &#123; <span class="comment">//u is left or right</span></span><br><span class="line">            w-&gt;parent-&gt;left = w;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            w-&gt;parent-&gt;right = w;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    u-&gt;left = w-&gt;right; <span class="comment">//u.left = B</span></span><br><span class="line">    <span class="keyword">if</span> (u-&gt;left != <span class="literal">NULL</span>) &#123;</span><br><span class="line">        u-&gt;left-&gt;parent = u;    <span class="comment">// B.parent = u</span></span><br><span class="line">    &#125;</span><br><span class="line">    u-&gt;parent = w;  <span class="comment">// w.right = u</span></span><br><span class="line">    w-&gt;right = u;</span><br><span class="line">    <span class="keyword">if</span> (u == root) &#123;   <span class="comment">//if u is root</span></span><br><span class="line">        root = w;</span><br><span class="line">        root-&gt;parent = <span class="literal">NULL</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+<h2 id="添加-删除"><a href="#添加-删除" class="headerlink" title="添加&#x2F;删除"></a>添加&#x2F;删除</h2><ul>
+<li>添加</li>
+</ul>
+<p>比如，对上述的Treap，加入一个值1.5，生成的优先级为4，即插入结点为(1.5,4)。首先使用BST的Add，插入在(2,99)的左子女上。为了满足<code>Heap规则</code>，依次进行以下旋转：</p>
+<p>99 &gt; 4 &#x3D;&gt;右旋;<br>6 &gt; 4 &#x3D;&gt; 左旋;<br>1 &lt; 4 &#x3D;&gt; 停止;</p>
+<p><img src="http://opendatastructures.org/versions/edition-0.1e/ods-java/img1108.png" alt="Treap插入"></p>
+<p>由前面的引理，可以知道，旋转的次数为$ 2ln(n) + O(1) $，复杂度为$ O(logn) $</p>
+<ul>
+<li>删除</li>
+</ul>
+<p>核心基本为添加的逆操作，对上述的Treap，删除一个结果(9)，那么将删除结点(9,17)。首先使用BST的Find，找到value为9的结点，然后将以(9,17)开始，向下不断旋转，直到最终为叶结点，然后把这个叶子剪去(Cut down)。</p>
+<p>旋转原则:</p>
+<ol>
+<li>left &#x3D; NULL &amp; right &#x3D; NULL ，不动</li>
+<li><strong>left &#x3D; NULL，左旋(right &#x3D; NULL则右旋)</strong>	<code>注:原文这里描述写反了</code></li>
+<li>left.p &lt; right.p，右旋(right.p &lt; left.p则左旋)</li>
+</ol>
+<p>依次进行以下旋转：</p>
+<p>right &#x3D; NULL &#x3D;&gt; 右旋;<br>right &#x3D; NULL &#x3D;&gt; 右旋;<br>叶结点 &#x3D;&gt; 停止;</p>
+<p><img src="http://opendatastructures.org/versions/edition-0.1e/ods-java/img1114.png" alt="Treap删除"></p>
+<p>和添加相反，复杂度为$ O(logn) $</p>
+<h2 id="复杂度"><a href="#复杂度" class="headerlink" title="复杂度"></a>复杂度</h2><p><code>构造</code>: $ O(logn) $<br><code>查找</code>: $ O(logn) $<br><code>添加</code>: $ O(logn) $<br><code>删除</code>: $ O(logn) $</p>
+<p>虽说都是$ O(logn) $，但是对比另一种高级数据结构<a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Skip_list">Skip List(跳表)</a>，查找复杂度在常数上有不同：</p>
+<p><code>Skip List</code>: $ elnn + O(1) \approx 1.884log(n) + O(1) $<br><code>Treap</code>: $ 2ln(n) + O(1)  \approx 1.386log(n) + O(1) $</p>
+<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><blockquote>
+<p>完整版C++实现，这里面的随机优先级，直接使用了value当种子srand()然后rand()获取随机数……（先进行BST的Add，确保value不会重复），实际中可以采用其他随机数方式获得更好的期望复杂度<br>（吐槽……开始没注意这是Java版伪代码，以后一定用Java或者JavaScript写……指针地狱）</p>
+</blockquote>
+<p>代码链接：<a target="_blank" rel="noopener" href="http://www.dreampiggy.com/source/413-2/">Treap</a></p>
 
       </section>
 
       
       
+        <nav class="article-nav">
+          
+            <div class="article-nav-item layout-padding">
+  <article class="card-container article-nav-card content-padding--primary soft-size--large soft-style--box">
+    
+    <div class="card-text">
+      
+        <a href="/React-Native-%E4%B8%8B%E4%B8%80%E4%BB%A3UI%E5%BC%80%E5%8F%91%E6%80%9D%E7%BB%B4/" itemprop="url">
+          <h2 class="card-text--title text-ellipsis">React-Native -- 下一代UI开发思维</h2>
+        </a>
+      
+      <div class="card-text--row">Newer</div>
+    </div>
+  </article>
+</div>
+          
+          
+            <div class="article-nav-item layout-padding">
+  <article class="card-container article-nav-card content-padding--primary soft-size--large soft-style--box">
+    
+    <div class="card-text">
+      
+        <a href="/%E7%94%A8-C-%E5%86%99%E4%B8%80%E4%B8%AA-Inet4Address-%E7%B1%BB/" itemprop="url">
+          <h2 class="card-text--title text-ellipsis">用 C++ 写一个 Inet4Address 类</h2>
+        </a>
+      
+      <div class="card-text--row">Older</div>
+    </div>
+  </article>
+</div>
+          
+        </nav>
+      
 
-      
-      
+      <section class="page-message-container layout-padding">
+        
+
+
+  
+  
+
+  
+  
+
+
+      </section>
     </div>
     <div class="widget-info">
       <section class="widget-author widget-item layout-margin content-padding--primary soft-size--large soft-style--box">
@@ -165,6 +279,8 @@
 
       
 
+      
+
       <section class="widget-categorys widget-item layout-margin content-padding--primary soft-size--large soft-style--box">
   <div class="widget-title">
     <svg class="icon icon-categories" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg">
@@ -195,7 +311,6 @@
     </div>
   </article>
 </div>
-
 
     <!-- footer container -->
 <footer id="footer" class="footer">

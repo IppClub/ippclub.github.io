@@ -22,7 +22,7 @@
 
   
 
-  <title>I++ 俱乐部 | I++ Club</title>
+  <title>用 C++ 写一个 Inet4Address 类 | I++ Club</title>
 
   
 
@@ -46,7 +46,7 @@
   <div class="root-container">
     
 <!-- header container -->
-<header class="header-container">
+<header class="header-container post">
   
     <div class="post-image" style="background-image: url(/img/mainbg.png)"></div>
   
@@ -94,44 +94,155 @@
 
   
   
-
-  
-  
     <div class="header-content">
-      <div class="post-text layout-block layout-padding">
-        <h1 class="title-wrap">I++ 俱乐部</h1>
-        
+      <div class="post-text layout-block">
+        <div class="layout-margin">
+          <h1 class="title-wrap">用 C++ 写一个 Inet4Address 类</h1>
+          <h2 class="title-sub-wrap">
+            <strong></strong>
+            <span>发布于</span>
+            <time  class="article-date" datetime="2015-11-01T06:12:00.000Z" itemprop="datePublished">2015-11-01</time>
+          </h2>
+          
+            <h2 class="last-time">
+              <span>最后更新于</span>
+              <time  class="article-updated" datetime="2024-10-03T13:38:54.000Z" itemprop="dateUpdated">2024-10-03</time>
+            </h2>
+          
+          
+          <ul class="wrap-list dark">
+  
+</ul>
+          <ul class="wrap-list dark">
+  
+    <li><a href="/tags/C/">🏷️ C++</a></li>
+  
+</ul>
+        </div>
       </div>
     </div>
+  
+
+  
   
   
 </header>
 
-    <!-- 分页(其他自定义页面) -->
+    <!-- 文章 -->
 
-<!-- 自定义页面 -->
-
+<!-- 文章内容 -->
 <div class="body-container">
   <article class="content-container layout-block post-container">
     <div class="article-info">
       
+      
+      
+      
       <section class="article-entry markdown-body layout-margin content-padding--large soft-size--large soft-style--box">
-        <h3 id="我们是谁"><a href="#我们是谁" class="headerlink" title="我们是谁"></a>我们是谁</h3><p>2015 常驻用户</p>
-<p>吴涛</p>
-<p>2016 常驻用户</p>
-<p>吕炀</p>
-<p><img src="/img/people/lvyang.jpg" alt="LvYang"></p>
-<p>2024 常驻用户</p>
-<p>何山</p>
-<h3 id="联系我们"><a href="#联系我们" class="headerlink" title="联系我们"></a>联系我们</h3><p>I++ 俱乐部是东南大学计软智学院的技术俱乐部。南京江宁区东南大学九龙湖校区计算机拔尖基地。</p>
+        <p><code>Inet4Address</code> 在 .net 和 facebook&#x2F;folly 中也叫做 <code>IPAddress</code>。<br>（顺便黑一下，muduo 中居然把 <code>SocketAddress</code> 叫做 <code>InetAddress</code> 真是有失偏颇。</p>
+<hr>
+<h3 id="构造ip地址"><a href="#构造ip地址" class="headerlink" title="构造ip地址"></a>构造ip地址</h3><br/>
+
+<p>ip 地址的构造，比较麻烦的地方就是网络序和主机序之间的问题。</p>
+<p>我们的 raw ipv4 address 存储在一个 <code>uint32_t</code> 的整数中，按照 <a target="_blank" rel="noopener" href="http://man7.org/linux/man-pages/man7/ip.7.html">linux 官方手册</a>中的描述，以下结构体表示 ipv4 address：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* Internet address. */</span></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">in_addr</span> &#123;</span></span><br><span class="line">    <span class="type">uint32_t</span> s_addr; <span class="comment">/* address in network byte order */</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p><code>s_addr</code> 是按网络序存储的，然而在下面的测试中，有与我预期不符合的地方：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">BOOST_AUTO_TEST_CASE</span>(test_byteorder_inaddr) &#123;</span><br><span class="line">  in_addr addr;</span><br><span class="line">  <span class="built_in">inet_pton</span>(AF_INET, <span class="string">&quot;192.168.0.1&quot;</span>, &amp;addr);</span><br><span class="line">  <span class="built_in">BOOST_CHECK_EQUAL</span>(addr.s_addr, <span class="number">0x0100A8C0</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>我原先以为高位的 192 应该在 b3，而实际上在 b0。在 Java 中 的 <code>Inet4Address.getAddress()</code> 也有注释说明</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Returns the raw IP address of this &#123;<span class="doctag">@code</span> InetAddress&#125;</span></span><br><span class="line"><span class="comment"> * object. The result is in network byte order: the highest order</span></span><br><span class="line"><span class="comment"> * byte of the address is in &#123;<span class="doctag">@code</span> getAddress()[0]&#125;.</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@return</span>  the raw IP address of this object.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="type">byte</span>[] getAddress() &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>（一开始没有理解这一点，我在 s_addr 存储的是 little-endian 值，以至于<a target="_blank" rel="noopener" href="https://github.com/neverchanje/sugen/blob/master/sugen/net/EndianConv.h">我引入了 redis 的 endianconv</a> 作为工具函数，现在看来暂时没有用武之地了）</p>
+<p>我们首先规定<strong>我们将使用 big-endian 存储 IP 地址</strong>，并统一使用</p>
+<p>对于 IP 地址：<strong>b0.b1.b2.b3</strong>，我们用</p>
+<p><strong>0x b3 b2 b1 b0 来构造大端序</strong></p>
+<p><strong>0x b0 b1 b2 b3 来构造小端序</strong></p>
+<ol>
+<li><p>我们允许使用者通过 <code>Byte4</code> 类型，也就是 <code>std::array&lt;uint8_t, 4&gt;</code> 作为参数来构造 <code>Inet4Address</code>，前提是 <code>Byte4</code> 参数是网络序：</p>
+<p> <strong>即对于 “192.168.0.1”， b0 &#x3D; 192, b1 &#x3D; 168, b2 &#x3D; 0, b3 &#x3D; 1</strong></p>
+</li>
+<li><p>我们也允许使用者通过 NBO 的 <code>uint32_t</code> 类型的地址进行构造，这时候我们该用  <code>ntohl</code> 或 <code>htonl</code> 来实现。</p>
+<hr>
+</li>
+</ol>
+<h3 id="特殊的-ip-地址"><a href="#特殊的-ip-地址" class="headerlink" title="特殊的 ip 地址"></a>特殊的 ip 地址</h3><br/>
+
+<ul>
+<li><p><a target="_blank" rel="noopener" href="https://github.com/neverchanje/sugen/blob/master/sugen/net/Inet4Address.h#L82">loopback address</a><br>环回地址。也就是<code>127.0.0.1</code></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://github.com/neverchanje/sugen/blob/master/sugen/net/Inet4Address.h#L88">link local address</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://github.com/neverchanje/sugen/blob/master/sugen/net/Inet4Address.h#L76">multicast address</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://github.com/neverchanje/sugen/blob/master/sugen/net/Inet4Address.h#L96">private address</a></p>
+</li>
+</ul>
+<p>这些地址在代码注释中有提供描述他们的 RFC 文档。</p>
+<hr>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><br />
+
+<p>因为理解的偏差，造轮子的时候走了一些远路（但不是歧路）：</p>
+<ul>
+<li><p><code>in_addr.s_addr</code> 是否为 NBO</p>
+</li>
+<li><p>b0 为 ipv4 的高8位地址，而不是 b3</p>
+</li>
+<li><p>引入 redis 的 endianconv，写了一些无用代码，希望以后会派上用场。</p>
+</li>
+<li><p>当然还有阅读 RFC 文档，理解这些特殊 IP 地址的定义和用途。</p>
+</li>
+</ul>
 
       </section>
 
       
       
+        <nav class="article-nav">
+          
+            <div class="article-nav-item layout-padding">
+  <article class="card-container article-nav-card content-padding--primary soft-size--large soft-style--box">
+    
+    <div class="card-text">
+      
+        <a href="/Random-Binary-Search-Tree-Treap/" itemprop="url">
+          <h2 class="card-text--title text-ellipsis">Random Binary Search Tree - Treap</h2>
+        </a>
+      
+      <div class="card-text--row">Newer</div>
+    </div>
+  </article>
+</div>
+          
+          
+            <div class="article-nav-item layout-padding">
+  <article class="card-container article-nav-card content-padding--primary soft-size--large soft-style--box">
+    
+    <div class="card-text">
+      
+        <a href="/Implementing-an-unique-ptr/" itemprop="url">
+          <h2 class="card-text--title text-ellipsis">Implementing an unique_ptr</h2>
+        </a>
+      
+      <div class="card-text--row">Older</div>
+    </div>
+  </article>
+</div>
+          
+        </nav>
+      
 
-      
-      
+      <section class="page-message-container layout-padding">
+        
+
+
+  
+  
+
+  
+  
+
+
+      </section>
     </div>
     <div class="widget-info">
       <section class="widget-author widget-item layout-margin content-padding--primary soft-size--large soft-style--box">
@@ -165,6 +276,8 @@
 
       
 
+      
+
       <section class="widget-categorys widget-item layout-margin content-padding--primary soft-size--large soft-style--box">
   <div class="widget-title">
     <svg class="icon icon-categories" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg">
@@ -195,7 +308,6 @@
     </div>
   </article>
 </div>
-
 
     <!-- footer container -->
 <footer id="footer" class="footer">

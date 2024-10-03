@@ -22,7 +22,7 @@
 
   
 
-  <title>I++ 俱乐部 | I++ Club</title>
+  <title>mongo 源码阅读感悟（一） | I++ Club</title>
 
   
 
@@ -46,7 +46,7 @@
   <div class="root-container">
     
 <!-- header container -->
-<header class="header-container">
+<header class="header-container post">
   
     <div class="post-image" style="background-image: url(/img/mainbg.png)"></div>
   
@@ -94,44 +94,117 @@
 
   
   
-
-  
-  
     <div class="header-content">
-      <div class="post-text layout-block layout-padding">
-        <h1 class="title-wrap">I++ 俱乐部</h1>
-        
+      <div class="post-text layout-block">
+        <div class="layout-margin">
+          <h1 class="title-wrap">mongo 源码阅读感悟（一）</h1>
+          <h2 class="title-sub-wrap">
+            <strong></strong>
+            <span>发布于</span>
+            <time  class="article-date" datetime="2016-06-12T11:03:17.000Z" itemprop="datePublished">2016-06-12</time>
+          </h2>
+          
+            <h2 class="last-time">
+              <span>最后更新于</span>
+              <time  class="article-updated" datetime="2024-10-03T13:38:54.000Z" itemprop="dateUpdated">2024-10-03</time>
+            </h2>
+          
+          
+          <ul class="wrap-list dark">
+  
+</ul>
+          <ul class="wrap-list dark">
+  
+    <li><a href="/tags/C/">🏷️ C++</a></li>
+  
+    <li><a href="/tags/mongo/">🏷️ mongo</a></li>
+  
+</ul>
+        </div>
       </div>
     </div>
+  
+
+  
   
   
 </header>
 
-    <!-- 分页(其他自定义页面) -->
+    <!-- 文章 -->
 
-<!-- 自定义页面 -->
-
+<!-- 文章内容 -->
 <div class="body-container">
   <article class="content-container layout-block post-container">
     <div class="article-info">
       
+      
+      
+      
       <section class="article-entry markdown-body layout-margin content-padding--large soft-size--large soft-style--box">
-        <h3 id="我们是谁"><a href="#我们是谁" class="headerlink" title="我们是谁"></a>我们是谁</h3><p>2015 常驻用户</p>
-<p>吴涛</p>
-<p>2016 常驻用户</p>
-<p>吕炀</p>
-<p><img src="/img/people/lvyang.jpg" alt="LvYang"></p>
-<p>2024 常驻用户</p>
-<p>何山</p>
-<h3 id="联系我们"><a href="#联系我们" class="headerlink" title="联系我们"></a>联系我们</h3><p>I++ 俱乐部是东南大学计软智学院的技术俱乐部。南京江宁区东南大学九龙湖校区计算机拔尖基地。</p>
+        <p>其实开头的这一篇不完全是阅读 mongo 时的感悟，也包括了我在 leveldb 中学到的技巧。看过 leveldb 的应该都知道，这份代码的注释不算清楚，文档也少，阅读体验不算好，需要 C++ 开发者有足够的经验。因此有些东西我到了mongo才真正了解它们的作用。也是十分惭愧。</p>
+<p>最近在阅读 mongo&#x2F;bson 的源码，我试图去实现一个 bson，在造轮子的过程中学习他们的编程技巧，事实证明阅读大型且较新的项目的源码要远远好过阅读小而老的项目。</p>
+<p>这篇文章我来介绍两个很小的类，<code>Status</code> 和 <code>StringData</code>，<code>StringData</code> 在 leveldb 中是 <code>Slice</code>，为了方便，之后我都会用 <code>Slice</code>。</p>
+<h3 id="Status"><a href="#Status" class="headerlink" title="Status"></a>Status</h3><p>许多大型 C++ 项目的编程规范要求 exception free，在实际的编程中，开发者会发现使用 error 来代替 exception 其实十分实用（golang开发中更多使用 error 而非 exception），因为很多的编程错误被强行放到了 exception 中，比如 java 的 <code>IndexOutOfBoundException</code>。再者，exception 也常常拉低了执行效率。对于不在意性能的语言（比如Java），exception 的罪状更多的在于如果不将异常及时catch，exception会蔓延到外部。</p>
+<p>这里我们介绍一个设施，它可以保证错误只会被手动的抛到外部，甚至我们可以保存错误的状态，延迟抛出（异常能做这件事吗？）。</p>
+<p>在 mongo 和 leveldb 中，都用了 Status 封装错误信息。</p>
+<p>Status 封装了 enum 类型的错误码，并且可以为每个错误绑定它的具体错误信息。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">static</span> Status <span class="title">FailedToParse</span><span class="params">(<span class="type">const</span> Slice &amp;msg)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<p>一个 FailedToParse 错误就可以这样被抛出来。</p>
+<p>为了节约内存，enum 被转为 <code>unsigned char</code>，用以存储至多 256 种错误。当然，大型项目可以多于这个数。</p>
+<p><code>Status::OK()</code> 表示这个函数调用没有错误，跟 C 语言里返回值为 0 类似，Status 通常也是通过函数返回值抛出。我们要尽量使得成功的函数调用几乎无需处理错误，只有在错误发生的时候才去处理错误。因此我们这样实现：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Status</span> &#123;</span><br><span class="line"> <span class="keyword">private</span>:</span><br><span class="line">  std::unique_ptr&lt;ErrorInfo&gt; info_;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p><code>Status</code> 内部只保存指向错误信息的指针。<code>Status::OK()</code> 抛出一个未初始化的指针（指向 null），只有在错误的信息抛出时，才会生成信息给指针。</p>
+<h3 id="Slice"><a href="#Slice" class="headerlink" title="Slice"></a>Slice</h3><p><code>Slice</code> 是对字符串的一种简单的 reference 的封装，它仅保存字符串的指针（<code>char*</code>）和字符串的长度。与 <code>std::string</code> 用途不同，它不会对字符串进行复制操作，在这一点上比 <code>std::string</code> 要好用许多。当然，我们也可以在整个项目中，完全使用 <code>std::string</code>，并且在函数接口中使用 <code>const std::string&amp;</code>，这样在一个需要大量使用字符串的代码中，函数的接口会变得混乱不堪。</p>
+<p>使用了 <code>Slice</code> 之后，我们可以这样编写一个函数的接口。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Parser::<span class="built_in">parseInt</span>(Slice int_string);</span><br></pre></td></tr></table></figure>
+<p>一方面这样可以简化函数接口（如果要 forward declaration 则需要引用），一方面这样可以兼容 raw string 和 <code>std::string</code>，不会出现 raw string 传参给 <code>const std::string &amp;</code> 时，出现复制的情况。</p>
+<p>唯一的缺点是我们需要去重新实现一些基本的工具函数。好在有 <code>&lt;cstring&gt;</code>，使得这一切并不算难。</p>
+<h3 id="附录"><a href="#附录" class="headerlink" title="附录"></a>附录</h3><p>附上我的实现：</p>
+<ul>
+<li><p>Slice: <a target="_blank" rel="noopener" href="https://github.com/neverchanje/bson-cpp11/blob/master/src%2FSlice.h">github link</a></p>
+</li>
+<li><p>Status: <a target="_blank" rel="noopener" href="https://github.com/neverchanje/bson-cpp11/blob/master/src%2FStatus.h">github link</a></p>
+</li>
+</ul>
 
       </section>
 
       
       
+        <nav class="article-nav">
+          
+          
+            <div class="article-nav-item layout-padding">
+  <article class="card-container article-nav-card content-padding--primary soft-size--large soft-style--box">
+    
+    <div class="card-text">
+      
+        <a href="/%E8%AF%BB-leveldb-%E7%9A%84%E6%84%9F%E6%82%9F-%EF%BC%9ACache%E7%9A%84%E8%AE%BE%E8%AE%A1/" itemprop="url">
+          <h2 class="card-text--title text-ellipsis">读 leveldb 的感悟 ：Cache的设计</h2>
+        </a>
+      
+      <div class="card-text--row">Older</div>
+    </div>
+  </article>
+</div>
+          
+        </nav>
+      
 
-      
-      
+      <section class="page-message-container layout-padding">
+        
+
+
+  
+  
+
+  
+  
+
+
+      </section>
     </div>
     <div class="widget-info">
       <section class="widget-author widget-item layout-margin content-padding--primary soft-size--large soft-style--box">
@@ -165,6 +238,8 @@
 
       
 
+      
+
       <section class="widget-categorys widget-item layout-margin content-padding--primary soft-size--large soft-style--box">
   <div class="widget-title">
     <svg class="icon icon-categories" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg">
@@ -195,7 +270,6 @@
     </div>
   </article>
 </div>
-
 
     <!-- footer container -->
 <footer id="footer" class="footer">
