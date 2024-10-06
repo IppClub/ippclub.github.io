@@ -23,8 +23,8 @@
   
     <meta name="description" content="I++ 俱乐部官方博客">
 <meta property="og:type" content="website">
-<meta property="og:title" content="I++ Club">
-<meta property="og:url" content="http://ippclub.github.io/page/2/index.html">
+<meta property="og:title" content="分类 - 招新">
+<meta property="og:url" content="http://ippclub.github.io/categories/%E6%8B%9B%E6%96%B0/index.html">
 <meta property="og:site_name" content="I++ Club">
 <meta property="og:description" content="I++ 俱乐部官方博客">
 <meta property="og:locale" content="zh_CN">
@@ -32,7 +32,7 @@
   
   
   
-  <title>I++ Club</title>
+  <title>分类 - 招新 - I++ Club</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -86,7 +86,7 @@
   <header>
     
 
-<div class="header-inner" style="height: 70vh;">
+<div class="header-inner" style="height: 60vh;">
   <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
   <div class="container">
     <a class="navbar-brand" href="/">
@@ -192,7 +192,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="I++俱乐部官方博客"></span>
+            <span id="subtitle" data-typed-text="分类 - 招新"></span>
           
         </div>
 
@@ -219,277 +219,23 @@
               <div class="col-12 col-md-10 m-auto">
                 
 
-
-  <div class="row mx-auto index-card">
+<div class="list-group">
+  <p class="h4">共计 1 篇文章</p>
+  <hr>
+  
+  
     
-    
-      <div class="col-12 col-md-4 m-auto index-img">
-        <a href="/Implementing-an-unique-ptr/" target="_self">
-          <img src="/img/logo.png" srcset="/img/loading.gif" lazyload alt="Implementing an unique_ptr">
-        </a>
-      </div>
-    
-    <article class="col-12 col-md-8 mx-auto index-info">
-      <h2 class="index-header">
-        
-        <a href="/Implementing-an-unique-ptr/" target="_self">
-          Implementing an unique_ptr
-        </a>
-      </h2>
-
       
-      <a class="index-excerpt " href="/Implementing-an-unique-ptr/" target="_self">
-        <div>
-          事实证明实现一个 unique_ptr 对其原理的认知并没有什么提升。 为了简便，我们只实现 single object 版本，不实现存储 array type 的 unique_ptr。  我们首先要对 UniquePtr 的定义进行声明： 12template&lt;class T, class D&gt;class UniquePtr &#123;  T 是 UniquePtr 所存储的指针
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2015-10-04 18:40" pubdate>
-              2015-10-04
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
-
-<span class="category-chains">
-  
-  
+      <p class="h5">2024</p>
     
-      <span class="category-chain">
-        
-  <a href="/categories/%E6%9C%AA%E5%88%86%E7%B1%BB/" class="category-chain-item">未分类</a>
+    <a href="/I-%E4%BF%B1%E4%B9%90%E9%83%A8%E8%AF%9A%E6%8B%9B%E6%96%B0%E6%88%90%E5%91%98/" class="list-group-item list-group-item-action">
+      <time>10-06</time>
+      <div class="list-group-item-title">I++ 俱乐部诚招新成员!</div>
+    </a>
   
-  
-
-      </span>
-    
-  
-</span>
-
-          </div>
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/C/">#C++</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-      <div class="col-12 col-md-4 m-auto index-img">
-        <a href="/%E5%85%B3%E4%BA%8E-boost-noncopyable-%E7%9A%84%E4%B8%80%E7%82%B9%E6%80%9D%E8%80%83/" target="_self">
-          <img src="/img/logo.png" srcset="/img/loading.gif" lazyload alt="关于 boost::noncopyable 的一点思考">
-        </a>
-      </div>
-    
-    <article class="col-12 col-md-8 mx-auto index-info">
-      <h2 class="index-header">
-        
-        <a href="/%E5%85%B3%E4%BA%8E-boost-noncopyable-%E7%9A%84%E4%B8%80%E7%82%B9%E6%80%9D%E8%80%83/" target="_self">
-          关于 boost::noncopyable 的一点思考
-        </a>
-      </h2>
-
-      
-      <a class="index-excerpt " href="/%E5%85%B3%E4%BA%8E-boost-noncopyable-%E7%9A%84%E4%B8%80%E7%82%B9%E6%80%9D%E8%80%83/" target="_self">
-        <div>
-          一般通过继承 boost::noncopyable 来保证类的对象不会被复制。我们会采用如下写法： 1class Buffer : boost::noncopyable &#123;  注意的是，我们既可以采用公有继承 (public)，也可以采用默认继承方式 (private)，具体使用哪一种方式，需要我们的思考。 譬如，当父类拥有了 noncopyable 的特性，一般情况下，我们希望子类在继
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2015-10-01 21:16" pubdate>
-              2015-10-01
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
-        
-  <a href="/categories/%E6%9C%AA%E5%88%86%E7%B1%BB/" class="category-chain-item">未分类</a>
-  
-  
-
-      </span>
-    
-  
-</span>
-
-          </div>
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/C/">#C++</a>
-            
-              <a href="/tags/Boost/">#Boost</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-      <div class="col-12 col-md-4 m-auto index-img">
-        <a href="/%E5%85%B3%E4%BA%8E-Redis-3-0-%E4%B8%AD%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" target="_self">
-          <img src="/img/logo.png" srcset="/img/loading.gif" lazyload alt="关于 Redis 3.0 中的数据结构">
-        </a>
-      </div>
-    
-    <article class="col-12 col-md-8 mx-auto index-info">
-      <h2 class="index-header">
-        
-        <a href="/%E5%85%B3%E4%BA%8E-Redis-3-0-%E4%B8%AD%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" target="_self">
-          关于 Redis 3.0 中的数据结构
-        </a>
-      </h2>
-
-      
-      <a class="index-excerpt " href="/%E5%85%B3%E4%BA%8E-Redis-3-0-%E4%B8%AD%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" target="_self">
-        <div>
-          Redis 是什么？Redis 官方网站：http://redis.io/  为什么要阅读 redis 的源代码？等价于问题：知乎：我们（大多数人）为什么喜欢造轮子？ redis 中有功能精简的模块，如 anet, ae，也有针对 redis 高度优化的数据结构模块，如 ziplist, dict, intset 等。这些模块相对易于学习，也非常有料。redis 本身就是一个相当优秀的开源作品，并
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2015-05-26 00:48" pubdate>
-              2015-05-26
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
-        
-  <a href="/categories/%E6%9C%AA%E5%88%86%E7%B1%BB/" class="category-chain-item">未分类</a>
-  
-  
-
-      </span>
-    
-  
-</span>
-
-          </div>
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/Redis/">#Redis</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-      <div class="col-12 col-md-4 m-auto index-img">
-        <a href="/I-Club/" target="_self">
-          <img src="/img/logo.png" srcset="/img/loading.gif" lazyload alt="I++俱乐部">
-        </a>
-      </div>
-    
-    <article class="col-12 col-md-8 mx-auto index-info">
-      <h2 class="index-header">
-        
-        <a href="/I-Club/" target="_self">
-          I++俱乐部
-        </a>
-      </h2>
-
-      
-      <a class="index-excerpt " href="/I-Club/" target="_self">
-        <div>
-          &emsp;&emsp;东南大学江宁区九龙湖校区南门软件学院，当年我的好基友总是说我不是在学院就是在去学院的路上。&emsp;&emsp;真的，多年前的软件学院那是一个怎样的存在，整层楼6间不用抢座宽敞明亮的自习教室，再来一层楼6间不用抢座宽敞明亮的机房，再来一排各式供社团使用的独立工作室，4层楼每层楼梯转角有乒乓球桌；自习室机房和工作室各式该有的网电空调工位齐全；1楼设有专用的图书室和文娱室；门
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2015-05-17 22:55" pubdate>
-              2015-05-17
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
-        
-  <a href="/categories/%E6%9C%AA%E5%88%86%E7%B1%BB/" class="category-chain-item">未分类</a>
-  
-  
-
-      </span>
-    
-  
-</span>
-
-          </div>
-        
-        
-      </div>
-    </article>
-  </div>
+</div>
 
 
-
-  <nav aria-label="navigation">
-    <span class="pagination" id="pagination">
-      <a class="extend prev" rel="prev" href="/"><i class="iconfont icon-arrowleft"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span>
-    </span>
-  </nav>
 
 
 

@@ -4,11 +4,36 @@
   
   
   <entry>
+    <title>I++ 俱乐部诚招新成员!</title>
+    <link href="/I-%E4%BF%B1%E4%B9%90%E9%83%A8%E8%AF%9A%E6%8B%9B%E6%96%B0%E6%88%90%E5%91%98/"/>
+    <url>/I-%E4%BF%B1%E4%B9%90%E9%83%A8%E8%AF%9A%E6%8B%9B%E6%96%B0%E6%88%90%E5%91%98/</url>
+    
+    <content type="html"><![CDATA[<p>🎉 <strong>I++ 俱乐部诚招新成员！</strong> 🎉</p><p>🌟 <strong>I++，加你所想，向创造和想象的边界进发！</strong>  </p><p>这里是技术和创意的世界！我们有经验丰富的指导老师，有优秀的学长学姐，还有和谐有趣的氛围。无论你是初学者还是有经验的技术爱好者，都可以在俱乐部中找到志同道合的伙伴、获得充分的交流和指导。</p><p>📂<strong>开源文化</strong>  </p><p>想要拥抱开源文化，参与开源项目？I++俱乐部提供了进行开源交流的平台，让你能够熟悉Github等开源平台的基础操作，了解开源文化的内涵，并有机会成为各大开源社区的贡献者！</p><p>💻 <strong>计算机图形学</strong>  </p><p>你是否被《黑神话：悟空》等游戏精美的游戏画面与光影效果所震撼？如果你想了解背后的三维重建、图像渲染等技术，那么欢迎加入I++俱乐部！在这里，你能够学习并实践计算机图形学技术，打造出令人惊叹的三维世界。</p><p>📚 <strong>程序设计与基础算法</strong>  </p><p>想要了解程序设计流程与相关的算法？I++俱乐部会与你一起探索这些技术！从设计思维到编译运行，从编程语言到算法应用，你可以在这里打下扎实的编程基础，迈出成为技术大佬的第一步！</p><p>🌐 <strong>JavaWeb 全栈开发与服务器搭建</strong>  </p><p>想成为全领域开发高手？I++俱乐部为你提供从前端到后端，从数据库管理到服务器搭建的交流平台，帮助你掌握 JavaWeb开发的关键技术，打造功能齐全的All in One服务器！</p><p><strong>尽情提出你的想法和兴趣，他们有可能成为俱乐部未来的方向！</strong></p><p>🚀 <strong>加入”I++”俱乐部，探索前沿技术，开创属于你的精彩未来！</strong>  </p><p>📱 扫码进群，加入我们~ 🎉</p><p><em><strong>计软智俱乐部联合招新宣讲将在10月9日（周三）举行，进群填写抽奖收集表，就有可能在宣讲现场领取精美小礼品~</strong></em></p><p><img src="/./I-%E4%BF%B1%E4%B9%90%E9%83%A8%E8%AF%9A%E6%8B%9B%E6%96%B0%E6%88%90%E5%91%98/qrcode.jpg" alt="qrcode"></p>]]></content>
+    
+    
+    <categories>
+      
+      <category>招新</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>I++Club</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>提交文章格式要求</title>
     <link href="/%E6%8F%90%E4%BA%A4%E6%96%87%E7%AB%A0%E6%A0%BC%E5%BC%8F%E8%A6%81%E6%B1%82/"/>
     <url>/%E6%8F%90%E4%BA%A4%E6%96%87%E7%AB%A0%E6%A0%BC%E5%BC%8F%E8%A6%81%E6%B1%82/</url>
     
-    <content type="html"><![CDATA[<h1 id="提交文章格式要求"><a href="#提交文章格式要求" class="headerlink" title="提交文章格式要求"></a>提交文章格式要求</h1><h2 id="front-matter"><a href="#front-matter" class="headerlink" title="front-matter"></a>front-matter</h2><figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs markdown">---<br>title: &#123;&#123; title &#125;&#125;<br>date: &#123;&#123; date &#125;&#125;<br>tags:<br>categories: <br>author: <br>index<span class="hljs-emphasis">_img: </span><br><span class="hljs-emphasis">banner_</span>img: <br>---<br></code></pre></td></tr></table></figure><ul><li><p>title直接跟字符串名称，不需要引号，建议不要使用特殊符号、表情等</p></li><li><p>date格式符合 <code>YYYY-MM-DD HH:mm:ss</code> ，这个有很多工具可以生成</p></li><li><p>tags是标签，有多个需要采用数组写法</p><figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs markdown">tags:<br><span class="hljs-bullet">-</span> tag1<br><span class="hljs-bullet">-</span> tag2<br></code></pre></td></tr></table></figure></li><li><p>categories是分类，写法同上</p></li><li><p>author是作者，不支持多个，但其实逗号连接也行</p></li><li><p>index_img是封面，建议：国内图床 &gt; 国外图床 &gt;&#x3D; 相对路径引用（可以留空）</p></li><li><p>banner_img是页面顶部大图，要求同上（可以留空）</p></li></ul><h2 id="注意"><a href="#注意" class="headerlink" title="注意"></a>注意</h2><ul><li>author 和 index_img 和 banner_img 可以为空</li><li>有latex公式则需要添加 <code>math: true</code></li><li>需要引用的资源放入文章同名文件夹中</li></ul>]]></content>
+    <content type="html"><![CDATA[<h1 id="提交文章格式要求"><a href="#提交文章格式要求" class="headerlink" title="提交文章格式要求"></a>提交文章格式要求</h1><h2 id="front-matter"><a href="#front-matter" class="headerlink" title="front-matter"></a>front-matter</h2><figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs markdown">---<br>title: &#123;&#123; title &#125;&#125;<br>date: &#123;&#123; date &#125;&#125;<br>tags:<br>categories: <br>author: <br>index<span class="hljs-emphasis">_img: </span><br><span class="hljs-emphasis">banner_</span>img: <br>---<br></code></pre></td></tr></table></figure><ul><li><p>title直接跟字符串名称，不需要引号，建议不要使用特殊符号、表情等</p></li><li><p>date格式符合 <code>YYYY-MM-DD HH:mm:ss</code> ，这个有很多工具可以生成</p></li><li><p>tags是标签，有多个需要采用数组写法</p><figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs markdown">tags:<br><span class="hljs-bullet">-</span> tag1<br><span class="hljs-bullet">-</span> tag2<br></code></pre></td></tr></table></figure></li><li><p>categories是分类，写法同上</p></li><li><p>author是作者，不支持多个，但其实逗号连接也行</p></li><li><p>index_img是封面，建议：国内图床 &gt; 国外图床 &gt;&#x3D; 相对路径引用（可以留空）</p></li><li><p>banner_img是页面顶部大图，要求同上（可以留空）</p></li></ul><h2 id="注意"><a href="#注意" class="headerlink" title="注意"></a>注意</h2><ul><li>author 和 index_img 和 banner_img 可以为空</li><li>有latex公式则需要添加 <code>math: true</code></li><li>需要引用的资源放入文章同名文件夹中，只能使用markdown语法，内嵌html标签可能无法正确引用资源</li></ul>]]></content>
     
     
     <categories>
@@ -174,13 +199,13 @@
     
     <tags>
       
+      <tag>Swift</tag>
+      
       <tag>React-Native</tag>
       
       <tag>IOS</tag>
       
       <tag>Javascript</tag>
-      
-      <tag>Swift</tag>
       
     </tags>
     
@@ -317,10 +342,10 @@
   
   <entry>
     <title>I++俱乐部</title>
-    <link href="/I-%E4%BF%B1%E4%B9%90%E9%83%A8/"/>
-    <url>/I-%E4%BF%B1%E4%B9%90%E9%83%A8/</url>
+    <link href="/I-Club/"/>
+    <url>/I-Club/</url>
     
-    <content type="html"><![CDATA[<p>&amp;&emsp;&emsp;东南大学江宁区九龙湖校区南门软件学院，当年我的好基友总是说我不是在学院就是在去学院的路上。<br>&emsp;&emsp;真的，多年前的软件学院那是一个怎样的存在，整层楼6间不用抢座宽敞明亮的自习教室，再来一层楼6间不用抢座宽敞明亮的机房，再来一排各式供社团使用的独立工作室，4层楼每层楼梯转角有乒乓球桌；自习室机房和工作室各式该有的网电空调工位齐全；1楼设有专用的图书室和文娱室；门外立着闪亮的东南大学软件学院的招牌。这样一个高大上的独立软院楼配上300多人每人4倍学费的学院，作为当时学院的一名学生，这样的求学环境真的够炫酷。<br>&emsp;&emsp;可那又怎么样呢。那时的IT业也没现在这么热，软院也只是一个在学校官网上拉到页面最下面点倒数第几个连接的学院。同年级的同学绝大都是调剂专业而来的学生，带着各式的不满，只要上下课做作业考试、魔兽、Dota、LOL就可以轻易用掉大学4年。优秀的同学们带着优秀的惯性，继续钻研着各门课程科目，刷个前百分之几的绩点可以保研。并没有很多人真正关心就读于这个专业是为了做什么。学院楼其实也只是一个空架子，除了某些课程使用机房或是自习教室时强制学生过来。其它时间里特别是周末里我甚至可以在空荡荡的楼层间漫步，然后独占一个机房教室或者工作室。<br>&emsp;&emsp;这才不是我想要的软件学院。读高中的时候我沉迷游戏有网瘾，玩魔兽地图编辑器，觉得制作一个游戏能创造一个自己的世界，简直是世界上最棒的事。所以猜想软件工程正是同样的，是最接近能创造一个世界的学科。所以为了在混学位和刷绩点之外，在大学里聚集更多不同的价值观的同学们，先是成立了中二病性质的，The9th软院游戏制作社，初期专教制作魔兽地图后期教写C++游戏，后又与一个接学校内部小网站开发的叫WE的俱乐部，合并成为I++俱乐部。（这里爆一点黑历史，The9th这个名字是创始人说电子游戏是一种人类八大艺术形式之外的第九类艺术，WE这个名字是说这个俱乐部的创始人有11个，We have Eleven people)。<br>&emsp;&emsp;I++的名字是大家一起选的，i++也是编程当中最常写的一段代码，表示一点一点的增加有积累和进步，配合了新俱乐部的目标，就是大家能在这里随性地一起研究学习的任何感兴趣的IT技术，一起组队做软件开发项目，参加国内外各式开发比赛，努力在专业上积累和提升自己的动手能力（不知不觉这么官腔哟）。所以正是那句话，如果有一天你觉得这不是你想要的大学生活，就来I++看看吧，也许真能找到和你一样想法的同伴，一起来努力做点什么不一样的事。</p>]]></content>
+    <content type="html"><![CDATA[<p>&emsp;&emsp;东南大学江宁区九龙湖校区南门软件学院，当年我的好基友总是说我不是在学院就是在去学院的路上。<br>&emsp;&emsp;真的，多年前的软件学院那是一个怎样的存在，整层楼6间不用抢座宽敞明亮的自习教室，再来一层楼6间不用抢座宽敞明亮的机房，再来一排各式供社团使用的独立工作室，4层楼每层楼梯转角有乒乓球桌；自习室机房和工作室各式该有的网电空调工位齐全；1楼设有专用的图书室和文娱室；门外立着闪亮的东南大学软件学院的招牌。这样一个高大上的独立软院楼配上300多人每人4倍学费的学院，作为当时学院的一名学生，这样的求学环境真的够炫酷。<br>&emsp;&emsp;可那又怎么样呢。那时的IT业也没现在这么热，软院也只是一个在学校官网上拉到页面最下面点倒数第几个连接的学院。同年级的同学绝大都是调剂专业而来的学生，带着各式的不满，只要上下课做作业考试、魔兽、Dota、LOL就可以轻易用掉大学4年。优秀的同学们带着优秀的惯性，继续钻研着各门课程科目，刷个前百分之几的绩点可以保研。并没有很多人真正关心就读于这个专业是为了做什么。学院楼其实也只是一个空架子，除了某些课程使用机房或是自习教室时强制学生过来。其它时间里特别是周末里我甚至可以在空荡荡的楼层间漫步，然后独占一个机房教室或者工作室。<br>&emsp;&emsp;这才不是我想要的软件学院。读高中的时候我沉迷游戏有网瘾，玩魔兽地图编辑器，觉得制作一个游戏能创造一个自己的世界，简直是世界上最棒的事。所以猜想软件工程正是同样的，是最接近能创造一个世界的学科。所以为了在混学位和刷绩点之外，在大学里聚集更多不同的价值观的同学们，先是成立了中二病性质的，The9th软院游戏制作社，初期专教制作魔兽地图后期教写C++游戏，后又与一个接学校内部小网站开发的叫WE的俱乐部，合并成为I++俱乐部。（这里爆一点黑历史，The9th这个名字是创始人说电子游戏是一种人类八大艺术形式之外的第九类艺术，WE这个名字是说这个俱乐部的创始人有11个，We have Eleven people)。<br>&emsp;&emsp;I++的名字是大家一起选的，i++也是编程当中最常写的一段代码，表示一点一点的增加有积累和进步，配合了新俱乐部的目标，就是大家能在这里随性地一起研究学习的任何感兴趣的IT技术，一起组队做软件开发项目，参加国内外各式开发比赛，努力在专业上积累和提升自己的动手能力（不知不觉这么官腔哟）。所以正是那句话，如果有一天你觉得这不是你想要的大学生活，就来I++看看吧，也许真能找到和你一样想法的同伴，一起来努力做点什么不一样的事。</p>]]></content>
     
     
     <categories>
