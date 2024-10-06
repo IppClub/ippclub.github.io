@@ -199,13 +199,13 @@
     
     <tags>
       
-      <tag>Swift</tag>
-      
       <tag>React-Native</tag>
       
       <tag>IOS</tag>
       
       <tag>Javascript</tag>
+      
+      <tag>Swift</tag>
       
     </tags>
     
@@ -367,7 +367,7 @@
     <link href="/"/>
     <url>/</url>
     
-    <content type="html"><![CDATA[<h3 id="我们是谁"><a href="#我们是谁" class="headerlink" title="我们是谁"></a>我们是谁</h3><p>2015 常驻用户</p><p>吴涛</p><p>2016 常驻用户</p><p>吕炀</p><p><img src="/img/people/lvyang.jpg" alt="LvYang"></p><p>2024 常驻用户</p><p>何山</p><h3 id="联系我们"><a href="#联系我们" class="headerlink" title="联系我们"></a>联系我们</h3><p>I++ 俱乐部是东南大学计软智学院的技术俱乐部。南京江宁区东南大学九龙湖校区计算机拔尖基地。</p>]]></content>
+    <content type="html"><![CDATA[<h3 id="我们是谁"><a href="#我们是谁" class="headerlink" title="我们是谁"></a>我们是谁</h3><p>2015 常驻用户</p><p>吴涛</p><p>2016 常驻用户</p><p>吕炀</p><img alt="lvyang" src="/img/people/lvyang.jpg" style="zoom: 50%; display: block; margin: auto" /><p>2024 常驻用户</p><p>何山</p><img alt="heshan" src="/img/people/heshan.png" style="zoom: 50%; display: block; margin: auto" /><h3 id="联系我们"><a href="#联系我们" class="headerlink" title="联系我们"></a>联系我们</h3><p>I++ 俱乐部是东南大学计软智学院的技术俱乐部。南京江宁区东南大学九龙湖校区计算机拔尖基地。</p>]]></content>
     
   </entry>
   
