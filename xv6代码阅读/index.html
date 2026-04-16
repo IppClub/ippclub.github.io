@@ -1,0 +1,911 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.ico">
+  <link rel="icon" href="/img/favicon.ico">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="苹果李子橘子">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="导言这是关于 MIT 6.828 xv6-RISCV 的代码阅读笔记，全文将围绕以下并发，虚拟化，持久化，三部分展开(仿照《操作系统导论》的组织形式)，去代码中寻找并解释一些功能的关键工作流程 作者的知识水平有限，如果出现人类幻觉与胡说八道等情形，欢迎指正 并发多进程运行xv6-riscv 默认是一个运行在 qemu-riscv64 三核处理器上的教学用操作系统，最多支持8核处理器，具备有同时运行">
+<meta property="og:type" content="article">
+<meta property="og:title" content="xv6 代码阅读">
+<meta property="og:url" content="http://ippclub.github.io/xv6%E4%BB%A3%E7%A0%81%E9%98%85%E8%AF%BB/index.html">
+<meta property="og:site_name" content="I++ Club">
+<meta property="og:description" content="导言这是关于 MIT 6.828 xv6-RISCV 的代码阅读笔记，全文将围绕以下并发，虚拟化，持久化，三部分展开(仿照《操作系统导论》的组织形式)，去代码中寻找并解释一些功能的关键工作流程 作者的知识水平有限，如果出现人类幻觉与胡说八道等情形，欢迎指正 并发多进程运行xv6-riscv 默认是一个运行在 qemu-riscv64 三核处理器上的教学用操作系统，最多支持8核处理器，具备有同时运行">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2025-09-23T02:00:00.000Z">
+<meta property="article:modified_time" content="2026-04-16T03:07:22.233Z">
+<meta property="article:tag" content="C++">
+<meta property="article:tag" content="xv6">
+<meta property="article:tag" content="OS">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>xv6 代码阅读 - I++ Club</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"ippclub.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"always","icon":"#"},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>I++ Club</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/mainbg.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="xv6 代码阅读"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-author" aria-hidden="true"></i>
+        苹果李子橘子
+      </span>
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2025-09-23 10:00" pubdate>
+          2025年9月23日 上午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          4.6k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          58 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar category-bar" style="margin-right: -1rem">
+    
+
+
+
+
+
+<div class="category-list">
+  
+  
+    
+    
+    
+    <div class="category row nomargin-x">
+      <a class="category-item 
+          list-group-item category-item-action col-10 col-md-11 col-xm-11" title="科普"
+        id="heading-cb5909f2fd6a1fab81c85d60b5ef82a5" role="tab" data-toggle="collapse" href="#collapse-cb5909f2fd6a1fab81c85d60b5ef82a5"
+        aria-expanded="true"
+      >
+        科普
+        <span class="list-group-count">(8)</span>
+        <i class="iconfont icon-arrowright"></i>
+      </a>
+      
+      <div class="category-collapse collapse show" id="collapse-cb5909f2fd6a1fab81c85d60b5ef82a5"
+           role="tabpanel" aria-labelledby="heading-cb5909f2fd6a1fab81c85d60b5ef82a5">
+        
+        
+          
+  <div class="category-post-list">
+    
+    
+      
+      
+        <a href="/1123%E6%B4%BB%E5%8A%A8/" title="1123活动"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">1123活动</span>
+        </a>
+      
+    
+      
+      
+        <a href="/Makefile%E7%9A%84%E4%BD%BF%E7%94%A8%E6%96%B9%E6%B3%95/" title="Makefile 的食用方法"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">Makefile 的食用方法</span>
+        </a>
+      
+    
+      
+      
+        <a href="/xv6%E4%BB%A3%E7%A0%81%E9%98%85%E8%AF%BB/" title="xv6 代码阅读"
+           class="list-group-item list-group-item-action
+           active">
+          <span class="category-post">xv6 代码阅读</span>
+        </a>
+      
+    
+      
+      
+        <a href="/%E4%B8%80%E4%BA%9B%E6%97%A5%E5%B8%B8%E5%8F%AF%E8%83%BD%E4%BC%9A%E7%94%A8%E5%BE%97%E4%B8%8A%E7%9A%84%E6%8A%80%E6%9C%AF%EF%BC%88%E4%BA%8C%EF%BC%89/" title="一些日常可能会用得上的技术（二）"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">一些日常可能会用得上的技术（二）</span>
+        </a>
+      
+    
+      
+      
+        <a href="/%E4%B8%80%E4%BA%9B%E6%97%A5%E5%B8%B8%E7%94%A8%E7%9A%84%E4%B8%8A%E7%9A%84%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%8A%80%E6%9C%AF%EF%BC%88%E4%B8%80%EF%BC%89/" title="一些日常用的上的计算机技术（一）"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">一些日常用的上的计算机技术（一）</span>
+        </a>
+      
+    
+      
+      
+        <a href="/%E7%88%B1%E4%B8%8E%E9%AD%94%E6%B3%95/" title="爱与魔法"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">爱与魔法</span>
+        </a>
+      
+    
+      
+      
+        <a href="/%E8%BD%AF%E4%BB%B6%E7%BA%A7%E7%A8%8B%E5%BA%8F%E7%9A%84%E7%BC%96%E8%AF%91/" title="软件级应用的编译"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">软件级应用的编译</span>
+        </a>
+      
+    
+      
+      
+        <a href="/%E9%9D%A2%E5%90%91%E6%96%B0%E6%8E%A5%E8%A7%A6%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%9A%84%E5%90%8C%E5%AD%A6%E7%9A%84%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E7%A7%91%E6%99%AE%EF%BC%88%E4%B8%80%EF%BC%89/" title="面向新接触计算机的同学的计算机基础知识科普（一）"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">面向新接触计算机的同学的计算机基础知识科普（一）</span>
+        </a>
+      
+    
+  </div>
+
+        
+      </div>
+    </div>
+  
+</div>
+
+
+  </aside>
+
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">xv6 代码阅读</h1>
+            
+              <p id="updated-time" class="note note-info" style="">
+                
+                  
+                    本文最后更新于 2026年4月16日 上午
+                  
+                
+              </p>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="导言"><a href="#导言" class="headerlink" title="导言"></a>导言</h1><p>这是关于 <strong>MIT 6.828 xv6-RISCV</strong> 的代码阅读笔记，全文将围绕以下并发，虚拟化，持久化，三部分展开(仿照《操作系统导论》的组织形式)，去代码中寻找并解释一些功能的关键工作流程</p>
+<p>作者的知识水平有限，如果出现人类幻觉与胡说八道等情形，欢迎指正</p>
+<h1 id="并发"><a href="#并发" class="headerlink" title="并发"></a>并发</h1><h2 id="多进程运行"><a href="#多进程运行" class="headerlink" title="多进程运行"></a>多进程运行</h2><p>xv6-riscv 默认是一个运行在 qemu-riscv64 三核处理器上的教学用操作系统，最多支持8核处理器，具备有同时运行多个进程的能力。在 kernel&#x2F;proc.h 中，我们可以看到其对一个 cpu 结构体的定义：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">cpu</span> &#123;</span><br>  <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">proc</span> *<span class="hljs-title">proc</span>;</span>          <span class="hljs-comment">// 当前运行在该核心上的进程</span><br>  <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">context</span> <span class="hljs-title">context</span>;</span>     <span class="hljs-comment">// 指向scheduler()函数的上下文结构体</span><br>  <span class="hljs-type">int</span> noff;                   <span class="hljs-comment">// 记录push_off()的调用次数</span><br>  <span class="hljs-type">int</span> intena;                 <span class="hljs-comment">// 记录push_off()前是否开中断</span><br>&#125;;<br></code></pre></td></tr></table></figure>
+<p>这里看似一个 cpu 只有指向一个进程的指针，但实际上，将 xv6 配置为单核启动也能实现多进程运行的效果，同一个进程也能被调度到不同的核心上去执行。在 kernel&#x2F;proc.c 文件中，我们可以看到分配在内核栈上的进程控制块数组，其默认配置为最多支持64个进程同时运行,在 proc 结构体中，定义了一个进程所需要的所有基本信息:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">proc</span> &#123;</span><br>  <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">spinlock</span> <span class="hljs-title">lock</span>;</span><br><br>  <span class="hljs-comment">// p-&gt;lock must be held when using these:</span><br>  <span class="hljs-class"><span class="hljs-keyword">enum</span> <span class="hljs-title">procstate</span> <span class="hljs-title">state</span>;</span>        <span class="hljs-comment">// Process state</span><br>  <span class="hljs-type">void</span> *chan;                  <span class="hljs-comment">// If non-zero, sleeping on chan</span><br>  <span class="hljs-type">int</span> killed;                  <span class="hljs-comment">// If non-zero, have been killed</span><br>  <span class="hljs-type">int</span> xstate;                  <span class="hljs-comment">// Exit status to be returned to parent&#x27;s wait</span><br>  <span class="hljs-type">int</span> pid;                     <span class="hljs-comment">// Process ID</span><br><br>  <span class="hljs-comment">// wait_lock must be held when using this:</span><br>  <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">proc</span> *<span class="hljs-title">parent</span>;</span>         <span class="hljs-comment">// Parent process</span><br><br>  <span class="hljs-comment">// these are private to the process, so p-&gt;lock need not be held.</span><br>  uint64 kstack;               <span class="hljs-comment">// Virtual address of kernel stack</span><br>  uint64 sz;                   <span class="hljs-comment">// Size of process memory (bytes)</span><br>  <span class="hljs-type">pagetable_t</span> pagetable;       <span class="hljs-comment">// User page table</span><br>  <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">trapframe</span> *<span class="hljs-title">trapframe</span>;</span> <span class="hljs-comment">// data page for trampoline.S</span><br>  <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">context</span> <span class="hljs-title">context</span>;</span>      <span class="hljs-comment">// swtch() here to run process</span><br>  <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">file</span> *<span class="hljs-title">ofile</span>[<span class="hljs-title">NOFILE</span>];</span>  <span class="hljs-comment">// Open files</span><br>  <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">inode</span> *<span class="hljs-title">cwd</span>;</span>           <span class="hljs-comment">// Current directory</span><br>  <span class="hljs-type">char</span> name[<span class="hljs-number">16</span>];               <span class="hljs-comment">// Process name (debugging)</span><br>&#125;;<br></code></pre></td></tr></table></figure>
+<p>在一个核心上支持多个进程的同时运行，需要支持这些进程之间的频繁切换，具体的，一个进程可能会在以下情况时让出cpu：</p>
+<ul>
+<li>被中断打断，被迫让出 cpu </li>
+<li>调用 yield(), 主动让出 cpu</li>
+<li>发起了阻塞性的系统调用，让出 cpu 以等待结果</li>
+</ul>
+<p>进程的切换主要体现为对于 sched() 函数的调用，sched() 对于即将被让出的进程状态有着严格的要求，若不满足则会触发内核崩溃(xv6 对于错误的处理手段大多是直接引发内核崩溃)，随后，其会调用汇编函数 swtch() 保存当前上下文的值，切换至 cpu 中预置的 scheduler() 上下文,并在其中切换至一个新的进程运行</p>
+<h2 id="同步与互斥"><a href="#同步与互斥" class="headerlink" title="同步与互斥"></a>同步与互斥</h2><h3 id="互斥锁"><a href="#互斥锁" class="headerlink" title="互斥锁"></a>互斥锁</h3><p>即使在单核 cpu 上运行多个用户进程时，也有可能会出现数据竞态，或者程序在运行至不可被中断的关键代码时被中断打断，因此，需要使用互斥锁来对关键数据或者代码段进行保护。互斥锁的底层实现依赖于硬件提供的同步原语，这里不过多展开。<br>在即将进行对某个关键数据或者设备进行独占式访问时，进程会先使用 aqcuire() 来尝试获取独占权，在独占结束之后，通过 release() 释放。而为了防止中断的意外到来，可以使用 push_off() 和 pop_off() 两个配套函数来进行中断的开关操作，同时会记录操作的层数以避免中断的提前开启。</p>
+<h3 id="睡眠锁与唤醒机制"><a href="#睡眠锁与唤醒机制" class="headerlink" title="睡眠锁与唤醒机制"></a>睡眠锁与唤醒机制</h3><h4 id="睡眠"><a href="#睡眠" class="headerlink" title="睡眠"></a>睡眠</h4><p>然而,一般的互斥锁被实现为自旋互斥锁,关键的独占性保证代码如下:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-keyword">while</span>(__sync_lock_test_and_set(&amp;lk-&gt;locked, <span class="hljs-number">1</span>) != <span class="hljs-number">0</span>)<br>   ;<br></code></pre></td></tr></table></figure>
+<p>cpu 会在获取到独占权之前一直空转,在并发的常见应用场景：生产者与消费者模型当中，如果生产速率和消费速率之间差异显著，则必定会有一方因为等待而浪费了大量的 cpu 资源,为此，便出现了睡眠锁的使用，睡眠锁的基本机制为 sleep() 的调用，即，在拿到锁之后，确认没有待处理数据，就使得进程状态更新为 SLEEPING 释放锁并让出 cpu,节省了等待时的资源浪费。</p>
+<p>在此之上，对自旋锁进一步封装得到了睡眠锁，结构体定义如下:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">sleeplock</span> &#123;</span><br>  uint locked;       <span class="hljs-comment">// Is the lock held?</span><br>  <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">spinlock</span> <span class="hljs-title">lk</span>;</span> <span class="hljs-comment">// spinlock protecting this sleep lock</span><br>  <br>  <span class="hljs-comment">// For debugging:</span><br>  <span class="hljs-type">char</span> *name;        <span class="hljs-comment">// Name of lock.</span><br>  <span class="hljs-type">int</span> pid;           <span class="hljs-comment">// Process holding lock</span><br>&#125;;<br></code></pre></td></tr></table></figure>
+<p>其通过封装后的 aqcuiresleep() 函数和 releasesleep() 函数进行使用，关键点在于，如果获取不到锁，就会直接让进程进入睡眠状态</p>
+<h4 id="唤醒"><a href="#唤醒" class="headerlink" title="唤醒"></a>唤醒</h4><p>在生产者和消费者模型当中，如果使用睡眠锁，则必然会出现生产者准备好数据，需要通知消费者去处理的情况，这时候，必须要生产者去唤醒睡眠状态下的消费者,主要体现为对于 wakeup() 函数的调用,其会寻找当前 channel 上所有正在睡眠的线程，将进程状态改为唤醒,(似乎只会在内核态,如终端和文件读写，进行 sleep 和 wakeup，所以不会涉及虚存切换)</p>
+<h2 id="中断与异常"><a href="#中断与异常" class="headerlink" title="中断与异常"></a>中断与异常</h2><h3 id="中断"><a href="#中断" class="headerlink" title="中断"></a>中断</h3><p>xv6 中的中断主要分为时钟中断和外设中断，在中断到来时，CPU 可能处在不同的特权级</p>
+<ul>
+<li>S&#x2F;U 模式异常：处于特权级的保护，用户进程无法访问到内核所使用的内存段，直接跳转至 kernelvec 会引发页错误，为此 xv6 中借助了跳板页实现，即 proc 结构体中的 trapframe 成员，在S&#x2F;U模式下，中断到来时会首先跳转至跳板vec，在 usertrap 中，完成csr操作，虚存切换(必须有代码段被同时映射到内核空间和用户空间)和上下文保存等工作后再返回。</li>
+<li>M 模式异常: 再M模式下发生异常后，直接跳转至 kernelvec 函数，对应的 trap 只接收来自S mode的设备中断,否则直接内核崩溃</li>
+</ul>
+<h3 id="异常"><a href="#异常" class="headerlink" title="异常"></a>异常</h3><ul>
+<li>S&#x2F;U模式发生异常会直接杀死异常来源的应用程序，M mode 异常直接崩溃</li>
+</ul>
+<h2 id="进程调度"><a href="#进程调度" class="headerlink" title="进程调度"></a>进程调度</h2><ul>
+<li>调度逻辑很简单，把代码贴出来，不再赘述了<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-keyword">for</span>(p = proc; p &lt; &amp;proc[NPROC]; p++) &#123;<br>    acquire(&amp;p-&gt;lock);<br>    <span class="hljs-keyword">if</span>(p-&gt;state == RUNNABLE) &#123;<br>      <span class="hljs-comment">// Switch to chosen process.  It is the process&#x27;s job</span><br>      <span class="hljs-comment">// to release its lock and then reacquire it</span><br>      <span class="hljs-comment">// before jumping back to us.</span><br>      p-&gt;state = RUNNING;<br>      c-&gt;proc = p;<br>      swtch(&amp;c-&gt;context, &amp;p-&gt;context);<br><br>      <span class="hljs-comment">// Process is done running for now.</span><br>      <span class="hljs-comment">// It should have changed its p-&gt;state before coming back.</span><br>      c-&gt;proc = <span class="hljs-number">0</span>;<br>      found = <span class="hljs-number">1</span>;<br>    &#125;<br></code></pre></td></tr></table></figure></li>
+</ul>
+<h1 id="虚拟化"><a href="#虚拟化" class="headerlink" title="虚拟化"></a>虚拟化</h1><p>虚拟化在操作系统里主要表现为，将有限的物理资源（CPU、内存、I&#x2F;O、网络等）抽象为多个逻辑实例，让用户或应用认为自己独占该资源，而在XV6中，主要表现为CPU虚拟化，内存虚拟化和文件系统虚拟化，CPU虚拟化主要表现为进程线程的抽象和时间片轮转，在前一节介绍过了，而文件系统的虚拟化主要在持久化一节中讲解，本章还是主要围绕虚存展开。</p>
+<h2 id="虚存管理"><a href="#虚存管理" class="headerlink" title="虚存管理"></a>虚存管理</h2><h3 id="初始化"><a href="#初始化" class="headerlink" title="初始化"></a>初始化</h3><p>除了最开始的 initcode.S 程序(直接在内核中分配虚存)，其他所有的程序最后都是通过kexec进行加载和内存初始化的(initcode.S 通过 exec 调用 init 程序，init 程序 fork 出所有其余进程)</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;init: starting sh\n&quot;</span>);<br>pid = fork();<br><span class="hljs-keyword">if</span>(pid &lt; <span class="hljs-number">0</span>)&#123;<br>  <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;init: fork failed\n&quot;</span>);<br>  <span class="hljs-built_in">exit</span>(<span class="hljs-number">1</span>);<br>&#125;<br><span class="hljs-keyword">if</span>(pid == <span class="hljs-number">0</span>)&#123;<br>  exec(<span class="hljs-string">&quot;sh&quot;</span>, argv);<br>  <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;init: exec sh failed\n&quot;</span>);<br>  <span class="hljs-built_in">exit</span>(<span class="hljs-number">1</span>);<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>具体来说,kexec 负责创建一个新的根页表，完成需要加载段的加载和数据映射(uvmalloc)以及必要的工具段，比如跳板页的映射，随后删除原进程的内存映射并释放所有物理内存。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c">proc_freepagetable(oldpagetable, oldsz);<br></code></pre></td></tr></table></figure>
+<p>而 kfork 则是会完全复制父进程的所有内存并建立映射，除了上下文中的a0被设定为0以在返回值上做出区分外，其余完全相同，知道使用 exec 被新进程覆盖,关键代码如下所示</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">// Copy user memory from parent to child.</span><br> <span class="hljs-keyword">if</span>(uvmcopy(p-&gt;pagetable, np-&gt;pagetable, p-&gt;sz) &lt; <span class="hljs-number">0</span>)&#123;<br>   freeproc(np);<br>   release(&amp;np-&gt;lock);<br>   <span class="hljs-keyword">return</span> <span class="hljs-number">-1</span>;<br> &#125;<br> np-&gt;sz = p-&gt;sz;<br><br> <span class="hljs-comment">// copy saved user registers.</span><br> *(np-&gt;trapframe) = *(p-&gt;trapframe);<br><br> <span class="hljs-comment">// Cause fork to return 0 in the child.</span><br> np-&gt;trapframe-&gt;a0 = <span class="hljs-number">0</span>;<br></code></pre></td></tr></table></figure>
+<h3 id="虚存分配"><a href="#虚存分配" class="headerlink" title="虚存分配"></a>虚存分配</h3><p>当应用程序使用 malloc 申请内存的时候，如果程序当前的内存空间不足，malloc 就会发起 sbrk 的系统调用</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-keyword">if</span>(p == freep)<br>    <span class="hljs-keyword">if</span>((p = morecore(nunits)) == <span class="hljs-number">0</span>)<br>      <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br></code></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">static</span> Header*<br><span class="hljs-title function_">morecore</span><span class="hljs-params">(uint nu)</span><br>&#123;<br>  <span class="hljs-type">char</span> *p;<br>  Header *hp;<br><br>  <span class="hljs-keyword">if</span>(nu &lt; <span class="hljs-number">4096</span>)<br>    nu = <span class="hljs-number">4096</span>;<br>  p = sbrk(nu * <span class="hljs-keyword">sizeof</span>(Header));<br>  <span class="hljs-keyword">if</span>(p == SBRK_ERROR)<br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>  hp = (Header*)p;<br>  hp-&gt;s.size = nu;<br>  <span class="hljs-built_in">free</span>((<span class="hljs-type">void</span>*)(hp + <span class="hljs-number">1</span>));<br>  <span class="hljs-keyword">return</span> freep;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>sys_sbrk最终会调用 uvmalloc 为用户空间分配更多的堆区内存,如果是 free,xv6的实现并没有内核层面的回收，也就是，单个应用程序的内存占用只会增大而不会缩小</p>
+<h2 id="特权级隔离"><a href="#特权级隔离" class="headerlink" title="特权级隔离"></a>特权级隔离</h2><p>特权级隔离主要是硬件层面实现的工作，在RISCV架构中，主要使用三个特权级</p>
+<ul>
+<li>M mode 机器模式，权限最高的模式，可以访问和修改所有 CSR，并可执行所有特权指令</li>
+<li>S mode 超级用户模式，可以访问对S mode开放的CSR，可以处理用户态或是被M态委托的S态中断与异常，并且可以借助驱动使用设备</li>
+<li>U mode 只能执行用户级指令，访问被标记为用户可访问的虚拟内存</li>
+</ul>
+<p>在硬件中，如果在执行某些特殊指令时处在了不符合的特权级，会从硬件层面产生异常</p>
+<h1 id="持久化"><a href="#持久化" class="headerlink" title="持久化"></a>持久化</h1><h2 id="基本文件操作"><a href="#基本文件操作" class="headerlink" title="基本文件操作"></a>基本文件操作</h2><h3 id="从-fd-到-file"><a href="#从-fd-到-file" class="headerlink" title="从 fd 到 file"></a>从 fd 到 file</h3><p>当用户空间发起对某个 fd 的读写时，底层会表现为 sys_read 或者 sys_write,在真正对文件进行读写之前，内核会去从对应进程控制块中断 ofile 数组中查询 fd 对应的 file 对象,然后对这个 file 对象执行对应的操作，比如 pipewrite, writei, 或者devsw.write();</p>
+<h3 id="管道，设备与磁盘"><a href="#管道，设备与磁盘" class="headerlink" title="管道，设备与磁盘"></a>管道，设备与磁盘</h3><p>在文件操作中，有一种思想叫做 “一切皆文件”。正如上文所说，对设备和管道的访问也被抽象为了文件操作，而真正意义上的磁盘文件是被标记为 inode 的 file 对象，设备对应的devsw 回调函数会在内核驱动初始化时被注册，目前 xv6 只支持串口设备，但是为其添加内核驱动应该是较为简单的事情。</p>
+<h3 id="文件系统"><a href="#文件系统" class="headerlink" title="文件系统"></a>文件系统</h3><p>在不需要持久化的前提下，可以修改 xv6 的代码使其使用 ramdisk,ramdisk 的二进制内容和 fs.img 是完全相同的，也就是说，文件系统实际上就是通过特殊排列以赋予文件，目录等语义的一种协议，具体来说，我们可以在 mkfs&#x2F;mkfs.c 中看到文件系统的构造方式, 这里不在详细说明.<br>这里开始讲解严格意义上的磁盘文件读写</p>
+<h4 id="file"><a href="#file" class="headerlink" title="file"></a>file</h4><p>在 file.c 中，我们可以看到如下代码</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-class"><span class="hljs-keyword">struct</span> &#123;</span><br>  <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">spinlock</span> <span class="hljs-title">lock</span>;</span><br>  <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">file</span> <span class="hljs-title">file</span>[<span class="hljs-title">NFILE</span>];</span><br>&#125; ftable;<br></code></pre></td></tr></table></figure>
+<p>其定义了一个 ftable 全局变量，应用程序通过向 ftable 申请一个空闲(ref &#x3D;&#x3D; 0)的 file 块，注册对应的文件描述符，并且根据文件类型的差异进行相应的初始化工作，从而获得对应文件的使用权。</p>
+<h4 id="inode"><a href="#inode" class="headerlink" title="inode"></a>inode</h4><p>而如果申请的文件类型是 磁盘文件或者设备文件，则 file 结构体中的 inode* 成员会被注册，inode 是类 Unix 文件系统中用于描述文件元数据核心数据结构。它本质上是一个记录文件属性和磁盘数据块位置的节点，inode 存放在磁盘上的的 inode 表中，但是在 xv6 系统中，我们在内存中也存放了 inode 的备份以便于访问，其存放在 itable 中，被设置为最多允许存在50个活跃 inode，其定义如下:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-class"><span class="hljs-keyword">struct</span> &#123;</span><br>  <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">spinlock</span> <span class="hljs-title">lock</span>;</span><br>  <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">inode</span> <span class="hljs-title">inode</span>[<span class="hljs-title">NINODE</span>];</span><br>&#125; itable;<br></code></pre></td></tr></table></figure>
+<p>以打开在 itable 中从未注册过的某个文件为例，首先看到 sys_open 函数</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br></pre></td><td class="code"><pre><code class="hljs c">uint64<br><span class="hljs-title function_">sys_open</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span><br>&#123;<br>  <span class="hljs-type">char</span> path[MAXPATH];<br>  <span class="hljs-type">int</span> fd, omode;<br>  <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">file</span> *<span class="hljs-title">f</span>;</span><br>  <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">inode</span> *<span class="hljs-title">ip</span>;</span><br>  <span class="hljs-type">int</span> n;<br><br>  argint(<span class="hljs-number">1</span>, &amp;omode);<br>  <span class="hljs-keyword">if</span>((n = argstr(<span class="hljs-number">0</span>, path, MAXPATH)) &lt; <span class="hljs-number">0</span>)<br>    <span class="hljs-keyword">return</span> <span class="hljs-number">-1</span>;<br><br>  begin_op();<br><br>  <span class="hljs-keyword">if</span>(omode &amp; O_CREATE)&#123;<br>    ip = create(path, T_FILE, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>);<br>    <span class="hljs-keyword">if</span>(ip == <span class="hljs-number">0</span>)&#123;<br>      end_op();<br>      <span class="hljs-keyword">return</span> <span class="hljs-number">-1</span>;<br>    &#125;<br>  &#125; <span class="hljs-keyword">else</span> &#123;<br>    <span class="hljs-keyword">if</span>((ip = namei(path)) == <span class="hljs-number">0</span>)&#123;<br>      end_op();<br>      <span class="hljs-keyword">return</span> <span class="hljs-number">-1</span>;<br>    &#125;<br>    ilock(ip);<br>    <span class="hljs-keyword">if</span>(ip-&gt;type == T_DIR &amp;&amp; omode != O_RDONLY)&#123;<br>      iunlockput(ip);<br>      end_op();<br>      <span class="hljs-keyword">return</span> <span class="hljs-number">-1</span>;<br>    &#125;<br>  &#125;<br><br>  <span class="hljs-keyword">if</span>(ip-&gt;type == T_DEVICE &amp;&amp; (ip-&gt;major &lt; <span class="hljs-number">0</span> || ip-&gt;major &gt;= NDEV))&#123;<br>    iunlockput(ip);<br>    end_op();<br>    <span class="hljs-keyword">return</span> <span class="hljs-number">-1</span>;<br>  &#125;<br><br>  <span class="hljs-keyword">if</span>((f = filealloc()) == <span class="hljs-number">0</span> || (fd = fdalloc(f)) &lt; <span class="hljs-number">0</span>)&#123;<br>    <span class="hljs-keyword">if</span>(f)<br>      fileclose(f);<br>    iunlockput(ip);<br>    end_op();<br>    <span class="hljs-keyword">return</span> <span class="hljs-number">-1</span>;<br>  &#125;<br><br>  <span class="hljs-keyword">if</span>(ip-&gt;type == T_DEVICE)&#123;<br>    f-&gt;type = FD_DEVICE;<br>    f-&gt;major = ip-&gt;major;<br>  &#125; <span class="hljs-keyword">else</span> &#123;<br>    f-&gt;type = FD_INODE;<br>    f-&gt;off = <span class="hljs-number">0</span>;<br>  &#125;<br>  f-&gt;ip = ip;<br>  f-&gt;readable = !(omode &amp; O_WRONLY);<br>  f-&gt;writable = (omode &amp; O_WRONLY) || (omode &amp; O_RDWR);<br><br>  <span class="hljs-keyword">if</span>((omode &amp; O_TRUNC) &amp;&amp; ip-&gt;type == T_FILE)&#123;<br>    itrunc(ip);<br>  &#125;<br><br>  iunlock(ip);<br>  end_op();<br><br>  <span class="hljs-keyword">return</span> fd;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>若在打开模式中置位了CREATE位，则会调用 create 函数，其会判断上级目录是否存在，以及传入的文件是否存在，若不存在，则会调用ialloc分配新的 inode 并且利用 iupdate 同步硬盘中的数据，若不是 create，则直接查找对应文件的inode,最后是调用 iget 从内存 inode 缓存里取出一个 inode，如果缓存没有，就分配一个空槽位并初始化，但不从磁盘加载 inode 内容,真正完成对磁盘内容的更新是在 ilock 中进行的，在此之后，就可以利用这个 inode 来实现对于磁盘的操作了, 以读文件为例， 调用链为 sys_read-&gt;fileread-&gt;readi-&gt;bread ，从 readi 开始，直接涉及了对于 inode 的操作，readi函数如下所示:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">int</span><br><span class="hljs-title function_">readi</span><span class="hljs-params">(<span class="hljs-keyword">struct</span> inode *ip, <span class="hljs-type">int</span> user_dst, uint64 dst, uint off, uint n)</span><br>&#123;<br>  uint tot, m;<br>  <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">buf</span> *<span class="hljs-title">bp</span>;</span><br><br>  <span class="hljs-keyword">if</span>(off &gt; ip-&gt;size || off + n &lt; off)<br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>  <span class="hljs-keyword">if</span>(off + n &gt; ip-&gt;size)<br>    n = ip-&gt;size - off;<br><br>  <span class="hljs-keyword">for</span>(tot=<span class="hljs-number">0</span>; tot&lt;n; tot+=m, off+=m, dst+=m)&#123;<br>    uint addr = bmap(ip, off/BSIZE);<br>    <span class="hljs-keyword">if</span>(addr == <span class="hljs-number">0</span>)<br>      <span class="hljs-keyword">break</span>;<br>    bp = bread(ip-&gt;dev, addr);<br>    m = min(n - tot, BSIZE - off%BSIZE);<br>    <span class="hljs-keyword">if</span>(either_copyout(user_dst, dst, bp-&gt;data + (off % BSIZE), m) == <span class="hljs-number">-1</span>) &#123;<br>      brelse(bp);<br>      tot = <span class="hljs-number">-1</span>;<br>      <span class="hljs-keyword">break</span>;<br>    &#125;<br>    brelse(bp);<br>  &#125;<br>  <span class="hljs-keyword">return</span> tot;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>代码的关键部分在于，通过bmap函数获取到硬盘所在区域的块编号，随后通过bread函数，从对应块读取整块的数据至内存中的buf并返回，通过either_copyout函数复制到函数调用者提供的缓冲区。</p>
+<h4 id="引用计数"><a href="#引用计数" class="headerlink" title="引用计数"></a>引用计数</h4><p>在 xv6 文件系统的实现中，file 结构体和 inode 结构体都有自己的 ref 成员，file结构体的 ref 指向的是对于持有该file对象的应用程序，共有几个文件描述符指向该 file 对象，而 inode 结构体的 ref 指向的是有几个 file 指向该 inode。具体来说，其特殊性体现在引用计数归零时的特殊操作，若关闭一个文件描述符时，其所对应的 file ref 归零，则关闭回收该 file 对象，若 file 对象关闭时，inode 结构体的 ref 也归零，并且文件的链接数也归零，则会在磁盘中删除该文件，因为再也没有手段来访问到该文件了。</p>
+<h4 id="超级块"><a href="#超级块" class="headerlink" title="超级块"></a>超级块</h4><p>超级块是整个存放整个文件系统元信息的地方，从 fsinit 函数开始，其会被常驻地加载到内存当中，作为一个 superblock 结构体。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">superblock</span> &#123;</span><br>  uint magic;        <span class="hljs-comment">// Must be FSMAGIC</span><br>  uint size;         <span class="hljs-comment">// Size of file system image (blocks)</span><br>  uint nblocks;      <span class="hljs-comment">// Number of data blocks</span><br>  uint ninodes;      <span class="hljs-comment">// Number of inodes.</span><br>  uint nlog;         <span class="hljs-comment">// Number of log blocks</span><br>  uint logstart;     <span class="hljs-comment">// Block number of first log block</span><br>  uint inodestart;   <span class="hljs-comment">// Block number of first inode block</span><br>  uint bmapstart;    <span class="hljs-comment">// Block number of first free map block</span><br>&#125;;<br></code></pre></td></tr></table></figure>
+<p>一切对于文件系统的操作都需要从超级块中提供的元信息开始，就以 balloc 函数为例，其代码如下:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">static</span> uint<br><span class="hljs-title function_">balloc</span><span class="hljs-params">(uint dev)</span><br>&#123;<br>  <span class="hljs-type">int</span> b, bi, m;<br>  <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">buf</span> *<span class="hljs-title">bp</span>;</span><br><br>  bp = <span class="hljs-number">0</span>;<br>  <span class="hljs-keyword">for</span>(b = <span class="hljs-number">0</span>; b &lt; sb.size; b += BPB)&#123;<br>    bp = bread(dev, BBLOCK(b, sb));<br>    <span class="hljs-keyword">for</span>(bi = <span class="hljs-number">0</span>; bi &lt; BPB &amp;&amp; b + bi &lt; sb.size; bi++)&#123;<br>      m = <span class="hljs-number">1</span> &lt;&lt; (bi % <span class="hljs-number">8</span>);<br>      <span class="hljs-keyword">if</span>((bp-&gt;data[bi/<span class="hljs-number">8</span>] &amp; m) == <span class="hljs-number">0</span>)&#123;  <span class="hljs-comment">// Is block free?</span><br>        bp-&gt;data[bi/<span class="hljs-number">8</span>] |= m;  <span class="hljs-comment">// Mark block in use.</span><br>        log_write(bp);<br>        brelse(bp);<br>        bzero(dev, b + bi);<br>        <span class="hljs-keyword">return</span> b + bi;<br>      &#125;<br>    &#125;<br>    brelse(bp);<br>  &#125;<br>  <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;balloc: out of blocks\n&quot;</span>);<br>  <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>这个函数的作用是分配一个被清零的磁盘块，其逻辑是，遍历读取磁盘中所有的位图块，逐块校验其中有没有空闲块，如果有，则返回其块号，若没有，则返回0，表示磁盘空间用尽。</p>
+<h2 id="日志与崩溃一致性"><a href="#日志与崩溃一致性" class="headerlink" title="日志与崩溃一致性"></a>日志与崩溃一致性</h2><h3 id="日志"><a href="#日志" class="headerlink" title="日志"></a>日志</h3><p>在日常对于电脑的使用当中，电脑的关闭有时并不是正常关机，有充分的时间让系统完成资源的清理和硬件的关闭操作，而是直接断电，此时，磁盘的读写会被强行中断，此时可能会出现部分更新或者状态不一致等问题，造成数据丢失或者读取垃圾数据，所以，需要通过日志来维护文件系统的崩溃一致性，一次事务要么全部完成，要么全部失败，不存在部分完成的情况。</p>
+<p>在文件系统的初始化中，我们也可以看到日志系统的初始化:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">void</span><br><span class="hljs-title function_">fsinit</span><span class="hljs-params">(<span class="hljs-type">int</span> dev)</span> &#123;<br>  readsb(dev, &amp;sb);<br>  <span class="hljs-keyword">if</span>(sb.magic != FSMAGIC)<br>    panic(<span class="hljs-string">&quot;invalid file system&quot;</span>);<br>  initlog(dev, &amp;sb);<br>  ireclaim(dev);<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>日志的定义如下所示</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">log</span> &#123;</span><br>  <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">spinlock</span> <span class="hljs-title">lock</span>;</span><br>  <span class="hljs-type">int</span> start;<br>  <span class="hljs-type">int</span> outstanding; <span class="hljs-comment">// how many FS sys calls are executing.</span><br>  <span class="hljs-type">int</span> committing;  <span class="hljs-comment">// in commit(), please wait.</span><br>  <span class="hljs-type">int</span> dev;<br>  <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">logheader</span> <span class="hljs-title">lh</span>;</span><br>&#125;;<br><span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">log</span> <span class="hljs-title">log</span>;</span><br></code></pre></td></tr></table></figure>
+<h4 id="日志的提交流程"><a href="#日志的提交流程" class="headerlink" title="日志的提交流程"></a>日志的提交流程</h4><p>为了保证程序的崩溃一致性，对于磁盘的写入与磁盘的读取并不相同，具体来说，在 writei 函数中，并没有直接写入磁盘当中，而是表现为调用了一个 log_write ,具体来说，其会在内存中的 log 块中注册被修改的块号，同时为对应的buff增加引用计数避免被回收,而在磁盘操作结束，调用end_op()时，如果此时磁盘完全空闲，则会进行日志的commit工作，完整流程如下:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">static</span> <span class="hljs-type">void</span><br><span class="hljs-title function_">commit</span><span class="hljs-params">()</span><br>&#123;<br>  <span class="hljs-keyword">if</span> (<span class="hljs-built_in">log</span>.lh.n &gt; <span class="hljs-number">0</span>) &#123;<br>    write_log();     <span class="hljs-comment">// Write modified blocks from cache to log</span><br>    write_head();    <span class="hljs-comment">// Write header to disk -- the real commit</span><br>    install_trans(<span class="hljs-number">0</span>); <span class="hljs-comment">// Now install writes to home locations</span><br>    <span class="hljs-built_in">log</span>.lh.n = <span class="hljs-number">0</span>;<br>    write_head();    <span class="hljs-comment">// Erase the transaction from the log</span><br>  &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>首先，write_log函数将log中被标记为修改的磁盘块真正写入磁盘中的日志区域，write_head函数则将日志头写入磁盘，当write_head函数被执行完成的时候，便真正标记着这个写入事务执行完成，随后install_trans将日志区域的数据写入磁盘，写入完成后，重置磁盘中的日志头。至此，一次磁盘写入完全完成。</p>
+<h4 id="重放"><a href="#重放" class="headerlink" title="重放"></a>重放</h4><p>如上所示，一次磁盘写入的完成与否取决于 commit 函数中第一个 write_head 函数是否完成，如果 write_head 函数没有执行完成，则写入全部未完成，如果其已经执行完成，则写入被认为全部完成。由于现代磁盘保证单个块写入的原子性，所以不用担心 write_head 的写入被打断，若在write_head执行之后断电，操作系统在启动时会进行日志的重放操作，彻底完成写入。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">static</span> <span class="hljs-type">void</span><br><span class="hljs-title function_">recover_from_log</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span><br>&#123;<br>  read_head();<br>  install_trans(<span class="hljs-number">1</span>); <span class="hljs-comment">// if committed, copy from log to disk</span><br>  <span class="hljs-built_in">log</span>.lh.n = <span class="hljs-number">0</span>;<br>  write_head(); <span class="hljs-comment">// clear the log</span><br>&#125;<br><br></code></pre></td></tr></table></figure>
+
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E7%A7%91%E6%99%AE/" class="category-chain-item">科普</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/C/" class="print-no-link">#C++</a>
+      
+        <a href="/tags/xv6/" class="print-no-link">#xv6</a>
+      
+        <a href="/tags/OS/" class="print-no-link">#OS</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>xv6 代码阅读</div>
+      <div>http://ippclub.github.io/xv6代码阅读/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>苹果李子橘子</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2025年9月23日</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>更新于</div>
+          <div>2026年4月16日</div>
+        </div>
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="NC - 非商业性使用">
+                    <i class="iconfont icon-cc-nc"></i>
+                  </span>
+                </a>
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="SA - 相同方式共享">
+                    <i class="iconfont icon-cc-sa"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/About-BS-Architect/" title="漫谈 B/S 架构">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">漫谈 B/S 架构</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/%E6%8A%8A%20321%20%E5%8E%9F%E5%88%99%E8%90%BD%E5%88%B0%E6%A1%8C%E9%9D%A2%EF%BC%9AWindows%20%E9%9B%B6%E6%89%8B%E5%8A%A8%E5%A4%87%E4%BB%BD%E5%AE%9E%E6%88%98/" title="把 321 原则落到桌面：Windows 零手动备份实战">
+                        <span class="hidden-mobile">把 321 原则落到桌面：Windows 零手动备份实战</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+  <div id="waline"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#waline', function() {
+      Fluid.utils.createCssLink('https://registry.npmmirror.com/@waline/client/2.15.8/files/dist/waline.css')
+      Fluid.utils.createScript('https://registry.npmmirror.com/@waline/client/2.15.8/files/dist/waline.js', function() {
+        var options = Object.assign(
+          {"serverURL":"https://waline.harkerhand.cn/","path":"window.location.pathname","meta":["nick","mail","link"],"requiredMeta":["nick"],"lang":"zh-CN","emoji":["https://cdn.jsdelivr.net/gh/walinejs/emojis/weibo","https://cdn.jsdelivr.net/gh/walinejs/emojis/tieba","https://cdn.jsdelivr.net/gh/walinejs/emojis/bmoji","https://cdn.jsdelivr.net/gh/walinejs/emojis/bilibili"],"dark":"html[data-user-color-scheme=\"dark\"]","wordLimit":0,"pageSize":10,"search":false,"reaction":true},
+          {
+            el: '#waline',
+            path: window.location.pathname
+          }
+        )
+        Waline.init(options);
+        Fluid.utils.waitElementVisible('#waline .vcontent', () => {
+          var imgSelector = '#waline .vcontent img:not(.vemoji)';
+          Fluid.plugins.imageCaption(imgSelector);
+          Fluid.plugins.fancyBox(imgSelector);
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

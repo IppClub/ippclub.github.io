@@ -1,0 +1,937 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.ico">
+  <link rel="icon" href="/img/favicon.ico">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="Redis 是什么？Redis 官方网站：http:&#x2F;&#x2F;redis.io&#x2F;  为什么要阅读 redis 的源代码？等价于问题：知乎：我们（大多数人）为什么喜欢造轮子？ redis 中有功能精简的模块，如 anet, ae，也有针对 redis 高度优化的数据结构模块，如 ziplist, dict, intset 等。这些模块相对易于学习，也非常有料。redis 本身就是一个相当优秀的开源作品，并">
+<meta property="og:type" content="article">
+<meta property="og:title" content="关于 Redis 3.0 中的数据结构">
+<meta property="og:url" content="http://ippclub.github.io/%E5%85%B3%E4%BA%8E-Redis-3-0-%E4%B8%AD%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/index.html">
+<meta property="og:site_name" content="I++ Club">
+<meta property="og:description" content="Redis 是什么？Redis 官方网站：http:&#x2F;&#x2F;redis.io&#x2F;  为什么要阅读 redis 的源代码？等价于问题：知乎：我们（大多数人）为什么喜欢造轮子？ redis 中有功能精简的模块，如 anet, ae，也有针对 redis 高度优化的数据结构模块，如 ziplist, dict, intset 等。这些模块相对易于学习，也非常有料。redis 本身就是一个相当优秀的开源作品，并">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2015-05-25T16:48:00.000Z">
+<meta property="article:modified_time" content="2026-04-16T03:07:22.249Z">
+<meta property="article:tag" content="Redis">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>关于 Redis 3.0 中的数据结构 - I++ Club</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"ippclub.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"always","icon":"#"},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>I++ Club</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/mainbg.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="关于 Redis 3.0 中的数据结构"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2015-05-26 00:48" pubdate>
+          2015年5月26日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          1.5k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          20 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar category-bar" style="margin-right: -1rem">
+    
+
+
+
+
+
+<div class="category-list">
+  
+  
+    
+    
+    
+    <div class="category row nomargin-x">
+      <a class="category-item 
+          list-group-item category-item-action col-10 col-md-11 col-xm-11" title="未分类"
+        id="heading-ecf7ebb59328ebf2369ce693a2423566" role="tab" data-toggle="collapse" href="#collapse-ecf7ebb59328ebf2369ce693a2423566"
+        aria-expanded="true"
+      >
+        未分类
+        <span class="list-group-count">(13)</span>
+        <i class="iconfont icon-arrowright"></i>
+      </a>
+      
+      <div class="category-collapse collapse show" id="collapse-ecf7ebb59328ebf2369ce693a2423566"
+           role="tabpanel" aria-labelledby="heading-ecf7ebb59328ebf2369ce693a2423566">
+        
+        
+          
+  <div class="category-post-list">
+    
+    
+      
+      
+        <a href="/C-%E7%9A%84%E4%B8%89%E7%A7%8D%E5%AE%9E%E7%8E%B0%E6%8E%A5%E5%8F%A3%E7%9A%84%E6%96%B9%E5%BC%8F/" title="C++ 的三种实现接口的方式"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">C++ 的三种实现接口的方式</span>
+        </a>
+      
+    
+      
+      
+        <a href="/I-Club/" title="I++俱乐部"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">I++俱乐部</span>
+        </a>
+      
+    
+      
+      
+        <a href="/Implementing-an-unique-ptr/" title="Implementing an unique_ptr"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">Implementing an unique_ptr</span>
+        </a>
+      
+    
+      
+      
+        <a href="/Random-Binary-Search-Tree-Treap/" title="Random Binary Search Tree - Treap"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">Random Binary Search Tree - Treap</span>
+        </a>
+      
+    
+      
+      
+        <a href="/React-Native-%E4%B8%8B%E4%B8%80%E4%BB%A3UI%E5%BC%80%E5%8F%91%E6%80%9D%E7%BB%B4/" title="React-Native -- 下一代UI开发思维"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">React-Native -- 下一代UI开发思维</span>
+        </a>
+      
+    
+      
+      
+        <a href="/Swift%E4%B9%8BAnyClass%E4%B8%8E%E5%8A%A8%E6%80%81%E7%B1%BB%E5%9E%8B/" title="Swift之AnyClass与动态类型"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">Swift之AnyClass与动态类型</span>
+        </a>
+      
+    
+      
+      
+        <a href="/mongo-%E6%BA%90%E7%A0%81%E9%98%85%E8%AF%BB%E6%84%9F%E6%82%9F%EF%BC%88%E4%B8%80%EF%BC%89/" title="mongo 源码阅读感悟（一）"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">mongo 源码阅读感悟（一）</span>
+        </a>
+      
+    
+      
+      
+        <a href="/%E5%85%B3%E4%BA%8E-Redis-3-0-%E4%B8%AD%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" title="关于 Redis 3.0 中的数据结构"
+           class="list-group-item list-group-item-action
+           active">
+          <span class="category-post">关于 Redis 3.0 中的数据结构</span>
+        </a>
+      
+    
+      
+      
+        <a href="/%E5%85%B3%E4%BA%8E-boost-noncopyable-%E7%9A%84%E4%B8%80%E7%82%B9%E6%80%9D%E8%80%83/" title="关于 boost::noncopyable 的一点思考"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">关于 boost::noncopyable 的一点思考</span>
+        </a>
+      
+    
+      
+      
+        <a href="/%E6%88%91%E5%AF%B9C-%E7%9A%84%E7%BC%96%E7%A8%8B%E6%80%9D%E8%80%83/" title="我对C++的编程思考"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">我对C++的编程思考</span>
+        </a>
+      
+    
+      
+      
+        <a href="/%E6%8F%90%E4%BA%A4%E6%96%87%E7%AB%A0%E6%A0%BC%E5%BC%8F%E8%A6%81%E6%B1%82/" title="提交文章格式要求"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">提交文章格式要求</span>
+        </a>
+      
+    
+      
+      
+        <a href="/%E7%94%A8-C-%E5%86%99%E4%B8%80%E4%B8%AA-Inet4Address-%E7%B1%BB/" title="用 C++ 写一个 Inet4Address 类"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">用 C++ 写一个 Inet4Address 类</span>
+        </a>
+      
+    
+      
+      
+        <a href="/%E8%AF%BB-leveldb-%E7%9A%84%E6%84%9F%E6%82%9F-%EF%BC%9ACache%E7%9A%84%E8%AE%BE%E8%AE%A1/" title="读 leveldb 的感悟 ：Cache的设计"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">读 leveldb 的感悟 ：Cache的设计</span>
+        </a>
+      
+    
+  </div>
+
+        
+      </div>
+    </div>
+  
+</div>
+
+
+  </aside>
+
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">关于 Redis 3.0 中的数据结构</h1>
+            
+              <p id="updated-time" class="note note-info" style="">
+                
+                  
+                    本文最后更新于 2026年4月16日 上午
+                  
+                
+              </p>
+            
+            
+              <div class="markdown-body">
+                
+                <h4 id="Redis-是什么？"><a href="#Redis-是什么？" class="headerlink" title="Redis 是什么？"></a>Redis 是什么？</h4><p>Redis 官方网站：<a target="_blank" rel="noopener" href="http://redis.io/">http://redis.io/</a></p>
+<hr>
+<h4 id="为什么要阅读-redis-的源代码？"><a href="#为什么要阅读-redis-的源代码？" class="headerlink" title="为什么要阅读 redis 的源代码？"></a>为什么要阅读 redis 的源代码？</h4><p>等价于问题：<a target="_blank" rel="noopener" href="http://www.zhihu.com/question/29852167">知乎：我们（大多数人）为什么喜欢造轮子？</a></p>
+<p>redis 中有功能精简的模块，如 <code>anet</code>, <code>ae</code>，也有针对 redis 高度优化的数据结构模块，如 <code>ziplist</code>, <code>dict</code>, <code>intset</code> 等。这些模块相对易于学习，也非常有料。redis 本身就是一个相当优秀的开源作品，并且使用广泛，学习其中的实现，也能对 redis 有更深入的了解。</p>
+<hr>
+<h4 id="简单开头"><a href="#简单开头" class="headerlink" title="简单开头"></a>简单开头</h4><p>Redis 对内存效率的要求常常会高于对时间效率的要求。所以接下来我们更多地会看到 redis 针对数据结构的内存上的优化。</p>
+<hr>
+<h4 id="Data-Structure-1-adlist"><a href="#Data-Structure-1-adlist" class="headerlink" title="Data Structure #1: adlist"></a>Data Structure #1: <code>adlist</code></h4><p><code>adlist</code> 是 redis 实现的一个双向链表。算法原理和普通的双向链表一样。<br>但是由于 C 语言没有复制构造函数之类的东西，所以深复制的实现要靠函数指针如：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">void</span> *(*dup) (<span class="hljs-type">void</span> *ptr);<br></code></pre></td></tr></table></figure>
+<p>与之对应的还有深释放和深匹配（自己造的词）</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">void</span> (*<span class="hljs-built_in">free</span>) (<span class="hljs-type">void</span> *ptr);<br><span class="hljs-type">int</span> (*match) (<span class="hljs-type">void</span> *ptr, <span class="hljs-type">void</span> *key);<br></code></pre></td></tr></table></figure>
+
+<hr>
+<h4 id="Data-Structure-2-intset"><a href="#Data-Structure-2-intset" class="headerlink" title="Data Structure #2: intset"></a>Data Structure #2: <code>intset</code></h4><p>首先说明， <code>intset</code> 内部由数组实现。而 <code>intset</code> 顾名思义，只能够存放整数数组。但即使是整数依然有多种类型。<code>uint32_t</code>，<code>int16_t</code>，<code>int8_t</code> 等等。</p>
+<p>由于 C 语言不具有多态，如果要一次性存放这些类型的数组，我们可以这样：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-keyword">typedef</span> <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">intset</span> &#123;</span><br>    <span class="hljs-type">uint32_t</span> *ui32;<br>    <span class="hljs-type">uint16_t</span> *ui16;<br>    <span class="hljs-type">int8_t</span>   *i8;<br>    ....<br>&#125; intset;<br></code></pre></td></tr></table></figure>
+
+<p>虽然这样可以解决问题，但这显然是一种非常麻烦的方式。而且内存开销大。</p>
+<p>redis 提供的思路是：<br>可以看出，一个 <code>int16_t</code> 可以用 2 个 <code>int8_t</code> 保存，同理地，一个 <code>int32_t</code> 可以用 4 个 <code>int8_t</code> 保存。所以，我们只需要一个 <code>int8_t[]</code> 数组即可。</p>
+<p>我们给出结构体：</p>
+<figure class="highlight angelscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs angelscript"><span class="hljs-keyword">typedef</span> struct <span class="hljs-built_in">int</span><span class="hljs-keyword">set</span> &#123;<br>    <span class="hljs-built_in">uint32</span>_t encoding;<br>    <span class="hljs-built_in">uint32</span>_t length;<br>    <span class="hljs-built_in">int8</span>_t contents[];<br>&#125; <span class="hljs-built_in">int</span><span class="hljs-keyword">set</span>;<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li><p>第一个问题：<strong>如何知道 <code>intset</code> 中存储的值的类型？</strong></p>
+<p>redis 用一个 encoding 值表示 <code>intset</code> 中值的类型。</p>
+</li>
+<li><p>第二个问题：<strong>当值超过 <code>int8_t</code> 的范围，但在 <code>int16_t</code> 的范围内，如何对 <code>intset</code> 做出修改？</strong></p>
+<p>重新调整 <code>contents</code> 数组的大小，以容纳 <code>length</code> 个 <code>int16_t</code> 值，并修改 <code>encoding</code> ，即：</p>
+</li>
+</ul>
+<figure class="highlight abnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs abnf"><span class="hljs-attribute">contents</span> <span class="hljs-operator">=</span> realloc(sizeof(int16_t) * length)<span class="hljs-comment">;`</span><br><span class="hljs-attribute">encoding</span> <span class="hljs-operator">=</span> INTSET_ENC_INT16<span class="hljs-comment">;</span><br></code></pre></td></tr></table></figure>
+
+<p><code>intset</code> 本身还提供了普通的 set 应有的特性，比如 <em>有序性</em>，<em>唯一性</em></p>
+<hr>
+<h4 id="Data-Structure-3-ziplist"><a href="#Data-Structure-3-ziplist" class="headerlink" title="Data Structure #3: ziplist"></a>Data Structure #3: <code>ziplist</code></h4><p><code>ziplist</code> 是一个压缩的双向链表，只能储存整数和字符串</p>
+<p>在了解之前，我们首先要理解压缩的意义。压缩的数据一定是静态的，我们很难直接对压缩的数据进行动态操作。如果要进行动态操作，首先要进行解压(decode)，等到操作结束后，再进行压缩(encode）。</p>
+<p>回想一下，一个双向链表节点的基本结构是</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-keyword">typedef</span> <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">listNode</span> &#123;</span><br>	<span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">listNode</span> *<span class="hljs-title">prev</span>;</span><br>	<span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">listNode</span> *<span class="hljs-title">next</span>;</span><br>	<span class="hljs-type">void</span>* value;<br>&#125; listNode;<br></code></pre></td></tr></table></figure>
+<p>看起来无法压缩，其实仔细观察会发现，<code>prev</code> 和 <code>next</code> 指针都会占用 <code>8bytes</code> 的空间，可以从这里下手。</p>
+<p>redis 提供的思路是：把整个 <code>ziplist</code> 放在一块连续的内存块上。这样就可以通过一些计算来获得 <code>next</code> 和 <code>prev</code>。</p>
+<p>假设指向当前节点的指针 <code>p</code>，当前节点的内存长度 <code>len</code>，那么下一个节点的指针 <code>next</code> 显然是：</p>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs ini"><span class="hljs-attr">next</span> = p + len<span class="hljs-comment">;</span><br></code></pre></td></tr></table></figure>
+<p>如果要获取 <code>prev</code>，则还要存储前一个节点的内存长度 <code>prevlen</code>，然后计算：</p>
+<figure class="highlight abnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs abnf"><span class="hljs-attribute">prev</span> <span class="hljs-operator">=</span> p - prevlen<span class="hljs-comment">;</span><br></code></pre></td></tr></table></figure>
+<p>所以我们可以由此设计出 <code>listNode</code> 内存块的分配</p>
+<figure class="highlight gherkin"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs gherkin">|<span class="hljs-string">prevlensize</span>|<span class="hljs-string">prevlen</span>|<span class="hljs-string">lensize</span>|<span class="hljs-string">len</span>|<span class="hljs-string">value</span>|<br></code></pre></td></tr></table></figure>
+<p>由于 <code>prevlen</code> 和 <code>len</code> 都是根据值的大小分配不同内存的（如果值小于 <code>int8_t</code> 就只会分配 <code>1byte</code>），我们就用固定长度为 <code>1byte</code> 的 <code>prevlensize</code> 和 <code>lensize</code> 来保存 <code>prevlen</code> 和 <code>len</code> 所花费的内存大小。</p>
+<p>这样根据值的大小来动态分配值的内存空间，从而达到节约内存的目的，是 redis 常用的一种手段。</p>
+<p>这只是大概思路，具体实现还要考虑到很多细节，比较麻烦。</p>
+<hr>
+<h4 id="Data-Structure-4-zipmap"><a href="#Data-Structure-4-zipmap" class="headerlink" title="Data Structure #4: zipmap"></a>Data Structure #4: <code>zipmap</code></h4><p>与 <code>ziplist</code> 用的几乎是同样一种手段。<code>zipmap</code> 是一个压缩的 string key-value 数组。获取 value 的复杂度是 O(n) 的，因此适合数据不多的场合。</p>
+<p>key-value 节点的结构是</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">klen</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">key</span>&gt;</span>|<span class="hljs-tag">&lt;<span class="hljs-name">vlen</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">free</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">value</span>&gt;</span><br>----key----|-------value-------<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>Question：<strong>free 区有什么作用？</strong></li>
+</ul>
+<p>这要牵扯到 redis 处理内存和时间平衡的一个技巧。</p>
+<p>我们储存一个值 <code>value</code>，并为其分配长度为 <code>len</code> 的空间，这个值在动态改变的时候，占用的内存可能会变为 <code>newlen</code>。 如果 <code>newlen &lt; len</code> ，意味着我们会多余出一些空间，这个空间记作 <code>free</code>。我们接下来可能要做两种操作：</p>
+<ul>
+<li>用 <code>realloc</code> 搭配 <code>memmove</code> 等操作将内存空间减少至 <code>newlen</code></li>
+<li>将这段多余的空间暂且放着，作为一段 <code>free</code> 空间。</li>
+</ul>
+<p>从时间效率考虑，后者肯定是最优的。（感觉解释起来有点麻烦）。但从内存效率考虑，前者肯定是最优的。</p>
+<p>根据具体情况，我们可能只考虑前者（不考虑内存），或只考虑后者（时间要求不高），也可以综合考虑，设置一个参数 <code>MAX_FREE_VALUE</code> 表示最大能够容忍的 <code>free</code> 空间。如果超过了 <code>MAX_FREE_VALUE</code> 我们就把 <code>free</code> 空间腾出来。如果没超过，就暂且放着这块 <code>free</code> 空间。</p>
+<hr>
+<h4 id="Data-Structure-5-dict"><a href="#Data-Structure-5-dict" class="headerlink" title="Data Structure #5: dict"></a>Data Structure #5: <code>dict</code></h4><p>跟普通的 Hashtable 差不多，普通的 Hashtable 实现可参照 <code>java.util.Hashtable&lt;K,V&gt;</code></p>
+<p>redis 中的 dict 进行了优化，也更复杂：</p>
+<ul>
+<li><p>一个 dict 其实维护了两个 Hashtable</p>
+<p>在 rehash 操作时，我们要进行 Hashtable 的迁移工作，这时候其实可以让两个 Hashtable 一起工作。比如查找节点时，在表1中找不到，则去表2中找。这样允许我们可以不必在 rehash 的时候一次性完成全部的迁移。</p>
+</li>
+<li><p>渐进式 rehash</p>
+<p><em><strong>为什么要使用渐进式 rehash ？</strong></em></p>
+<p>显然，rehash 操作是整个 hashtable 的瓶颈。可以采用分摊的思想，将 rehash 操作分摊给其他操作。比如分摊给 dictAdd, dictFind, dictDelete, dictReplace。由于这些操作平均复杂度都是 O(1) 的，所以每个操作都只能分摊一次 rehash 操作。</p>
+</li>
+</ul>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E6%9C%AA%E5%88%86%E7%B1%BB/" class="category-chain-item">未分类</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/Redis/" class="print-no-link">#Redis</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>关于 Redis 3.0 中的数据结构</div>
+      <div>http://ippclub.github.io/关于-Redis-3-0-中的数据结构/</div>
+    </div>
+    <div class="license-meta">
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2015年5月26日</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>更新于</div>
+          <div>2026年4月16日</div>
+        </div>
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="NC - 非商业性使用">
+                    <i class="iconfont icon-cc-nc"></i>
+                  </span>
+                </a>
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="SA - 相同方式共享">
+                    <i class="iconfont icon-cc-sa"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/%E5%85%B3%E4%BA%8E-boost-noncopyable-%E7%9A%84%E4%B8%80%E7%82%B9%E6%80%9D%E8%80%83/" title="关于 boost::noncopyable 的一点思考">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">关于 boost::noncopyable 的一点思考</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/I-Club/" title="I++俱乐部">
+                        <span class="hidden-mobile">I++俱乐部</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+  <div id="waline"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#waline', function() {
+      Fluid.utils.createCssLink('https://registry.npmmirror.com/@waline/client/2.15.8/files/dist/waline.css')
+      Fluid.utils.createScript('https://registry.npmmirror.com/@waline/client/2.15.8/files/dist/waline.js', function() {
+        var options = Object.assign(
+          {"serverURL":"https://waline.harkerhand.cn/","path":"window.location.pathname","meta":["nick","mail","link"],"requiredMeta":["nick"],"lang":"zh-CN","emoji":["https://cdn.jsdelivr.net/gh/walinejs/emojis/weibo","https://cdn.jsdelivr.net/gh/walinejs/emojis/tieba","https://cdn.jsdelivr.net/gh/walinejs/emojis/bmoji","https://cdn.jsdelivr.net/gh/walinejs/emojis/bilibili"],"dark":"html[data-user-color-scheme=\"dark\"]","wordLimit":0,"pageSize":10,"search":false,"reaction":true},
+          {
+            el: '#waline',
+            path: window.location.pathname
+          }
+        )
+        Waline.init(options);
+        Fluid.utils.waitElementVisible('#waline .vcontent', () => {
+          var imgSelector = '#waline .vcontent img:not(.vemoji)';
+          Fluid.plugins.imageCaption(imgSelector);
+          Fluid.plugins.fancyBox(imgSelector);
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

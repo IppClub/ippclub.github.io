@@ -1,0 +1,875 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.ico">
+  <link rel="icon" href="/img/favicon.ico">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="李瑾">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="一、折腾开始&emsp;&emsp;关注 AI Agent 领域也有一段时间了（每天高强度网上冲浪看看看），看着各种 Coding Agent 工具如雨后春笋般涌现。作为一个天天和游戏引擎打交道快要腐朽的”老东西”，我就在想：能不能把这些 Agent 的能力，直接搬到游戏引擎里？让 AI 不仅仅是个写代码的助手，而是成为游戏开发流程中真正的一部分？ &emsp;&emsp;于是就有了 Dora S">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Dora 游戏引擎的内置 AI 编码助手，写啦">
+<meta property="og:url" content="http://ippclub.github.io/Dora%E6%B8%B8%E6%88%8F%E5%BC%95%E6%93%8E%E7%9A%84%E5%86%85%E7%BD%AEAI%E7%BC%96%E7%A0%81%E5%8A%A9%E6%89%8B%EF%BC%8C%E5%86%99%E5%95%A6/index.html">
+<meta property="og:site_name" content="I++ Club">
+<meta property="og:description" content="一、折腾开始&emsp;&emsp;关注 AI Agent 领域也有一段时间了（每天高强度网上冲浪看看看），看着各种 Coding Agent 工具如雨后春笋般涌现。作为一个天天和游戏引擎打交道快要腐朽的”老东西”，我就在想：能不能把这些 Agent 的能力，直接搬到游戏引擎里？让 AI 不仅仅是个写代码的助手，而是成为游戏开发流程中真正的一部分？ &emsp;&emsp;于是就有了 Dora S">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://ippclub.github.io/Dora%E6%B8%B8%E6%88%8F%E5%BC%95%E6%93%8E%E7%9A%84%E5%86%85%E7%BD%AEAI%E7%BC%96%E7%A0%81%E5%8A%A9%E6%89%8B%EF%BC%8C%E5%86%99%E5%95%A6/%E5%B0%81%E9%9D%A2.png">
+<meta property="article:published_time" content="2026-04-02T10:00:00.000Z">
+<meta property="article:modified_time" content="2026-04-16T03:07:22.185Z">
+<meta property="article:tag" content="Dora SSR">
+<meta property="article:tag" content="Coding Agent">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://ippclub.github.io/Dora%E6%B8%B8%E6%88%8F%E5%BC%95%E6%93%8E%E7%9A%84%E5%86%85%E7%BD%AEAI%E7%BC%96%E7%A0%81%E5%8A%A9%E6%89%8B%EF%BC%8C%E5%86%99%E5%95%A6/%E5%B0%81%E9%9D%A2.png">
+  
+  
+  
+  <title>Dora 游戏引擎的内置 AI 编码助手，写啦 - I++ Club</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"ippclub.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"always","icon":"#"},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>I++ Club</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/Dora%E6%B8%B8%E6%88%8F%E5%BC%95%E6%93%8E%E7%9A%84%E5%86%85%E7%BD%AEAI%E7%BC%96%E7%A0%81%E5%8A%A9%E6%89%8B%EF%BC%8C%E5%86%99%E5%95%A6/%E5%B0%81%E9%9D%A2.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Dora 游戏引擎的内置 AI 编码助手，写啦"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-author" aria-hidden="true"></i>
+        李瑾
+      </span>
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2026-04-02 18:00" pubdate>
+          2026年4月2日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          4.1k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          51 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar category-bar" style="margin-right: -1rem">
+    
+
+
+
+
+
+<div class="category-list">
+  
+  
+    
+    
+    
+    <div class="category row nomargin-x">
+      <a class="category-item 
+          list-group-item category-item-action col-10 col-md-11 col-xm-11" title="AI"
+        id="heading-0a40e3c91a3a55c9a37428c6d194d0e5" role="tab" data-toggle="collapse" href="#collapse-0a40e3c91a3a55c9a37428c6d194d0e5"
+        aria-expanded="true"
+      >
+        AI
+        <span class="list-group-count">(1)</span>
+        <i class="iconfont icon-arrowright"></i>
+      </a>
+      
+      <div class="category-collapse collapse show" id="collapse-0a40e3c91a3a55c9a37428c6d194d0e5"
+           role="tabpanel" aria-labelledby="heading-0a40e3c91a3a55c9a37428c6d194d0e5">
+        
+        
+          
+  <div class="category-post-list">
+    
+    
+      
+      
+        <a href="/Dora%E6%B8%B8%E6%88%8F%E5%BC%95%E6%93%8E%E7%9A%84%E5%86%85%E7%BD%AEAI%E7%BC%96%E7%A0%81%E5%8A%A9%E6%89%8B%EF%BC%8C%E5%86%99%E5%95%A6/" title="Dora 游戏引擎的内置 AI 编码助手，写啦"
+           class="list-group-item list-group-item-action
+           active">
+          <span class="category-post">Dora 游戏引擎的内置 AI 编码助手，写啦</span>
+        </a>
+      
+    
+  </div>
+
+        
+      </div>
+    </div>
+  
+</div>
+
+
+  </aside>
+
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">Dora 游戏引擎的内置 AI 编码助手，写啦</h1>
+            
+              <p id="updated-time" class="note note-info" style="">
+                
+                  
+                    本文最后更新于 2026年4月16日 上午
+                  
+                
+              </p>
+            
+            
+              <div class="markdown-body">
+                
+                <h2 id="一、折腾开始"><a href="#一、折腾开始" class="headerlink" title="一、折腾开始"></a>一、折腾开始</h2><p>&emsp;&emsp;关注 AI Agent 领域也有一段时间了（每天高强度网上冲浪看看看），看着各种 Coding Agent 工具如雨后春笋般涌现。作为一个天天和游戏引擎打交道快要腐朽的”老东西”，我就在想：能不能把这些 Agent 的能力，直接搬到游戏引擎里？让 AI 不仅仅是个写代码的助手，而是成为游戏开发流程中真正的一部分？</p>
+<p>&emsp;&emsp;于是就有了 Dora SSR Coding Agent——一个能跑在全平台游戏引擎中、帮助做游戏开发的 LLM Agent 功能。</p>
+<p>&emsp;&emsp;先看看目前实现的效果，在 Android 手机上安装的引擎运行起来是什么样吧。</p>
+<img src="/Dora%E6%B8%B8%E6%88%8F%E5%BC%95%E6%93%8E%E7%9A%84%E5%86%85%E7%BD%AEAI%E7%BC%96%E7%A0%81%E5%8A%A9%E6%89%8B%EF%BC%8C%E5%86%99%E5%95%A6/dora-agent-mobile.jpg" srcset="/img/loading.gif" lazyload class="" title="dora-agent-mobile">
+
+<h2 id="二、为什么要在游戏引擎里做-Agent？"><a href="#二、为什么要在游戏引擎里做-Agent？" class="headerlink" title="二、为什么要在游戏引擎里做 Agent？"></a>二、为什么要在游戏引擎里做 Agent？</h2><p>&emsp;&emsp;现在的 Coding Agent 工具大多跑在命令行或者 IDE 里，帮开发者写代码、改 bug。但是游戏开发有其特殊性：你需要不断调整游戏参数、修改场景逻辑、测试玩法反馈。这个过程往往需要在游戏运行时即时调整，而不是改代码 → 编译 → 运行 → 再改代码的死循环。</p>
+<p>&emsp;&emsp;Dora SSR 作为跨平台游戏引擎，天然支持热更新脚本（Lua&#x2F;TypeScript&#x2F;YueScript 等），这为 Agent 的实时干预提供了绝佳的基础设施。我们希望做到的是：Agent 能直接在游戏引擎的上下文中工作，理解当前游戏状态，修改代码后立即生效，形成”描述需求 → Agent 编码 → 运行验证”的快速迭代闭环。</p>
+<p>&emsp;&emsp;更进一步的愿景是：这个 Agent 框架不只是一个游戏 IDE 相关的功能，也能作为一个插件库在游戏玩法中被调用。想象一下，游戏中的 NPC 能在更大更复杂的游戏上下文结构中进行分析动态做决策和生成对话剧情，或者关卡设计能根据玩家水平自动调整，实现游戏一遍玩一边开发完善自己——这都是 Agent 能力在游戏玩法层面可能的延伸。</p>
+<h2 id="三、站在巨人的肩膀上——学习-nanobot"><a href="#三、站在巨人的肩膀上——学习-nanobot" class="headerlink" title="三、站在巨人的肩膀上——学习 nanobot"></a>三、站在巨人的肩膀上——学习 nanobot</h2><p>&emsp;&emsp;做 Agent 不是拍脑门的事，我们认真研究了香港大学 DS 实验室开源的 <a target="_blank" rel="noopener" href="https://github.com/HKUDS/nanobot">nanobot</a> 项目。这是一个设计精良的 AI Agent 框架，我们从中学到了很多核心设计思想。</p>
+<h3 id="3-1-Context-管理，有限窗口下的无限挑战"><a href="#3-1-Context-管理，有限窗口下的无限挑战" class="headerlink" title="3.1 Context 管理，有限窗口下的无限挑战"></a>3.1 Context 管理，有限窗口下的无限挑战</h3><p>&emsp;&emsp;其实，LLM API 本身就以数组形式的 message 作为基本管理单元。nanobot 并没有额外发明什么新的 context 组织结构，就是一条一条的 message——系统提示、用户消息、AI 助手回复、工具调用、工具结果反馈——按顺序拼接到一个数组中进行维护。我们后面要讨论的 context 管理，本质上就是在这个 message 数组上做”预算控制”和”压缩清理”。</p>
+<p>&emsp;&emsp;LLM 的 context window 是有限的，但 Agent 任务可能需要处理大量历史信息。nanobot 的 context 管理架构给了我们很大启发：</p>
+<p>&emsp;&emsp;首先，什么是 context window？可以把它理解为一个”容器”，LLM 每次处理对话时，需要把系统提示词、历史对话、用户消息都塞进这个容器里。不同模型容器大小不同，比如 Claude 3 有 200k tokens，GPT-4 Turbo 有 128k tokens，nanobot 默认配置是 65,536 tokens。</p>
+<p>&emsp;&emsp;但这个容器不是全都能用来装对话历史的。nanobot 采用了一个”预算控制”策略：先把一部分空间”锁死”——比如预留 8,192 tokens 给 LLM 生成回复（毕竟 LLM 的回复本身也要占用 context），再预留 1,024 tokens 作为安全缓冲。这样算下来，真正可用于对话历史的空间（budget）大约是 56,000 tokens。</p>
+<p>&emsp;&emsp;有了这个预算，nanobot 会实时估算当前 prompt 的 token 数，一旦发现超过预算，就触发内存压缩，把旧的对话历史压缩成精简摘要，释放空间。压缩的目标是把使用量降到预算的一半（约 28,000 tokens），为后续对话预留充足空间。</p>
+<img src="/Dora%E6%B8%B8%E6%88%8F%E5%BC%95%E6%93%8E%E7%9A%84%E5%86%85%E7%BD%AEAI%E7%BC%96%E7%A0%81%E5%8A%A9%E6%89%8B%EF%BC%8C%E5%86%99%E5%95%A6/%E4%BC%B0%E7%AE%97.png" srcset="/img/loading.gif" lazyload class="" title="估算">
+
+<p>&emsp;&emsp;核心设计点是：</p>
+<ul>
+<li><strong>预算计算</strong>：<code>budget = context_window - max_llm_output - SAFETY_BUFFER</code>，默认约 56k tokens</li>
+<li><strong>压缩触发</strong>：当 prompt 估计超过 budget 时触发压缩</li>
+<li><strong>压缩目标</strong>：压缩到 <code>budget // 2</code>（约 28k tokens），预留充足空间</li>
+</ul>
+<h3 id="3-2-Memory-双层存储，记忆的分层管理"><a href="#3-2-Memory-双层存储，记忆的分层管理" class="headerlink" title="3.2 Memory 双层存储，记忆的分层管理"></a>3.2 Memory 双层存储，记忆的分层管理</h3><p>&emsp;&emsp;nanobot 的 Memory 系统采用双层存储设计，这个设计非常优雅，简单说就是，当对话历史超出大模型承载力后，从对话历史提出重要信息摘要放到下次对话的上下文里：</p>
+<img src="/Dora%E6%B8%B8%E6%88%8F%E5%BC%95%E6%93%8E%E7%9A%84%E5%86%85%E7%BD%AEAI%E7%BC%96%E7%A0%81%E5%8A%A9%E6%89%8B%EF%BC%8C%E5%86%99%E5%95%A6/%E5%8E%8B%E7%BC%A9.png" srcset="/img/loading.gif" lazyload class="" title="压缩">
+
+<p>&emsp;&emsp;关键设计：</p>
+<ul>
+<li><strong>MEMORY.md</strong>：存储长时记忆（用户偏好、项目上下文、重要事实），每次压缩由 LLM 生成并覆盖写入，会注入到后续对话的 prompt 中</li>
+<li><strong>HISTORY.md</strong>：追加写入的历史归档，不注入 prompt，但可以通过 grep 搜索回顾</li>
+</ul>
+<p>&emsp;&emsp;这个设计的精妙之处在于：长时记忆保持精简（受 max_tokens 限制），历史日志完整保留（供检索），两者各司其职。</p>
+<p>&emsp;&emsp;这里还有个巧妙的设计：OpenAI 标准的 LLM API 通常有个参数叫 <code>max_tokens</code>，用于控制 LLM 单次推理生成的最大 token 数。nanobot 利用这个参数来确保记忆压缩的输出不会失控——不管你给 LLM 输入多少上下文，它生成的压缩结果都会自然限制在 <code>max_tokens</code> 以内。这是大模型推理能力层面的”天然硬约束”，不需要在代码里显式检查输出长度。</p>
+<h3 id="3-3-Progressive-Disclosure：渐进式披露"><a href="#3-3-Progressive-Disclosure：渐进式披露" class="headerlink" title="3.3 Progressive Disclosure：渐进式披露"></a>3.3 Progressive Disclosure：渐进式披露</h3><p>&emsp;&emsp;nanobot 的 Skill 系统设计其实很简单——它本质上就是<strong>网页上的链接</strong>。想象一下 Wikipedia：首页给你一篇文章的摘要和链接（Level 1），你感兴趣就点进去看完整内容（Level 2），文章里可能还有参考文献链接，需要时再跳转（Level 3）。</p>
+<p>&emsp;&emsp;整个知识体系就是这样分层级整理的：先给你一个目录索引，让你知道”有哪些东西可用”，然后通过”链接”（在我们的场景里是 <code>read_file</code> 工具）去访问具体内容。这样做的好处显而易见：你不需要在首页把整个百科全书都塞进去，而是让读者按需探索。</p>
+<p>&emsp;&emsp;nanobot 的 Skill 系统把这个理念用到了 LLM Agent 的 context 管理上。LLM 的 context window 有限，不可能一次性把所有 skill 的完整内容都塞进去。所以先给它一个”目录”（Level 1 XML 摘要），让它知道”哦，原来还有个 github skill 可以用”，等真正需要时再通过工具加载详细内容。这和人类浏览网页的方式是一样的——先扫目录，再逐级点击链接深入阅读。</p>
+<p>&emsp;&emsp;这样的 Progressive Disclosure（渐进式披露）设计，解决了一个核心矛盾：用户可能添加无数 skills，但 context window 是有限的。</p>
+<img src="/Dora%E6%B8%B8%E6%88%8F%E5%BC%95%E6%93%8E%E7%9A%84%E5%86%85%E7%BD%AEAI%E7%BC%96%E7%A0%81%E5%8A%A9%E6%89%8B%EF%BC%8C%E5%86%99%E5%95%A6/skill.png" srcset="/img/loading.gif" lazyload class="" title="skill">
+
+<p>&emsp;&emsp;三级加载策略：</p>
+<ol>
+<li>Level 1 (Metadata)：所有 skill 的元数据（名称、描述）以 XML 格式注入 System Prompt，LLM 知道”有哪些工具可用”</li>
+<li>Level 2 (SKILL.md)：LLM 判断需要某个 skill 时，通过 <code>read_file</code> 加载完整 SKILL.md</li>
+<li>Level 3 (Bundled Resources)：如果 skill 带有参考文档或脚本，完全按需加载</li>
+</ol>
+<p>&emsp;&emsp;特殊机制 <code>always=true</code>：核心 skill（如 memory）直接注入 Level 2，跳过 Level 1 的”广告”阶段，确保始终可用。</p>
+<h2 id="四、用-TypeScript-写-Agent，编译成-Lua-跑"><a href="#四、用-TypeScript-写-Agent，编译成-Lua-跑" class="headerlink" title="四、用 TypeScript 写 Agent，编译成 Lua 跑"></a>四、用 TypeScript 写 Agent，编译成 Lua 跑</h2><p>&emsp;&emsp;Dora SSR 的 CodingAgent 是用 Codex 使用 TypeScript 编写的，通过 TSTL（TypeScript To Lua）编译成 Lua 代码，然后在引擎的 Lua 虚拟机中执行。</p>
+<p>&emsp;&emsp;为什么选 TypeScript？因为 AI 代码生成对 TS 的支持更好（Codex 训练数据的效果不错），而且 TS 的类型系统能帮助我们在编译期发现很多问题。但游戏引擎跑的是 Lua，所以 TSTL 成了桥梁。所以这可能算是一个 Lua 语言生态比较早实现的 Coding Agent 案例啦。</p>
+<p>&emsp;&emsp;整个 Coding Agent 的开发都是 Codex 在一步一步指令下完成的。其实理论上也可以让 AI 直接把 nanobot 代码逐行翻译到 Dora 引擎，能跑就行。但 Dora 引擎作为一个需要长期维护的项目，我们还是选择了人负责学习和思考整体设计，拆分任务后让 Codex 逐步实现，再人机协作修 bug 的方式。在 Vibe coding 的同时，也把人做”品控”工作的参与感拉满——毕竟 AI 是可以写代码，但判断”这是不是好代码”的责任，还是得人来扛。</p>
+<h3 id="4-1-核心文件结构"><a href="#4-1-核心文件结构" class="headerlink" title="4.1 核心文件结构"></a>4.1 核心文件结构</h3><figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs awk">Assets<span class="hljs-regexp">/Script/</span>Lib<span class="hljs-regexp">/Agent/</span><br>├── CodingAgent.ts      <span class="hljs-comment"># Agent 主逻辑（2000+ 行）</span><br>├── Memory.ts           <span class="hljs-comment"># Memory 压缩系统（1400+ 行）</span><br>├── Tools.ts            <span class="hljs-comment"># 工具实现（read_file, edit_file 等）</span><br>├── Utils.ts            <span class="hljs-comment"># 工具函数（LLM 调用、XML 解析等）</span><br>├── flow.ts             <span class="hljs-comment"># 基于 Flow 的任务编排</span><br>└── WebIDEAgentSession.ts  <span class="hljs-comment"># Web IDE 会话管理</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="4-2-Memory-压缩实现"><a href="#4-2-Memory-压缩实现" class="headerlink" title="4.2 Memory 压缩实现"></a>4.2 Memory 压缩实现</h3><p>&emsp;&emsp;我们参考 nanobot 实现了 Memory 压缩流程：</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs typescript"><span class="hljs-keyword">export</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">MemoryCompressor</span> &#123;<br>	<span class="hljs-keyword">private</span> <span class="hljs-attr">contextWindowTokens</span>: <span class="hljs-built_in">number</span> = <span class="hljs-number">32768</span>; <span class="hljs-comment">// 上下文窗口</span><br>	<span class="hljs-keyword">private</span> <span class="hljs-attr">maxCompletionTokens</span>: <span class="hljs-built_in">number</span> = <span class="hljs-number">8192</span>; <span class="hljs-comment">// 最大输出</span><br>	<span class="hljs-keyword">private</span> <span class="hljs-attr">compressionThreshold</span>: <span class="hljs-built_in">number</span> = <span class="hljs-number">0.8</span>; <span class="hljs-comment">// 压缩阈值（80%）</span><br><br>	<span class="hljs-title function_">shouldCompress</span>(<span class="hljs-attr">estimatedTokens</span>: <span class="hljs-built_in">number</span>): <span class="hljs-built_in">boolean</span> &#123;<br>		<span class="hljs-keyword">const</span> budget = <span class="hljs-variable language_">this</span>.<span class="hljs-property">contextWindowTokens</span> - <span class="hljs-variable language_">this</span>.<span class="hljs-property">maxCompletionTokens</span> - <span class="hljs-number">1024</span>;<br>		<span class="hljs-keyword">return</span> estimatedTokens &gt;= budget * <span class="hljs-variable language_">this</span>.<span class="hljs-property">compressionThreshold</span>;<br>	&#125;<br><br>	<span class="hljs-keyword">async</span> <span class="hljs-title function_">compress</span>(<span class="hljs-attr">history</span>: <span class="hljs-title class_">AgentActionRecord</span>[]): <span class="hljs-title class_">Promise</span>&lt;<span class="hljs-title class_">CompressionResult</span>&gt; &#123;<br>		<span class="hljs-comment">// 调用 LLM 生成压缩后的 MEMORY.md 和 HISTORY.md 条目</span><br>		<span class="hljs-keyword">const</span> prompt = <span class="hljs-variable language_">this</span>.<span class="hljs-title function_">buildCompressionPrompt</span>(history);<br>		<span class="hljs-keyword">const</span> result = <span class="hljs-keyword">await</span> <span class="hljs-title function_">callLLM</span>(prompt, <span class="hljs-variable language_">this</span>.<span class="hljs-property">llmConfig</span>);<br>		<span class="hljs-keyword">return</span> <span class="hljs-variable language_">this</span>.<span class="hljs-title function_">parseCompressionResult</span>(result);<br>	&#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>&emsp;&emsp;相比 nanobot 的原始设计，Dora 在压缩切分时稍微增加了一个改进：对话边界保护。</p>
+<p>&emsp;&emsp;简单说，就是尽可能找到一段”对话起始到结束”的安全边界来切分历史窗口，而不是从任意位置一刀切。这样被压缩的历史片段能保留尽可能完整的上下文，LLM 生成摘要时能理解”这段对话在干什么”，而不是从半截对话开始压缩，导致信息丢失。</p>
+<p>&emsp;&emsp;具体实现上，我们会向前或向后搜索，找到用户消息边界（<code>role === &#39;user&#39;</code>）作为切分点，确保每次压缩的历史片段都是完整的多轮对话。</p>
+<h3 id="4-3-Token-估算"><a href="#4-3-Token-估算" class="headerlink" title="4.3 Token 估算"></a>4.3 Token 估算</h3><p>&emsp;&emsp;Token 估算是触发压缩的关键。我们实现了一个非常简单粗糙的估算器，基于中英文混合文本的统计规律：</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs typescript"><span class="hljs-keyword">export</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">estimateTokens</span>(<span class="hljs-params"><span class="hljs-attr">text</span>: <span class="hljs-built_in">string</span></span>): <span class="hljs-built_in">number</span> &#123;<br>	<span class="hljs-comment">// 中文约 2 tokens/字符，英文约 0.25 tokens/字符</span><br>	<span class="hljs-keyword">let</span> tokens = <span class="hljs-number">0</span>;<br>	<span class="hljs-keyword">for</span> (<span class="hljs-keyword">const</span> char <span class="hljs-keyword">of</span> text) &#123;<br>		<span class="hljs-keyword">if</span> (<span class="hljs-regexp">/[\u4e00-\u9fff]/</span>.<span class="hljs-title function_">test</span>(char)) &#123;<br>			tokens += <span class="hljs-number">2.0</span>;<br>		&#125; <span class="hljs-keyword">else</span> &#123;<br>			tokens += <span class="hljs-number">0.25</span>;<br>		&#125;<br>	&#125;<br>	<span class="hljs-keyword">return</span> <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">ceil</span>(tokens);<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>&emsp;&emsp;这个估算虽然不精确（nanobot 用的是 tiktoken 以及对应服务商的 token 估算接口），但在游戏引擎环境中不需要额外依赖，够用就行。</p>
+<h3 id="4-4-为什么用-Flow-而不是-for-循环"><a href="#4-4-为什么用-Flow-而不是-for-循环" class="headerlink" title="4.4 为什么用 Flow 而不是 for 循环"></a>4.4 为什么用 Flow 而不是 for 循环</h3><p>&emsp;&emsp;有人可能会问：Coding Agent 本质不就是个 “LLM 判断 → 执行工具 → 再判断” 的循环吗？写个 <code>while(true)</code> 或者 <code>for</code> 循环不就完事了，为什么要用 <code>flow.ts</code> 这种基于结构化节点的流程编排？</p>
+<p>&emsp;&emsp;答案是：为了给未来预留扩展空间。</p>
+<p>&emsp;&emsp;基于 Flow 的结构化设计，让我们可以嵌入人类预制的最佳实践工作流，比如”先读 README → 再看 package.json → 然后检查测试文件”，这种固定流程不需要 LLM 每次都重新推理。</p>
+<p>&emsp;&emsp;并且不是所有场景都能用 SOTA 强模型。未来本地部署的小模型（7B、13B 参数量级）在这种结构化框架下，某些节点是纯 LLM 决策，某些节点是固定的”专家规则”，灵活组合，就有机会借助预制流程获得更好的表现。</p>
+<p>&emsp;&emsp;简单说，<code>flow.ts</code> 是在为可能使用的”不完美的 LLM”做工程兜底。我们不总是能用最强的模型，但我们预留空间可以用更好的架构来弥补模型能力的不足。</p>
+<h3 id="4-5-运行层与可视化层分离"><a href="#4-5-运行层与可视化层分离" class="headerlink" title="4.5 运行层与可视化层分离"></a>4.5 运行层与可视化层分离</h3><p>&emsp;&emsp;<code>WebIDEAgentSession.ts</code> 的核心职责是解耦 Agent 运行层和前端可视化层。</p>
+<p>&emsp;&emsp;工作原理就是 Agent 运行时通过事件抛出状态信息（正在读哪个文件、调用了什么工具、LLM 返回了什么），然后WebIDEAgentSession 把这些信息写入 SQLite 数据库。</p>
+<p>&emsp;&emsp;这样 Web IDE 前端可以随时从数据库读取 Agent 进展，刷新页面也不会丢失状态。当用户关闭浏览器标签页，Agent 依然在后台跑，下次打开 Web IDE 能看到完整历史。</p>
+<p>&emsp;&emsp;更重要的是，Agent 运行层可以完全脱离 WebIDEAgentSession：通过一个简单的函数调用就能直接启动 Agent，不依赖任何 Web 相关的代码。这种设计让 CodingAgent 既能在 Web IDE 里用，也能作为命令行工具、或者集成到其他自动化流程中。</p>
+<p>&emsp;&emsp;这样设计下 WebIDEAgentSession 是个”可选的观察者”，而不是 Agent 的必需组件。</p>
+<h2 id="五、当前实现与未来规划"><a href="#五、当前实现与未来规划" class="headerlink" title="五、当前实现与未来规划"></a>五、当前实现与未来规划</h2><h3 id="5-1-已实现的功能"><a href="#5-1-已实现的功能" class="headerlink" title="5.1 已实现的功能"></a>5.1 已实现的功能</h3><ul>
+<li><strong>工具集</strong>：read_file, edit_file, delete_file, grep_files, glob_files, search_dora_api, build, finish</li>
+<li><strong>Memory 系统</strong>：双层存储（MEMORY.md + HISTORY.md）、自动压缩</li>
+<li><strong>Skill 系统</strong>：分级加载 Skill 文档到上下文</li>
+<li><strong>LLM 决策模式</strong>：支持 Function Calling 和 XML 两种格式</li>
+<li><strong>Web IDE 集成</strong>：在 Dora SSR Web IDE 中直接使用</li>
+</ul>
+<h3 id="5-2-待实现的功能"><a href="#5-2-待实现的功能" class="headerlink" title="5.2 待实现的功能"></a>5.2 待实现的功能</h3><p>&emsp;&emsp;还有两种实现需要考虑问题会比较多的 Agent 工具还有待实现。</p>
+<ul>
+<li><strong>spawn subagent</strong>：生成子代理，把复杂任务拆分后交给专门的子 agent 处理，需要考虑好怎么拆分任务和隔离好并行的子 agent</li>
+<li><strong>run command</strong>：直接执行引擎代码，比如在游戏运行时动态执行 Lua 脚本，实现真正的”运行中编程并执行新代码”，这里需要考虑好怎么确保 AI 自己执行的代码的正确性和确保生成代码不会把正在运行的引擎跑奔溃</li>
+</ul>
+<h3 id="5-3-未来游戏玩法的集成"><a href="#5-3-未来游戏玩法的集成" class="headerlink" title="5.3 未来游戏玩法的集成"></a>5.3 未来游戏玩法的集成</h3><p>&emsp;&emsp;这是我们最兴奋的方向——把 Agent 能力暴露为游戏脚本 API：</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs typescript"><span class="hljs-comment">// 未来 API 设计（概念）</span><br><span class="hljs-keyword">import</span> &#123; <span class="hljs-title class_">CodingAgent</span> &#125; <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;Dora/Agent&#x27;</span>;<br><br><span class="hljs-comment">// 在游戏中动态生成 NPC 对话</span><br><span class="hljs-keyword">const</span> dialogue = <span class="hljs-keyword">await</span> <span class="hljs-title class_">CodingAgent</span>.<span class="hljs-title function_">generateDialogue</span>(&#123;<br>	<span class="hljs-attr">npc</span>: <span class="hljs-string">&quot;老村长&quot;</span>,<br>	<span class="hljs-attr">context</span>: <span class="hljs-string">&quot;玩家刚完成了新手任务&quot;</span>,<br>	<span class="hljs-attr">style</span>: <span class="hljs-string">&quot;幽默风趣&quot;</span><br>&#125;);<br><br><span class="hljs-comment">// 根据玩家表现调整关卡</span><br><span class="hljs-keyword">const</span> levelConfig = <span class="hljs-keyword">await</span> <span class="hljs-title class_">CodingAgent</span>.<span class="hljs-title function_">generateLevel</span>(&#123;<br>	<span class="hljs-attr">difficulty</span>: playerStats.<span class="hljs-property">skillLevel</span>,<br>	<span class="hljs-attr">preferences</span>: playerPrefs,<br>	<span class="hljs-attr">availableAssets</span>: [<span class="hljs-string">&quot;forest&quot;</span>, <span class="hljs-string">&quot;cave&quot;</span>, <span class="hljs-string">&quot;castle&quot;</span>]<br>&#125;);<br></code></pre></td></tr></table></figure>
+
+<p>&emsp;&emsp;这还需要解决一些挑战，比如：</p>
+<ul>
+<li><p>API 调用延迟（可能需要异步 + 缓存）</p>
+</li>
+<li><p>成本控制（不能每次都调 LLM）</p>
+</li>
+<li><p>内容审核（生成的游戏内容需要安全可控）</p>
+</li>
+</ul>
+<p>&emsp;&emsp;等等诸多问题。</p>
+<h2 id="六、一些技术细节的碎碎念"><a href="#六、一些技术细节的碎碎念" class="headerlink" title="六、一些技术细节的碎碎念"></a>六、一些技术细节的碎碎念</h2><h3 id="6-1-XML-vs-JSON-作为决策格式"><a href="#6-1-XML-vs-JSON-作为决策格式" class="headerlink" title="6.1 XML vs JSON 作为决策格式"></a>6.1 XML vs JSON 作为决策格式</h3><p>&emsp;&emsp;我们同时支持 Tool Calling 和 XML 两种决策格式。XML 格式的好处是不依赖 LLM 的 Function Calling 能力，更通用：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">tool_call_result</span>&gt;</span><br>	<span class="hljs-tag">&lt;<span class="hljs-name">tool</span>&gt;</span>edit_file<span class="hljs-tag">&lt;/<span class="hljs-name">tool</span>&gt;</span><br>	<span class="hljs-tag">&lt;<span class="hljs-name">reason</span>&gt;</span>Need to add the new enemy type to the game config.<span class="hljs-tag">&lt;/<span class="hljs-name">reason</span>&gt;</span><br>	<span class="hljs-tag">&lt;<span class="hljs-name">params</span>&gt;</span><br>		<span class="hljs-tag">&lt;<span class="hljs-name">path</span>&gt;</span>config/enemies.json<span class="hljs-tag">&lt;/<span class="hljs-name">path</span>&gt;</span><br>		<span class="hljs-tag">&lt;<span class="hljs-name">old_str</span>&gt;</span>&quot;goblin&quot;: &#123;...&#125;<span class="hljs-tag">&lt;/<span class="hljs-name">old_str</span>&gt;</span><br>		<span class="hljs-tag">&lt;<span class="hljs-name">new_str</span>&gt;</span>&quot;goblin&quot;: &#123;...&#125;,<br>&quot;dragon&quot;: &#123;...&#125;<span class="hljs-tag">&lt;/<span class="hljs-name">new_str</span>&gt;</span><br>	<span class="hljs-tag">&lt;/<span class="hljs-name">params</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">tool_call_result</span>&gt;</span><br></code></pre></td></tr></table></figure>
+
+<p>&emsp;&emsp;XML 在 prompt 中比 JSON 更”干净”，不需要处理那么多引号转义问题。这是从我们调用 DeepSeek 模型时，误吐出 DSML 标签的意外发现中学到的技巧，原来 DeepSeek 对 Function Calling 的内部实现也是先生成一个类似 XML 格式的代码，再转为 JSON，直接吐出 JSON 的稳定性还是不那么好的。</p>
+<h2 id="七、写在最后"><a href="#七、写在最后" class="headerlink" title="七、写在最后"></a>七、写在最后</h2><p>&emsp;&emsp;开发 AI Agent 是个挺有意思的过程。你会发现 LLM 既聪明又笨拙——它能理解复杂的上下文，但有时候又会在简单的事情上犯迷糊。这就像带了个高智商但缺乏常识的实习生，需要精心设计 prompt 来引导它。</p>
+<p>&emsp;&emsp;nanobot 的设计给了我们很大帮助，特别是 Memory 系统和 Progressive Disclosure 的设计思想。这些不是”酷炫功能”，而是真正解决问题的架构设计。这里再感谢并推荐一下 nanobot 项目，这篇文章也是在和 nanobot 一起研读讨论着 nanobot 的源码一边相谈甚欢中共同完成的。</p>
+<p>&emsp;&emsp;最后，如果你也对”AI + 游戏开发”感兴趣，欢迎来 Dora SSR 社区交流。毕竟开源项目嘛，用爱发电的同时，也希望能找到更多同路人。</p>
+<hr>
+<h2 id="相关链接"><a href="#相关链接" class="headerlink" title="相关链接"></a>相关链接</h2><ul>
+<li><strong>Dora SSR 开源游戏引擎</strong>：<a target="_blank" rel="noopener" href="https://github.com/IppClub/Dora-SSR">https://github.com/IppClub/Dora-SSR</a></li>
+<li><strong>nanobot AI Agent 框架</strong>：<a target="_blank" rel="noopener" href="https://github.com/HKUDS/nanobot">https://github.com/HKUDS/nanobot</a></li>
+<li><strong>Dora SSR 官方文档</strong>：<a target="_blank" rel="noopener" href="https://dora-ssr.net/">https://dora-ssr.net</a></li>
+</ul>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/AI/" class="category-chain-item">AI</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/Dora-SSR/" class="print-no-link">#Dora SSR</a>
+      
+        <a href="/tags/Coding-Agent/" class="print-no-link">#Coding Agent</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Dora 游戏引擎的内置 AI 编码助手，写啦</div>
+      <div>http://ippclub.github.io/Dora游戏引擎的内置AI编码助手，写啦/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>李瑾</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2026年4月2日</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>更新于</div>
+          <div>2026年4月16日</div>
+        </div>
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="NC - 非商业性使用">
+                    <i class="iconfont icon-cc-nc"></i>
+                  </span>
+                </a>
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="SA - 相同方式共享">
+                    <i class="iconfont icon-cc-sa"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/SimpleBili%EF%BC%9A%E5%9C%A8%E7%AE%97%E6%B3%95%E6%97%B6%E4%BB%A3%EF%BC%8C%E7%BB%99%E8%87%AA%E5%B7%B1%E9%80%A0%E4%B8%80%E4%B8%AA%E6%AD%A3%E5%90%91%E7%9A%84%E4%BF%A1%E6%81%AF%E8%8C%A7%E6%88%BF/" title="SimpleBili：在算法时代，给自己造一个正向的信息茧房">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">SimpleBili：在算法时代，给自己造一个正向的信息茧房</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/Python%20%E5%B9%B6%E5%8F%91%E7%AD%89%E5%BE%85%E6%9C%BA%E5%88%B6/" title="Python 线程池的陷阱：如何让 concurrent.futures 优雅地响应 Ctrl+C？">
+                        <span class="hidden-mobile">Python 线程池的陷阱：如何让 concurrent.futures 优雅地响应 Ctrl+C？</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+  <div id="waline"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#waline', function() {
+      Fluid.utils.createCssLink('https://registry.npmmirror.com/@waline/client/2.15.8/files/dist/waline.css')
+      Fluid.utils.createScript('https://registry.npmmirror.com/@waline/client/2.15.8/files/dist/waline.js', function() {
+        var options = Object.assign(
+          {"serverURL":"https://waline.harkerhand.cn/","path":"window.location.pathname","meta":["nick","mail","link"],"requiredMeta":["nick"],"lang":"zh-CN","emoji":["https://cdn.jsdelivr.net/gh/walinejs/emojis/weibo","https://cdn.jsdelivr.net/gh/walinejs/emojis/tieba","https://cdn.jsdelivr.net/gh/walinejs/emojis/bmoji","https://cdn.jsdelivr.net/gh/walinejs/emojis/bilibili"],"dark":"html[data-user-color-scheme=\"dark\"]","wordLimit":0,"pageSize":10,"search":false,"reaction":true},
+          {
+            el: '#waline',
+            path: window.location.pathname
+          }
+        )
+        Waline.init(options);
+        Fluid.utils.waitElementVisible('#waline .vcontent', () => {
+          var imgSelector = '#waline .vcontent img:not(.vemoji)';
+          Fluid.plugins.imageCaption(imgSelector);
+          Fluid.plugins.fancyBox(imgSelector);
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

@@ -1,0 +1,952 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.ico">
+  <link rel="icon" href="/img/favicon.ico">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="李瑾">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="开源引擎与鸿蒙平台挑战&emsp;&emsp;Dora SSR是一款跨平台开源游戏引擎，采用 C++ 编写核心功能。它内置了易用的 Web IDE 开发工具链，支持在移动设备、嵌入式设备和手持游戏机等多种平台直接进行游戏开发。随着华为鸿蒙（HarmonyOS）系统的兴起，我们社区的开发者萌生了让 Dora SSR 引擎在鸿蒙 OS 上原生运行的想法。然而，要让一个游戏引擎登陆全新的操作系统并非易事">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Dora SSR 引擎原生适配鸿蒙的故事">
+<meta property="og:url" content="http://ippclub.github.io/DoraSSR%E5%BC%95%E6%93%8E%E5%8E%9F%E7%94%9F%E9%80%82%E9%85%8D%E9%B8%BF%E8%92%99%E7%9A%84%E6%95%85%E4%BA%8B/index.html">
+<meta property="og:site_name" content="I++ Club">
+<meta property="og:description" content="开源引擎与鸿蒙平台挑战&emsp;&emsp;Dora SSR是一款跨平台开源游戏引擎，采用 C++ 编写核心功能。它内置了易用的 Web IDE 开发工具链，支持在移动设备、嵌入式设备和手持游戏机等多种平台直接进行游戏开发。随着华为鸿蒙（HarmonyOS）系统的兴起，我们社区的开发者萌生了让 Dora SSR 引擎在鸿蒙 OS 上原生运行的想法。然而，要让一个游戏引擎登陆全新的操作系统并非易事">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://ippclub.github.io/DoraSSR%E5%BC%95%E6%93%8E%E5%8E%9F%E7%94%9F%E9%80%82%E9%85%8D%E9%B8%BF%E8%92%99%E7%9A%84%E6%95%85%E4%BA%8B/%E5%B0%81%E9%9D%A2.png">
+<meta property="article:published_time" content="2025-08-21T10:00:00.000Z">
+<meta property="article:modified_time" content="2026-04-16T03:07:22.173Z">
+<meta property="article:tag" content="DoraSSR">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://ippclub.github.io/DoraSSR%E5%BC%95%E6%93%8E%E5%8E%9F%E7%94%9F%E9%80%82%E9%85%8D%E9%B8%BF%E8%92%99%E7%9A%84%E6%95%85%E4%BA%8B/%E5%B0%81%E9%9D%A2.png">
+  
+  
+  
+  <title>Dora SSR 引擎原生适配鸿蒙的故事 - I++ Club</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"ippclub.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"always","icon":"#"},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>I++ Club</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/DoraSSR%E5%BC%95%E6%93%8E%E5%8E%9F%E7%94%9F%E9%80%82%E9%85%8D%E9%B8%BF%E8%92%99%E7%9A%84%E6%95%85%E4%BA%8B/%E5%B0%81%E9%9D%A2.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Dora SSR 引擎原生适配鸿蒙的故事"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-author" aria-hidden="true"></i>
+        李瑾
+      </span>
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2025-08-21 18:00" pubdate>
+          2025年8月21日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          5k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          63 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar category-bar" style="margin-right: -1rem">
+    
+
+
+
+
+
+<div class="category-list">
+  
+  
+    
+    
+    
+    <div class="category row nomargin-x">
+      <a class="category-item 
+          list-group-item category-item-action col-10 col-md-11 col-xm-11" title="游戏开发"
+        id="heading-03af44dfb57651192e1e5ff490e35760" role="tab" data-toggle="collapse" href="#collapse-03af44dfb57651192e1e5ff490e35760"
+        aria-expanded="true"
+      >
+        游戏开发
+        <span class="list-group-count">(9)</span>
+        <i class="iconfont icon-arrowright"></i>
+      </a>
+      
+      <div class="category-collapse collapse show" id="collapse-03af44dfb57651192e1e5ff490e35760"
+           role="tabpanel" aria-labelledby="heading-03af44dfb57651192e1e5ff490e35760">
+        
+        
+          
+          
+  <div class="category-post-list">
+    
+    
+      
+      
+        <a href="/Dora-SSR-x-AI-x-Blockly-%E4%BD%8E%E7%A7%91%E6%8A%80%E5%92%8C%E9%AB%98%E7%A7%91%E6%8A%80%E7%9A%84%E7%A2%B0%E6%92%9E/" title="Dora SSR x AI x Blockly 低科技和高科技的碰撞"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">Dora SSR x AI x Blockly 低科技和高科技的碰撞</span>
+        </a>
+      
+    
+      
+      
+        <a href="/Dora-SSR-x-Blockly%E2%80%94%E8%BF%99%E7%A7%8D%E6%84%9F%E8%A7%89%E6%88%91%E4%BB%8E%E6%9C%AA%E6%8B%A5%E6%9C%89/" title="Dora SSR x Blockly—这种感觉我从未拥有"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">Dora SSR x Blockly—这种感觉我从未拥有</span>
+        </a>
+      
+    
+      
+      
+        <a href="/DoraSSR%E5%BC%95%E6%93%8E%E5%8E%9F%E7%94%9F%E9%80%82%E9%85%8D%E9%B8%BF%E8%92%99%E7%9A%84%E6%95%85%E4%BA%8B/" title="Dora SSR 引擎原生适配鸿蒙的故事"
+           class="list-group-item list-group-item-action
+           active">
+          <span class="category-post">Dora SSR 引擎原生适配鸿蒙的故事</span>
+        </a>
+      
+    
+      
+      
+        <a href="/Lua%E9%81%87%E4%B8%8ATypeScript-TypeScriptToLua%E7%9A%84%E5%A5%87%E5%A6%99%E6%97%85%E7%A8%8B/" title="Lua 遇上 TypeScript——TSTL 的奇妙旅程"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">Lua 遇上 TypeScript——TSTL 的奇妙旅程</span>
+        </a>
+      
+    
+      
+      
+        <a href="/%E5%BC%80%E6%BA%90%E5%85%B1%E5%88%9B%EF%BC%8C%E6%B8%B8%E6%88%8F%E6%B8%A9%E5%B7%9E%E2%80%94%E2%80%9415%E5%A4%A9%E5%88%9B%E6%84%8F%E7%8B%82%E6%AC%A2/" title="开源共创，游戏温州——15 天创意狂欢"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">开源共创，游戏温州——15 天创意狂欢</span>
+        </a>
+      
+    
+      
+      
+        <a href="/%E5%BD%93Yarn%20Spinner%E9%81%87%E4%B8%8ALua%EF%BC%9A%E4%B8%80%E6%AC%A1%E5%AF%B9%E8%AF%9D%E7%B3%BB%E7%BB%9F%E7%9A%84%E6%94%BE%E6%B5%AA%E9%80%83%E4%BA%A1/" title="当Yarn Spinner遇上Lua：一次对话系统的放浪逃亡"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">当Yarn Spinner遇上Lua：一次对话系统的放浪逃亡</span>
+        </a>
+      
+    
+      
+      
+        <a href="/%E6%9E%84%E5%BB%BA%E8%87%AA%E5%8A%A8%E5%8C%96%E7%9A%84-Yarn-Spinner-%E5%89%A7%E6%9C%AC%E7%94%9F%E6%88%90%E6%B5%81%E7%A8%8B/" title="构建自动化的 Yarn Spinner 剧本生成流程"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">构建自动化的 Yarn Spinner 剧本生成流程</span>
+        </a>
+      
+    
+      
+      
+        <a href="/%E7%94%A8%E5%87%B9%E8%AF%AD%E8%A8%80%E4%B8%BA%E6%B8%B8%E6%88%8F%E5%BC%95%E6%93%8E%E8%A3%85%E4%B8%8A%E4%B8%80%E9%A2%97%E5%BC%80%E6%BA%90%E7%9A%84%E5%BF%83/" title="用凹语言为游戏引擎装上一颗开源的心"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">用凹语言为游戏引擎装上一颗开源的心</span>
+        </a>
+      
+    
+  </div>
+
+          
+  
+    
+    
+    
+    <div class="category-sub row nomargin-x">
+      <a class="category-subitem collapsed
+          list-group-item category-item-action col-10 col-md-11 col-xm-11" title="转载"
+        id="heading-aa6eb67fe55f3fb03caa5e07ee4af3d4" role="tab" data-toggle="collapse" href="#collapse-aa6eb67fe55f3fb03caa5e07ee4af3d4"
+        aria-expanded="false"
+      >
+        转载
+        <span class="list-group-count">(1)</span>
+        <i class="iconfont icon-arrowright"></i>
+      </a>
+      
+      <div class="category-collapse collapse " id="collapse-aa6eb67fe55f3fb03caa5e07ee4af3d4"
+           role="tabpanel" aria-labelledby="heading-aa6eb67fe55f3fb03caa5e07ee4af3d4">
+        
+        
+          
+  <div class="category-post-list">
+    
+    
+      
+      
+        <a href="/%E4%B8%8D%E5%88%B0100%E8%A1%8C%E4%BB%A3%E7%A0%81%E5%86%99%E5%87%BA%E6%84%A4%E6%80%92%E7%9A%84%E5%B0%8F%E9%B8%9F/" title="不到100行代码写出愤怒的小鸟"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">不到100行代码写出愤怒的小鸟</span>
+        </a>
+      
+    
+  </div>
+
+        
+      </div>
+    </div>
+  
+        
+      </div>
+    </div>
+  
+</div>
+
+
+  </aside>
+
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">Dora SSR 引擎原生适配鸿蒙的故事</h1>
+            
+              <p id="updated-time" class="note note-info" style="">
+                
+                  
+                    本文最后更新于 2026年4月16日 上午
+                  
+                
+              </p>
+            
+            
+              <div class="markdown-body">
+                
+                <h2 id="开源引擎与鸿蒙平台挑战"><a href="#开源引擎与鸿蒙平台挑战" class="headerlink" title="开源引擎与鸿蒙平台挑战"></a>开源引擎与鸿蒙平台挑战</h2><p>&emsp;&emsp;Dora SSR是一款跨平台开源游戏引擎，采用 C++ 编写核心功能。它内置了易用的 Web IDE 开发工具链，支持在移动设备、嵌入式设备和手持游戏机等多种平台直接进行游戏开发。随着华为鸿蒙（HarmonyOS）系统的兴起，我们社区的开发者萌生了让 Dora SSR 引擎在鸿蒙 OS 上原生运行的想法。然而，要让一个游戏引擎登陆全新的操作系统并非易事，需要解决底层系统 API、图形接口等方面的适配挑战。</p>
+<p>&emsp;&emsp;我们决定充分利用引擎现有的跨平台架构优势。Dora SSR 原本就高度依赖 SDL2 和 bgfx 这两个跨平台库：SDL2 负责抽象操作系统层的窗口、输入、音频等通用功能，bgfx 则作为跨平台渲染硬件接口（RHI）封装具体图形 API。借助它们，我们希望最大程度减少对鸿蒙系统适配的代码改动，只需在必要处实现 SDL2 和 bgfx 针对鸿蒙的支撑即可完成移植。这个思路也契合 Dora SSR 引擎一贯的设计哲学：引擎自身尽量与平台解耦，依赖中间层的抽象能力来适配不同系统。</p>
+<img src="/DoraSSR%E5%BC%95%E6%93%8E%E5%8E%9F%E7%94%9F%E9%80%82%E9%85%8D%E9%B8%BF%E8%92%99%E7%9A%84%E6%95%85%E4%BA%8B/dora-ssr-architecture.png" srcset="/img/loading.gif" lazyload class="" title="dora-ssr-architecture">
+
+<p>&emsp;&emsp;<em>图：Dora SSR 架构。</em></p>
+<h2 id="操作系统抽象层的利器"><a href="#操作系统抽象层的利器" class="headerlink" title="操作系统抽象层的利器"></a>操作系统抽象层的利器</h2><p>&emsp;&emsp;SDL2（Simple DirectMedia Layer）是 Dora SSR 引擎用来处理操作系统相关功能的基础。作为一款跨平台的多媒体开发库，SDL2 提供了控制图像、声音、输入输出等的统一接口，使开发者能够用相同或相似的代码开发出跨多个平台（如 Linux、Windows、macOS 等）的应用。简单来说，SDL2 将不同操作系统的底层函数封装为统一的函数调用。例如，在 Windows 平台 SDL 内部实际调用的是 Win32 API，而在 Linux 上则通过 X11 的 Xlib 或是 Wayland 库来实现窗体图形输出。这种封装让游戏引擎无需关心每个系统的繁杂细节，大幅减少了针对不同 OS 编写和调试底层代码的工作量。</p>
+<img src="/DoraSSR%E5%BC%95%E6%93%8E%E5%8E%9F%E7%94%9F%E9%80%82%E9%85%8D%E9%B8%BF%E8%92%99%E7%9A%84%E6%95%85%E4%BA%8B/sdl.png" srcset="/img/loading.gif" lazyload class="" title="sdl">
+
+<p>&emsp;&emsp;<em>图：SDL 在不同操作系统上的封装示意 – SDL会将 Windows 上的 Win32 API、Linux 上的 Xlib 等平台 API封装为统一接口供上层调用。</em></p>
+<p>&emsp;&emsp;更重要的是，SDL2 不仅提供图形窗口管理，还涵盖文件系统访问、事件处理、音频输出、线程等子系统。这意味着使用 SDL2 编写的游戏引擎，许多平台相关功能都走统一的代码路径。在适配一个新操作系统时，我们并不需要改动引擎的大部分逻辑，只需在新平台上实现 SDL2 用到的那一小部分功能即可。例如，本次将引擎移植至鸿蒙，我们首先考虑的就是鸿蒙上 SDL2 的支持情况。如果 SDL2 已有鸿蒙实现，应用层代码几乎不用改动；即便暂时还没有相关社区的支持，我们也可以自行实现 SDL2 的几个抽象接口（如窗口创建、输入事件、音频播放等）来让引擎跑起来。这种“抽象层适配”的模式，大大提升了引擎代码的可移植性。</p>
+<p>&emsp;&emsp;举个例子，在跨平台应用开发中，不同操作系统对消息与事件的处理机制差异巨大：</p>
+<ul>
+<li>Windows 使用消息队列（Message Queue），通过 <code>GetMessage</code>&#x2F;<code>PeekMessage</code> 分发窗口消息。</li>
+<li>Linux X11&#x2F;Wayland 有各自的事件循环接口。</li>
+<li>macOS 则依赖 Cocoa 的事件分发模型。</li>
+</ul>
+<p>&emsp;&emsp;如果开发者需要在这些平台间编写统一代码，往往要自己封装大量冗余逻辑。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs cpp">SDL_Event event;<br><span class="hljs-keyword">while</span> (<span class="hljs-built_in">SDL_PollEvent</span>(&amp;event)) &#123;<br>    <span class="hljs-keyword">if</span> (event.type == SDL_QUIT) &#123;<br>        running = <span class="hljs-literal">false</span>;<br>    &#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (event.type == SDL_KEYDOWN) &#123;<br>        <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;Key pressed: %d\n&quot;</span>, event.key.keysym.sym);<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>&emsp;&emsp;上面的示例代码无需区分 Windows&#x2F;Linux&#x2F;macOS&#x2F;Android&#x2F;HarmonyOS，在所有支持 SDL2 的系统上都能一致工作。这种“事件抽象层”设计，把平台间千差万别的消息系统统一成一套干净、轻量、适合实时应用的接口，极大地提升了跨平台开发效率。</p>
+<p>&emsp;&emsp;在实践中我们发现鸿蒙的社区对 SDL2 已有开源项目的支持了，但也遇到了一些细节问题。例如，SDL2 的音频格式支持在鸿蒙上不完整：一开始 Dora 通过 SDL 接口请求鸿蒙不支持的音频输出格式时，没有得到错误提示，程序继续执行直到发生随机崩溃，一度令我们摸不着头脑。最终我们还是定位到了 SDL 音频初始化流程，避免使用鸿蒙未支持的格式才解决了这个问题。此外，我们还修正了 SDL 输入事件坐标计算在鸿蒙上的偏差，保证触摸&#x2F;鼠标事件的位置与窗口像素正确对应。由此可见，虽然 SDL2 极大简化了跨平台适配工作，但在一个新系统上跑通它仍需要针对性地调优。不过，相比完全从零适配整个引擎，改动 SDL2 封装的少量代码已经是很小的成本。</p>
+<img src="/DoraSSR%E5%BC%95%E6%93%8E%E5%8E%9F%E7%94%9F%E9%80%82%E9%85%8D%E9%B8%BF%E8%92%99%E7%9A%84%E6%95%85%E4%BA%8B/fix.png" srcset="/img/loading.gif" lazyload class="" title="fix">
+
+<p>&emsp;&emsp;<em>图：在鸿蒙平台上修正 SDL2 的触摸事件坐标。</em></p>
+<h2 id="跨平台图形渲染的底层能力"><a href="#跨平台图形渲染的底层能力" class="headerlink" title="跨平台图形渲染的底层能力"></a>跨平台图形渲染的底层能力</h2><p>&emsp;&emsp;在图形渲染方面，Dora SSR 引擎采用了 bgfx 库。bgfx 是一个跨平台、图形 API 无关的渲染库，强调 “Bring Your Own Engine&#x2F;Framework”，即引擎自带架构而 bgfx 专注提供底层渲染支持。它内部封装了多种图形后台，可根据平台能力选择使用 Direct3D 11&#x2F;12、Metal、OpenGL 2.1&#x2F;3.x、OpenGL ES 2&#x2F;3、Vulkan、WebGL 等不同渲染 API。对于我们的鸿蒙移植，这意味着：无需重写渲染模块，只要 bgfx 支持鸿蒙上的图形接口，我们就能让引擎渲染出画面。</p>
+<p>&emsp;&emsp;起初我们担心过鸿蒙是否存在对图形 API 的支持不足。Dora SSR 引擎依赖了一些 ES 3.0 的特性，如果有不兼容直接运行可能会报错甚至无法启动。不过深入研究后我们发现，鸿蒙实际上已经支持到 OpenGL ES 3.2，是我们传递给 SDL 的 OpenGL 版本参数有误，才让初始化时识别成了 2.0。纠正配置后，引擎成功获取到了 ES 3.x 上下文。然而，事情并非一路顺遂：华为设备上的 OpenGL 实现还是缺失了 bgfx 所需的一部分 OpenGLES 扩展接口的功能。我们最后尝试让 bgfx 跳过那些鸿蒙暂不支持的特性，最终终于使渲染器初始化成功——屏幕上出现了应有的清屏背景，这标志着 SDL2 + bgfx 在鸿蒙上跑通了。这一步非常关键，意味着引擎核心的图形渲染循环已在新平台上正常运转。</p>
+<img src="/DoraSSR%E5%BC%95%E6%93%8E%E5%8E%9F%E7%94%9F%E9%80%82%E9%85%8D%E9%B8%BF%E8%92%99%E7%9A%84%E6%95%85%E4%BA%8B/bgfx.png" srcset="/img/loading.gif" lazyload class="" title="bgfx">
+
+<p>&emsp;&emsp;<em>图：bgfx Hello World 程序在鸿蒙上启动成功。</em></p>
+<h2 id="关于-bgfx-如何消弭多平台渲染差异"><a href="#关于-bgfx-如何消弭多平台渲染差异" class="headerlink" title="关于 bgfx 如何消弭多平台渲染差异"></a>关于 bgfx 如何消弭多平台渲染差异</h2><p>&emsp;&emsp;在鸿蒙移植过程中，SDL2 负责操作系统层的统一接口，而 bgfx 则在渲染层面抹平了不同图形 API 的差异。这一点在工程实践中尤为关键，下面结合几个典型设计，简单介绍一下 bgfx 的特点。</p>
+<ol>
+<li><strong>能力自描述（Caps）</strong><br>  bgfx 会在运行时检测当前后端（OpenGL ES、Vulkan、Metal…）支持的功能，并通过 <code>bgfx::Caps</code> 返回一份能力表。<br>  例如，某些平台不支持 sRGB 贴图或 Instancing，bgfx 会提供标记，开发者即可自动选择降级方案，而不用写平台特定的代码分支。</li>
+</ol>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-type">const</span> bgfx::Caps* caps = bgfx::<span class="hljs-built_in">getCaps</span>();<br><span class="hljs-type">bool</span> hasInstancing = <span class="hljs-number">0</span> != (caps-&gt;supported &amp; BGFX_CAPS_INSTANCING);<br></code></pre></td></tr></table></figure>
+
+<ol start="2">
+<li><strong>统一状态接口（State Flags）</strong><br>  在不同 API 中，混合、深度、剔除的设置方式各异。bgfx 把这些全部抽象为统一的位标志。<br>  一次写好，到处通用。</li>
+</ol>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-type">uint64_t</span> state = BGFX_STATE_WRITE_RGB | BGFX_STATE_DEPTH_TEST_LESS | BGFX_STATE_CULL_CW;<br>bgfx::<span class="hljs-built_in">setState</span>(state);<br></code></pre></td></tr></table></figure>
+
+<ol start="3">
+<li><strong>View&#x2F;Submit 渲染模型</strong><br>  bgfx 把渲染通道抽象成 View，开发者通过 <code>submit()</code> 将 draw call 提交给指定视图。<br>  在不同后端，这些 View 对应的实现可能是 FBO、RenderPass 或 CommandBuffer，但应用层逻辑始终一致。</li>
+</ol>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs cpp">bgfx::<span class="hljs-built_in">setViewRect</span>(<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, width, height);<br>bgfx::<span class="hljs-built_in">setViewClear</span>(<span class="hljs-number">0</span>, BGFX_CLEAR_COLOR | BGFX_CLEAR_DEPTH, <span class="hljs-number">0x303030ff</span>);<br>bgfx::<span class="hljs-built_in">submit</span>(<span class="hljs-number">0</span>, program);<br></code></pre></td></tr></table></figure>
+
+<ol start="4">
+<li><p><strong>跨平台着色器编译</strong><br>  bgfx 提供 <code>shaderc</code> 工具，把一份 HLSL&#x2F;GLSL 源码编译成各平台二进制（DXBC、MSL、SPIR-V 等）。<br>  应用只需加载统一的 <code>ProgramHandle</code>，不必关心底层差异。</p>
+</li>
+<li><p><strong>Transient Buffer 与资源生命周期</strong><br>  通过 <code>TransientVertexBuffer</code> 等机制，bgfx 自动处理帧级资源的分配与回收，屏蔽了不同 API 在同步和内存管理上的差异。</p>
+</li>
+</ol>
+<hr>
+<h3 id="视图-资源关系示意图"><a href="#视图-资源关系示意图" class="headerlink" title="视图 &#x2F; 资源关系示意图"></a>视图 &#x2F; 资源关系示意图</h3><img src="/DoraSSR%E5%BC%95%E6%93%8E%E5%8E%9F%E7%94%9F%E9%80%82%E9%85%8D%E9%B8%BF%E8%92%99%E7%9A%84%E6%95%85%E4%BA%8B/bgfx-view.png" srcset="/img/loading.gif" lazyload class="" title="bgfx-view">
+
+<p>&emsp;&emsp;图中可以看到：应用只和 bgfx 的统一 API 打交道。View 定义了渲染通道和顺序，资源（RT&#x2F;Texture&#x2F;Buffer）在内部绑定到底层图形 API。这样无论底层是 OpenGL ES 还是 Vulkan，逻辑都保持一致。</p>
+<p>&emsp;&emsp;值得一提的是，bgfx 还提供了切换渲染后端的灵活性。如果 OpenGL 在某个平台表现不佳，我们可以改用 Vulkan 等后端。鸿蒙系统理论上支持 Vulkan，但当我们考察切换 Vulkan 时发现工作量较大：需要修改 SDL2 窗口与鸿蒙图形栈的集成代码，而 OpenGL 路线问题相对更少。因此目前 Dora SSR 在鸿蒙上仍采用 OpenGLES 渲染，但保留了将来升级为 Vulkan 的可能性。bgfx 的多后端设计让我们有信心，在未来鸿蒙图形能力提升或需要支持更多设备时，可以较容易地替换底层渲染接口以获得最佳效果。</p>
+<h2 id="从编译工具链到运行验证的适配总结"><a href="#从编译工具链到运行验证的适配总结" class="headerlink" title="从编译工具链到运行验证的适配总结"></a>从编译工具链到运行验证的适配总结</h2><p>&emsp;&emsp;在实际移植过程中，我们遵循“自底向上”的顺序逐步攻克难题：</p>
+<p>&emsp;&emsp;<strong>1. 编译环境与依赖库适配：</strong> Dora SSR 引擎依赖的 bgfx 库及其子库 bx、bimg 等需要先能在鸿蒙下编译通过。然而 bgfx 的官方构建系统使用的是名为 GENie 的项目生成工具，其预置支持的平台并不包括鸿蒙（OpenHarmony）。bgfx 通常通过 GENie 脚本生成各个平台的工程文件——这对常见的 Windows、Linux、Android 都很有效，但面对鸿蒙这个当时的新平台，GENie 无能为力。为了解决这个问题，我们采取了替代构建方案：使用跨平台构建工具 Xmake 重写工程配置。Xmake 早在 v2.9.1 版本就原生支持了鸿蒙 OS 的交叉编译工具链，只需指定平台为 <code>harmony</code> 即可自动检测本地的鸿蒙 SDK 并编译。于是我们将 bgfx 的构建脚本从 GENie 生成的 Makefile&#x2F;CMake 配置逆向“翻译”成 Xmake 脚本。这里我们方便地借助了 AI 大模型的力量——我们把 GENie 生成的 Makefile 丢给 AI，请它转换为 Xmake Lua 脚本，结果一次生成的脚本就几乎可以直接使用，省去了大量人工摸索的时间。</p>
+<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><code class="hljs lua"><span class="hljs-comment">-- 3rdParty/bgfx/xmake.lua 的部分关键配置示例，就是很简单</span><br>set_project(<span class="hljs-string">&quot;bgfx&quot;</span>)<br>add_rules(<span class="hljs-string">&quot;mode.debug&quot;</span>, <span class="hljs-string">&quot;mode.release&quot;</span>)<br>set_languages(<span class="hljs-string">&quot;cxx17&quot;</span>)<br><br>target(<span class="hljs-string">&quot;bgfx&quot;</span>)<br>  set_kind(<span class="hljs-string">&quot;static&quot;</span>)<br>  <span class="hljs-comment">-- 鸿蒙平台特定配置</span><br>  add_defines(<span class="hljs-string">&quot;BGFX_CONFIG_RENDERER_OPENGLES=30&quot;</span>)<br>  add_defines(<span class="hljs-string">&quot;BGFX_CONFIG_RENDERER_OPENGLES_MIN_VERSION=30&quot;</span>)<br><br>  ...<br><br>  <span class="hljs-comment">-- 编译参数</span><br>  add_cxflags(<span class="hljs-string">&quot;-Wall&quot;</span>, <span class="hljs-string">&quot;-Wextra&quot;</span>, <span class="hljs-string">&quot;-ffast-math&quot;</span>, <span class="hljs-string">&quot;-fomit-frame-pointer&quot;</span>)<br>  add_cxxflags(<span class="hljs-string">&quot;-fno-rtti&quot;</span>, <span class="hljs-string">&quot;-fno-exceptions&quot;</span>, <span class="hljs-string">&quot;-fPIC&quot;</span>)<br><br>  ...<br><br>  <span class="hljs-comment">-- 平台架构输出目录</span><br>  <span class="hljs-keyword">if</span> is_arch(<span class="hljs-string">&quot;x86_64&quot;</span>) <span class="hljs-keyword">then</span><br>    set_targetdir(<span class="hljs-string">&quot;../../Dora/entry/src/main/cpp/3rdParty/bgfx/Lib/x86_64&quot;</span>)<br>  <span class="hljs-keyword">elseif</span> is_arch(<span class="hljs-string">&quot;arm64-v8a&quot;</span>) <span class="hljs-keyword">then</span><br>    set_targetdir(<span class="hljs-string">&quot;../../Dora/entry/src/main/cpp/3rdParty/bgfx/Lib/arm64-v8a&quot;</span>)<br>  <span class="hljs-keyword">end</span><br></code></pre></td></tr></table></figure>
+
+<p>&emsp;&emsp;多个 bgfx 静态库的构建脚本：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># 3rdParty/makefile 中的鸿蒙构建命令</span><br>define build_cmd<br>  <span class="hljs-built_in">cd</span> $(ROOT_DIR)/$(1) &amp;&amp; \<br>  xmake f -p harmony -m $(2) -a arm64-v8a &amp;&amp; xmake &amp;&amp; \<br>  xmake f -p harmony -m $(2) -a x86_64 &amp;&amp; xmake<br>endef<br><br><span class="hljs-comment"># Release 构建</span><br>release:<br>  @<span class="hljs-keyword">for</span> <span class="hljs-built_in">dir</span> <span class="hljs-keyword">in</span> $(SUBDIRS); <span class="hljs-keyword">do</span> \<br>    $(call build_cmd,$<span class="hljs-variable">$dir</span>,release); \<br>  <span class="hljs-keyword">done</span><br></code></pre></td></tr></table></figure>
+
+<p>&emsp;&emsp;借助 Xmake 对鸿蒙的支持，我们顺利编译出了 bgfx 及其依赖库针对鸿蒙平台的静态库。需要注意的是，鸿蒙采用 musl C 库和特定的 NDK 工具链，与 Linux glibc 或 Android bionic 略有不同。Xmake 中自动配置了鸿蒙提供的 sysroot 和工具链参数，解决了 C++ 标准库链接和 CPU 架构指令集等底层兼容问题。最终，bgfx、bx、bimg 三个基础库都成功产出了鸿蒙版本的库文件，为后续引擎主体的编译奠定了基础。</p>
+<p>&emsp;&emsp;<strong>2. 引擎代码调整：</strong> 当 Dora SSR 引擎主体代码切换到鸿蒙NDK编译后，大部分逻辑都无需修改就通过了，这是跨平台设计带来的直接好处。不过仍有一些细节值得记录。例如，鸿蒙使用的 Clang 编译器声称支持到 C++23 标准，但我们遇到了 C++ ranges 库的实现缺失，导致引擎中使用 C++20 ranges 功能的代码无法编译。对此我们临时采取了替换方案，将相关代码改用传统标准库算法，以及改写为手动迭代方式实现，绕过了这个坑点。类似地，个别 SDL2 调用在鸿蒙上尚未实现，我们也对引擎做了宏判断：如果在鸿蒙编译，则跳过或改用替代方案。例如针对前述的输入法（IME）问题，暂时禁用了 SDL 文本输入获取，计划后续再完善。</p>
+<img src="/DoraSSR%E5%BC%95%E6%93%8E%E5%8E%9F%E7%94%9F%E9%80%82%E9%85%8D%E9%B8%BF%E8%92%99%E7%9A%84%E6%95%85%E4%BA%8B/cpp-ranges.png" srcset="/img/loading.gif" lazyload class="" title="cpp-ranges">
+
+<p>&emsp;&emsp;<strong>3. 调试运行：</strong> 完成编译后，将生成的 Dora SSR 引擎应用包部署到鸿蒙设备上，开始了令人紧张的首次运行测试。最初的几次尝试难免遇到崩溃和黑屏。例如在音频子系统没修复前，应用一启动就由于 SDL 初始化音频时的 Bug 导致崩溃。修复这些问题后，再次运行，终于看到了引擎启动界面！我们成功加载了引擎自带的 Web IDE 开发环境，并在鸿蒙手机上打开了引擎的调试界面。进一步地，我们尝试运行引擎的示例游戏和开源 Demo 项目，发现游戏图形正常渲染，音频和输入也基本工作。当熟悉的游戏画面和操作响应出现在鸿蒙设备屏幕上时，整个开发团队都异常激动——移植工作取得了第一个里程碑的胜利。</p>
+<img src="/DoraSSR%E5%BC%95%E6%93%8E%E5%8E%9F%E7%94%9F%E9%80%82%E9%85%8D%E9%B8%BF%E8%92%99%E7%9A%84%E6%95%85%E4%BA%8B/showcase.png" srcset="/img/loading.gif" lazyload class="" title="showcase">
+
+<p>&emsp;&emsp;<em>图：Dora SSR 引擎及内置 Web IDE 运行成功。</em></p>
+<h2 id="对比-Android-适配有哪些异同？"><a href="#对比-Android-适配有哪些异同？" class="headerlink" title="对比 Android 适配有哪些异同？"></a>对比 Android 适配有哪些异同？</h2><p>&emsp;&emsp;由于鸿蒙 OS 与 Android 设计同源（同为 Linux 内核衍生，并参考部分 AOSP 的框架设计演进），将 Dora SSR 移植到鸿蒙的过程在很多方面与移植 Android 十分类似。比如，两者都使用 Clang 编译、都支持 OpenGLES 图形接口，应用打包方式也相仿。这种熟悉的环境降低了我们的学习成本。此外，Android 上原有的 SDL2 和 bgfx 移植经验很大程度上可复用到鸿蒙中。然而，我们也注意到了一些细节层面的区别：</p>
+<ul>
+<li><strong>资源文件访问机制不同：</strong> Android 平台的 APK 中附带的资源通常打包在 assets 或 res 中，运行时需要通过 AssetManager 读取或者手动解压。而鸿蒙则支持自动将应用包中打包的资源文件解压到沙盒目录供程序直接访问。鸿蒙应用通过 Context 的 <code>resourceDir</code> 属性即可获得资源文件所在路径（虽然目前测试在鸿蒙 5.1 的模拟器中发现存在有获取到路径为空的 bug），然后就能像普通文件一样读取资源。这意味着在鸿蒙上，我们不再需要编写 JNI 代码解压或映射应用 zip 包中的资源，简化了引擎加载资源的流程。例如，引擎启动时直接从鸿蒙提供的资源目录读取游戏引擎脚本和素材，相比 Android 上通过读取压缩包，效率和便利性有一些提升。</li>
+<li><strong>NDK 与系统库差异：</strong> 鸿蒙使用的标准 C&#x2F;C++ 库是 musl，实现细节上与 Android 的 bionic 库有差别。这导致某些边缘函数行为和可用的 C++ 特性不同。比如前面提到的 C++20 ranges 在鸿蒙 NDK 不可用，而在 Android NDK（更贴近 GNU libstdc++ 实现）上可能就能正常使用。我们在适配过程中对此有所体会，但总体而言这些差异带来的修改工作量不大。社区维护的工具链（如 Xmake 等）已经对鸿蒙做了支持，让我们构建鸿蒙应用的体验与 Android 相差无几。</li>
+<li><strong>SDL2 官方支持度不同：</strong> Android 作为 SDL2 的重点支持平台，很多坑在社区多年使用中都被填平了；相对的，鸿蒙上的 SDL2 还不成熟，一些功能需要我们自己去完善。在本次移植稳定后，我们会向 SDL2 的鸿蒙版本提交补丁，修复音频格式和输入坐标等的问题。这些修复不仅让 Dora SSR 引擎运行更稳定，也为后续其它 SDL 应用适配鸿蒙提供了借鉴。可以预见，随着更多开发者尝试鸿蒙移植并反馈问题，SDL2 对鸿蒙的支持未来会更加健全。</li>
+</ul>
+<p>&emsp;&emsp;总体说来，Dora SSR 在鸿蒙的适配难度和 Android 相当。这也许也验证了此前宣传的一种说法：“如果你的应用良好地支持 Android，那迁移到 HarmonyOS 并不需要花太多功夫。” 我们的实践确实印证了这一点：借助良好的跨平台基座，开发者可以在较短时间内让应用登陆新系统。正如华为宣称的“两天适配一个 App”也许并非空穴来风，我们的引擎在新平台很快跑了起来。当然，更多细节上的调优和 bug 修复仍需花费更多时间，但主要框架在短时间内即告成型，这也是出乎我们预料的。</p>
+<img src="/DoraSSR%E5%BC%95%E6%93%8E%E5%8E%9F%E7%94%9F%E9%80%82%E9%85%8D%E9%B8%BF%E8%92%99%E7%9A%84%E6%95%85%E4%BA%8B/show1.png" srcset="/img/loading.gif" lazyload class="" title="show1">
+
+<img src="/DoraSSR%E5%BC%95%E6%93%8E%E5%8E%9F%E7%94%9F%E9%80%82%E9%85%8D%E9%B8%BF%E8%92%99%E7%9A%84%E6%95%85%E4%BA%8B/show2.png" srcset="/img/loading.gif" lazyload class="" title="show2">
+
+<h2 id="开源社区的协作与展望"><a href="#开源社区的协作与展望" class="headerlink" title="开源社区的协作与展望"></a>开源社区的协作与展望</h2><p>&emsp;&emsp;经过这段集中的攻关，我们成功让 Dora SSR 开源游戏引擎在鸿蒙 OS 上原生运行。从最初的疑虑到最终的验收，这次移植之旅充分体现了跨平台开发的威力和开源社区的合作精神。社区开发者们在 Dora 社区群实时分享进展、交流心得（本篇故事内容也来源于期间的开发日志交流片段），正是这样的群策群力使得诸多难题迎刃而解。在初接触鸿蒙系统短短不到一周的时间里，引擎从无法运行到基本功能完备，进度甚至超出了我们的预期。</p>
+<p>&emsp;&emsp;目前，Dora SSR 鸿蒙适配版本的源代码已经在 GitHub 上开源（地址：<a target="_blank" rel="noopener" href="https://github.com/IppClub/ohos_dora_ssr">ohos_dora_ssr</a>）。有兴趣的开发者可以访问项目仓库（<strong>IppClub&#x2F;ohos_dora_ssr</strong>）了解更多技术细节，甚至亲自编译运行体验。在未来，我们计划进一步完善对鸿蒙系统特性的支持，例如集成鸿蒙特有的互联能力，以及适配鸿蒙的输入法框架等。不仅如此，我们也希望借此机会吸引更多开发者参与，共同优化 Dora SSR 在鸿蒙上的性能和功能，实现更流畅的游戏开发体验。</p>
+<p>&emsp;&emsp;Dora SSR 引擎移植鸿蒙的成功，是开源社区合作与技术共享的新范例。这既为鸿蒙生态引入了新的游戏引擎选择，也为 Dora SSR 拓展了用户群体。一款真正跨平台的游戏引擎，就应该如这般在不同设备和系统上自由驰骋。展望未来，我们相信随着鸿蒙系统的成熟和社区的壮大，Dora SSR 也会在鸿蒙平台上大放异彩，驱动更多精彩的游戏和创意应用诞生！</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E6%B8%B8%E6%88%8F%E5%BC%80%E5%8F%91/" class="category-chain-item">游戏开发</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/DoraSSR/" class="print-no-link">#DoraSSR</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Dora SSR 引擎原生适配鸿蒙的故事</div>
+      <div>http://ippclub.github.io/DoraSSR引擎原生适配鸿蒙的故事/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>李瑾</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2025年8月21日</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>更新于</div>
+          <div>2026年4月16日</div>
+        </div>
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="NC - 非商业性使用">
+                    <i class="iconfont icon-cc-nc"></i>
+                  </span>
+                </a>
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="SA - 相同方式共享">
+                    <i class="iconfont icon-cc-sa"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/%E4%BB%8E%20NapCat%20%E7%9A%84%E9%87%8D%E5%A4%A7%E5%AE%89%E5%85%A8%E4%BA%8B%E6%95%85%E8%B0%88%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/" title="NcatBot系列软件重大安全事故回顾">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">NcatBot系列软件重大安全事故回顾</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/RustFFI/" title="Rust/C/JS FFI">
+                        <span class="hidden-mobile">Rust/C/JS FFI</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+  <div id="waline"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#waline', function() {
+      Fluid.utils.createCssLink('https://registry.npmmirror.com/@waline/client/2.15.8/files/dist/waline.css')
+      Fluid.utils.createScript('https://registry.npmmirror.com/@waline/client/2.15.8/files/dist/waline.js', function() {
+        var options = Object.assign(
+          {"serverURL":"https://waline.harkerhand.cn/","path":"window.location.pathname","meta":["nick","mail","link"],"requiredMeta":["nick"],"lang":"zh-CN","emoji":["https://cdn.jsdelivr.net/gh/walinejs/emojis/weibo","https://cdn.jsdelivr.net/gh/walinejs/emojis/tieba","https://cdn.jsdelivr.net/gh/walinejs/emojis/bmoji","https://cdn.jsdelivr.net/gh/walinejs/emojis/bilibili"],"dark":"html[data-user-color-scheme=\"dark\"]","wordLimit":0,"pageSize":10,"search":false,"reaction":true},
+          {
+            el: '#waline',
+            path: window.location.pathname
+          }
+        )
+        Waline.init(options);
+        Fluid.utils.waitElementVisible('#waline .vcontent', () => {
+          var imgSelector = '#waline .vcontent img:not(.vemoji)';
+          Fluid.plugins.imageCaption(imgSelector);
+          Fluid.plugins.fancyBox(imgSelector);
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

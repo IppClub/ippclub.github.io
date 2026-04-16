@@ -1,0 +1,790 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.ico">
+  <link rel="icon" href="/img/favicon.ico">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="李瑾">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="&emsp;&emsp;在这个被代码与算法重构的世界里，“开源”是一个被频繁提起却越来越模糊的词。它既是平台工程师口中的“最佳实践”，也是独立开发者夜以继日创作时的信仰灯塔。它出现在科技巨头的发布会上，也出现在地下论坛的讨论帖中。它是工具，是策略，是文化，也是抵抗。 &emsp;&emsp;我们站在这样一个历史的节点上，有必要重新问一句：我们所说的“开源”，到底是什么？ 开源的多重面貌&emsp;">
+<meta property="og:type" content="article">
+<meta property="og:title" content="开源的多重性与第三路径宣言">
+<meta property="og:url" content="http://ippclub.github.io/%E5%BC%80%E6%BA%90%E7%9A%84%E5%A4%9A%E9%87%8D%E6%80%A7%E4%B8%8E%E7%AC%AC%E4%B8%89%E8%B7%AF%E5%BE%84%E5%AE%A3%E8%A8%80/index.html">
+<meta property="og:site_name" content="I++ Club">
+<meta property="og:description" content="&emsp;&emsp;在这个被代码与算法重构的世界里，“开源”是一个被频繁提起却越来越模糊的词。它既是平台工程师口中的“最佳实践”，也是独立开发者夜以继日创作时的信仰灯塔。它出现在科技巨头的发布会上，也出现在地下论坛的讨论帖中。它是工具，是策略，是文化，也是抵抗。 &emsp;&emsp;我们站在这样一个历史的节点上，有必要重新问一句：我们所说的“开源”，到底是什么？ 开源的多重面貌&emsp;">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://ippclub.github.io/%E5%BC%80%E6%BA%90%E7%9A%84%E5%A4%9A%E9%87%8D%E6%80%A7%E4%B8%8E%E7%AC%AC%E4%B8%89%E8%B7%AF%E5%BE%84%E5%AE%A3%E8%A8%80/A_warm_and_powerful_anime-style_illustration_of_a_young.jpg">
+<meta property="article:published_time" content="2025-04-18T10:00:00.000Z">
+<meta property="article:modified_time" content="2026-04-16T03:07:22.292Z">
+<meta property="article:tag" content="IppClub">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://ippclub.github.io/%E5%BC%80%E6%BA%90%E7%9A%84%E5%A4%9A%E9%87%8D%E6%80%A7%E4%B8%8E%E7%AC%AC%E4%B8%89%E8%B7%AF%E5%BE%84%E5%AE%A3%E8%A8%80/A_warm_and_powerful_anime-style_illustration_of_a_young.jpg">
+  
+  
+  
+  <title>开源的多重性与第三路径宣言 - I++ Club</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"ippclub.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"always","icon":"#"},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>I++ Club</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/%E5%BC%80%E6%BA%90%E7%9A%84%E5%A4%9A%E9%87%8D%E6%80%A7%E4%B8%8E%E7%AC%AC%E4%B8%89%E8%B7%AF%E5%BE%84%E5%AE%A3%E8%A8%80/A_warm_and_powerful_anime-style_illustration_of_a_young.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="开源的多重性与第三路径宣言"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-author" aria-hidden="true"></i>
+        李瑾
+      </span>
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2025-04-18 18:00" pubdate>
+          2025年4月18日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          1.3k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          16 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar category-bar" style="margin-right: -1rem">
+    
+
+
+
+
+
+<div class="category-list">
+  
+  
+    
+    
+    
+    <div class="category row nomargin-x">
+      <a class="category-item 
+          list-group-item category-item-action col-10 col-md-11 col-xm-11" title="开源文化"
+        id="heading-31f5fddbe5d0992fd1c832780417d7fe" role="tab" data-toggle="collapse" href="#collapse-31f5fddbe5d0992fd1c832780417d7fe"
+        aria-expanded="true"
+      >
+        开源文化
+        <span class="list-group-count">(1)</span>
+        <i class="iconfont icon-arrowright"></i>
+      </a>
+      
+      <div class="category-collapse collapse show" id="collapse-31f5fddbe5d0992fd1c832780417d7fe"
+           role="tabpanel" aria-labelledby="heading-31f5fddbe5d0992fd1c832780417d7fe">
+        
+        
+          
+  <div class="category-post-list">
+    
+    
+      
+      
+        <a href="/%E5%BC%80%E6%BA%90%E7%9A%84%E5%A4%9A%E9%87%8D%E6%80%A7%E4%B8%8E%E7%AC%AC%E4%B8%89%E8%B7%AF%E5%BE%84%E5%AE%A3%E8%A8%80/" title="开源的多重性与第三路径宣言"
+           class="list-group-item list-group-item-action
+           active">
+          <span class="category-post">开源的多重性与第三路径宣言</span>
+        </a>
+      
+    
+  </div>
+
+        
+      </div>
+    </div>
+  
+</div>
+
+
+  </aside>
+
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">开源的多重性与第三路径宣言</h1>
+            
+              <p id="updated-time" class="note note-info" style="">
+                
+                  
+                    本文最后更新于 2026年4月16日 上午
+                  
+                
+              </p>
+            
+            
+              <div class="markdown-body">
+                
+                <p>&emsp;&emsp;在这个被代码与算法重构的世界里，“开源”是一个被频繁提起却越来越模糊的词。它既是平台工程师口中的“最佳实践”，也是独立开发者夜以继日创作时的信仰灯塔。它出现在科技巨头的发布会上，也出现在地下论坛的讨论帖中。它是工具，是策略，是文化，也是抵抗。</p>
+<p>&emsp;&emsp;我们站在这样一个历史的节点上，有必要重新问一句：<strong>我们所说的“开源”，到底是什么？</strong></p>
+<h2 id="开源的多重面貌"><a href="#开源的多重面貌" class="headerlink" title="开源的多重面貌"></a>开源的多重面貌</h2><p>&emsp;&emsp;开源的诞生，源于自由软件运动对封闭技术权力的反叛，它最初是一种关于“使用权、学习权、修改权和分享权”的承诺。然而随着技术逐渐成为主导世界的新秩序，“开源”这个词也在不同的语境中长出了不同的面孔。</p>
+<p>&emsp;&emsp;在大公司手中，开源是一种战略。它可以构建生态、吸引开发者、降低研发成本、压制竞争对手。React、TensorFlow、Kubernetes，这些被成百上千人贡献的明星项目背后，是由公司制定路线图、审核 PR、决定最终方向的专业团队。我们不能否认这些项目在推动技术进步上的作用，但也必须承认：<strong>这是一种高度组织化、中心化的开源</strong>。</p>
+<p>&emsp;&emsp;与此同时，在无数没有聚光灯的小角落里，另一种开源也在悄然成长。那是学生宿舍里不眠的夜晚，是打工人用碎片时间构建的工具，是社区成员互相提问、互相回答、互相鼓励的温暖。这些项目或许没有千星万 fork，但它们是真正以兴趣驱动、以信任维系、以共享为核心的存在。它们是<strong>草根型开源</strong>，是我们更愿意称之为真正“开源文化”的所在。</p>
+<h2 id="劳动的两种衡量方式"><a href="#劳动的两种衡量方式" class="headerlink" title="劳动的两种衡量方式"></a>劳动的两种衡量方式</h2><p>&emsp;&emsp;在现有的资本主义逻辑中，人的劳动价值被资产占有与利润回报衡量。你的代码是否盈利、是否能让企业省钱、是否“不可替代”，成为你“价值”的标尺。但在许多草根开源项目中，另一个世界正在被构筑：</p>
+<p>&emsp;&emsp;在这里，一个好用的命令行工具，一段通俗的文档，一个用心回答的 issue，都被珍视。你不是一个可以被替代的齿轮，而是一个为世界带来便利的人。</p>
+<p>&emsp;&emsp;这是一种新的劳动价值观：</p>
+<blockquote>
+<p><strong>价值不是由你能占有多少资产决定，而是由你为他人创造了多少真实的帮助所决定。</strong></p>
+</blockquote>
+<p>&emsp;&emsp;它不依赖于市场，也不需要 KPI，而是在协作网络中彼此认同，在创作中彼此照亮。</p>
+<h2 id="第三路径：既非“反商业”，也非“被利用”"><a href="#第三路径：既非“反商业”，也非“被利用”" class="headerlink" title="第三路径：既非“反商业”，也非“被利用”"></a>第三路径：既非“反商业”，也非“被利用”</h2><p>&emsp;&emsp;我们并不否认企业型开源的技术价值，也不排斥合理的商业模式。我们拒绝的，是那种打着开源旗号攫取社区热情与免费劳动力，却不愿放下控制权的伪社区化行为。</p>
+<p>&emsp;&emsp;我们也不幻想乌托邦式的“技术即解放”。我们清楚地知道，自由不是从天而降，而是在自发连接、共同创作中长出来的。</p>
+<p>&emsp;&emsp;因此，我们主张一条第三路径：</p>
+<ul>
+<li>它是<strong>去中心化的协作网络</strong>，但不拒绝组织；</li>
+<li>它是<strong>价值驱动的创作共识</strong>，而非由利润驱动的内卷；</li>
+<li>它是<strong>温暖而自由的文化土壤</strong>，而非冷冰冰的工具集散地；</li>
+<li>它相信，真正持久的开源，是人与人之间建立的信任，而不是许可证条款上的条目。</li>
+</ul>
+<h2 id="开源的未来，需要更多“非传统者”"><a href="#开源的未来，需要更多“非传统者”" class="headerlink" title="开源的未来，需要更多“非传统者”"></a>开源的未来，需要更多“非传统者”</h2><p>&emsp;&emsp;我们看到越来越多的年轻人、打工人、学生、自由职业者，正在加入这条不被主流资本青睐的道路。他们不是“传统程序员”，却用自己的方式，在博客、播客、游戏、动漫、贴纸和创作中表达技术的另一种美学。</p>
+<p>&emsp;&emsp;这是“非传统者”的时代。 他们在边缘，却创造着新的中心； 他们在沉默中发光，却最终被世界看到。</p>
+<h2 id="我们的宣言"><a href="#我们的宣言" class="headerlink" title="我们的宣言"></a>我们的宣言</h2><p>&emsp;&emsp;我们写下这些文字，不是为了划分敌我，而是为了找回初心。 不是为了批判谁的开源“不够纯粹”，而是为了提醒我们自己：<strong>真正有力量的开源，是文化，是精神，是连接彼此的信念。</strong></p>
+<p>&emsp;&emsp;我们愿意为这种信念继续劳动、创作、聚集、分享。 因为我们知道，未来的文明，也许就从这些不起眼的小项目、小代码、小故事中生长出来。</p>
+<p>&emsp;&emsp;让我们共同走在这条路上，不快，但坚定。</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E5%BC%80%E6%BA%90%E6%96%87%E5%8C%96/" class="category-chain-item">开源文化</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/IppClub/" class="print-no-link">#IppClub</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>开源的多重性与第三路径宣言</div>
+      <div>http://ippclub.github.io/开源的多重性与第三路径宣言/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>李瑾</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2025年4月18日</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>更新于</div>
+          <div>2026年4月16日</div>
+        </div>
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="NC - 非商业性使用">
+                    <i class="iconfont icon-cc-nc"></i>
+                  </span>
+                </a>
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="SA - 相同方式共享">
+                    <i class="iconfont icon-cc-sa"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/Dora-SSR-x-AI-x-Blockly-%E4%BD%8E%E7%A7%91%E6%8A%80%E5%92%8C%E9%AB%98%E7%A7%91%E6%8A%80%E7%9A%84%E7%A2%B0%E6%92%9E/" title="Dora SSR x AI x Blockly 低科技和高科技的碰撞">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Dora SSR x AI x Blockly 低科技和高科技的碰撞</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/Makefile%E7%9A%84%E4%BD%BF%E7%94%A8%E6%96%B9%E6%B3%95/" title="Makefile 的食用方法">
+                        <span class="hidden-mobile">Makefile 的食用方法</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+  <div id="waline"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#waline', function() {
+      Fluid.utils.createCssLink('https://registry.npmmirror.com/@waline/client/2.15.8/files/dist/waline.css')
+      Fluid.utils.createScript('https://registry.npmmirror.com/@waline/client/2.15.8/files/dist/waline.js', function() {
+        var options = Object.assign(
+          {"serverURL":"https://waline.harkerhand.cn/","path":"window.location.pathname","meta":["nick","mail","link"],"requiredMeta":["nick"],"lang":"zh-CN","emoji":["https://cdn.jsdelivr.net/gh/walinejs/emojis/weibo","https://cdn.jsdelivr.net/gh/walinejs/emojis/tieba","https://cdn.jsdelivr.net/gh/walinejs/emojis/bmoji","https://cdn.jsdelivr.net/gh/walinejs/emojis/bilibili"],"dark":"html[data-user-color-scheme=\"dark\"]","wordLimit":0,"pageSize":10,"search":false,"reaction":true},
+          {
+            el: '#waline',
+            path: window.location.pathname
+          }
+        )
+        Waline.init(options);
+        Fluid.utils.waitElementVisible('#waline .vcontent', () => {
+          var imgSelector = '#waline .vcontent img:not(.vemoji)';
+          Fluid.plugins.imageCaption(imgSelector);
+          Fluid.plugins.fancyBox(imgSelector);
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

@@ -1,0 +1,907 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.ico">
+  <link rel="icon" href="/img/favicon.ico">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="这次写一下关于Swift中AnyClass的使用以及动态类型的实例化和使用场景  AnyClass与AnyObjectSwift中，任何自定义的对象都是AnyObject的子类，类似于Java的Object类（但注意，这和Objective-C的NSObject不同，后者在Swift中是专门的UIKit或者AppKit框架里面定义的类型，而非语言所规定的类型）  AnyClassThe prot">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Swift之AnyClass与动态类型">
+<meta property="og:url" content="http://ippclub.github.io/Swift%E4%B9%8BAnyClass%E4%B8%8E%E5%8A%A8%E6%80%81%E7%B1%BB%E5%9E%8B/index.html">
+<meta property="og:site_name" content="I++ Club">
+<meta property="og:description" content="这次写一下关于Swift中AnyClass的使用以及动态类型的实例化和使用场景  AnyClass与AnyObjectSwift中，任何自定义的对象都是AnyObject的子类，类似于Java的Object类（但注意，这和Objective-C的NSObject不同，后者在Swift中是专门的UIKit或者AppKit框架里面定义的类型，而非语言所规定的类型）  AnyClassThe prot">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2015-12-26T14:11:35.000Z">
+<meta property="article:modified_time" content="2026-04-16T03:07:22.226Z">
+<meta property="article:tag" content="Swift">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>Swift之AnyClass与动态类型 - I++ Club</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"ippclub.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"always","icon":"#"},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>I++ Club</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/mainbg.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Swift之AnyClass与动态类型"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2015-12-26 22:11" pubdate>
+          2015年12月26日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          1.2k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          16 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar category-bar" style="margin-right: -1rem">
+    
+
+
+
+
+
+<div class="category-list">
+  
+  
+    
+    
+    
+    <div class="category row nomargin-x">
+      <a class="category-item 
+          list-group-item category-item-action col-10 col-md-11 col-xm-11" title="未分类"
+        id="heading-ecf7ebb59328ebf2369ce693a2423566" role="tab" data-toggle="collapse" href="#collapse-ecf7ebb59328ebf2369ce693a2423566"
+        aria-expanded="true"
+      >
+        未分类
+        <span class="list-group-count">(13)</span>
+        <i class="iconfont icon-arrowright"></i>
+      </a>
+      
+      <div class="category-collapse collapse show" id="collapse-ecf7ebb59328ebf2369ce693a2423566"
+           role="tabpanel" aria-labelledby="heading-ecf7ebb59328ebf2369ce693a2423566">
+        
+        
+          
+  <div class="category-post-list">
+    
+    
+      
+      
+        <a href="/C-%E7%9A%84%E4%B8%89%E7%A7%8D%E5%AE%9E%E7%8E%B0%E6%8E%A5%E5%8F%A3%E7%9A%84%E6%96%B9%E5%BC%8F/" title="C++ 的三种实现接口的方式"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">C++ 的三种实现接口的方式</span>
+        </a>
+      
+    
+      
+      
+        <a href="/I-Club/" title="I++俱乐部"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">I++俱乐部</span>
+        </a>
+      
+    
+      
+      
+        <a href="/Implementing-an-unique-ptr/" title="Implementing an unique_ptr"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">Implementing an unique_ptr</span>
+        </a>
+      
+    
+      
+      
+        <a href="/Random-Binary-Search-Tree-Treap/" title="Random Binary Search Tree - Treap"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">Random Binary Search Tree - Treap</span>
+        </a>
+      
+    
+      
+      
+        <a href="/React-Native-%E4%B8%8B%E4%B8%80%E4%BB%A3UI%E5%BC%80%E5%8F%91%E6%80%9D%E7%BB%B4/" title="React-Native -- 下一代UI开发思维"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">React-Native -- 下一代UI开发思维</span>
+        </a>
+      
+    
+      
+      
+        <a href="/Swift%E4%B9%8BAnyClass%E4%B8%8E%E5%8A%A8%E6%80%81%E7%B1%BB%E5%9E%8B/" title="Swift之AnyClass与动态类型"
+           class="list-group-item list-group-item-action
+           active">
+          <span class="category-post">Swift之AnyClass与动态类型</span>
+        </a>
+      
+    
+      
+      
+        <a href="/mongo-%E6%BA%90%E7%A0%81%E9%98%85%E8%AF%BB%E6%84%9F%E6%82%9F%EF%BC%88%E4%B8%80%EF%BC%89/" title="mongo 源码阅读感悟（一）"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">mongo 源码阅读感悟（一）</span>
+        </a>
+      
+    
+      
+      
+        <a href="/%E5%85%B3%E4%BA%8E-Redis-3-0-%E4%B8%AD%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" title="关于 Redis 3.0 中的数据结构"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">关于 Redis 3.0 中的数据结构</span>
+        </a>
+      
+    
+      
+      
+        <a href="/%E5%85%B3%E4%BA%8E-boost-noncopyable-%E7%9A%84%E4%B8%80%E7%82%B9%E6%80%9D%E8%80%83/" title="关于 boost::noncopyable 的一点思考"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">关于 boost::noncopyable 的一点思考</span>
+        </a>
+      
+    
+      
+      
+        <a href="/%E6%88%91%E5%AF%B9C-%E7%9A%84%E7%BC%96%E7%A8%8B%E6%80%9D%E8%80%83/" title="我对C++的编程思考"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">我对C++的编程思考</span>
+        </a>
+      
+    
+      
+      
+        <a href="/%E6%8F%90%E4%BA%A4%E6%96%87%E7%AB%A0%E6%A0%BC%E5%BC%8F%E8%A6%81%E6%B1%82/" title="提交文章格式要求"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">提交文章格式要求</span>
+        </a>
+      
+    
+      
+      
+        <a href="/%E7%94%A8-C-%E5%86%99%E4%B8%80%E4%B8%AA-Inet4Address-%E7%B1%BB/" title="用 C++ 写一个 Inet4Address 类"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">用 C++ 写一个 Inet4Address 类</span>
+        </a>
+      
+    
+      
+      
+        <a href="/%E8%AF%BB-leveldb-%E7%9A%84%E6%84%9F%E6%82%9F-%EF%BC%9ACache%E7%9A%84%E8%AE%BE%E8%AE%A1/" title="读 leveldb 的感悟 ：Cache的设计"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">读 leveldb 的感悟 ：Cache的设计</span>
+        </a>
+      
+    
+  </div>
+
+        
+      </div>
+    </div>
+  
+</div>
+
+
+  </aside>
+
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">Swift之AnyClass与动态类型</h1>
+            
+              <p id="updated-time" class="note note-info" style="">
+                
+                  
+                    本文最后更新于 2026年4月16日 上午
+                  
+                
+              </p>
+            
+            
+              <div class="markdown-body">
+                
+                <blockquote>
+<p>这次写一下关于Swift中AnyClass的使用以及动态类型的实例化和使用场景</p>
+</blockquote>
+<h1 id="AnyClass与AnyObject"><a href="#AnyClass与AnyObject" class="headerlink" title="AnyClass与AnyObject"></a>AnyClass与AnyObject</h1><p>Swift中，任何自定义的对象都是<code>AnyObject</code>的子类，类似于Java的Object类（但注意，这和Objective-C的NSObject不同，后者在Swift中是专门的UIKit或者AppKit框架里面定义的类型，而非语言所规定的类型）</p>
+<blockquote>
+<p>AnyClass<br>The protocol to which all class types implicitly conform.</p>
+</blockquote>
+<p>Declaration</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs swift"><span class="hljs-keyword">typealias</span> <span class="hljs-type">AnyClass</span> <span class="hljs-operator">=</span> <span class="hljs-type">AnyObject</span>.<span class="hljs-keyword">Type</span><br></code></pre></td></tr></table></figure>
+
+<blockquote>
+<p>AnyObject</p>
+</blockquote>
+<p>protocol AnyObject { … }</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs swift"><span class="hljs-type">The</span> <span class="hljs-keyword">protocol</span> <span class="hljs-title class_">to</span> which all classes implicitly conform.<br></code></pre></td></tr></table></figure>
+
+<p>但是注意，这个AnyObject.Type是一个毕竟是一个接口的Property，所以只能在函数的参数里面使用，如果想要直接获取某个类（而非实例）的类型，使用类名.self即可；如果想要获取一个实例的类的类型，使用.dynamicType；对了，如果对象是NSObject的实例（iOS开发中常用），用classForCoder也是一个选择</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs ruby"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Test</span> &#123;&#125;<br>func f(<span class="hljs-symbol">s:</span> <span class="hljs-title class_">AnyClass</span>) &#123;<br>    print(s)<br>&#125;<br>let a = <span class="hljs-title class_">Test</span>.<span class="hljs-variable language_">self</span><br>let b = <span class="hljs-title class_">Test</span>().dynamicType<br>let <span class="hljs-symbol">c:</span><span class="hljs-title class_">AnyClass</span> = <span class="hljs-string">&quot;test&quot;</span>.classForCoder /<span class="hljs-regexp">/注意此时加了classForCoder的方法调用，编译器会推导出&quot;&quot;是一个NSString的实例而不是String</span><br><span class="hljs-regexp">f(a) /</span><span class="hljs-regexp">/Test</span><br><span class="hljs-regexp">f(b) /</span><span class="hljs-regexp">/Test</span><br><span class="hljs-regexp">f(c) /</span><span class="hljs-regexp">/NSString</span><br></code></pre></td></tr></table></figure>
+
+<h1 id="动态实例化"><a href="#动态实例化" class="headerlink" title="动态实例化"></a>动态实例化</h1><p>既然我们有了某个AnyObject的Type，这样我们就可以直接构造出一个类型的实例。使用AnyObject都有的.init方法即可，当然，AnyObject本身并没有init的构造方法……不过首先，我们得改写Test类的init初始化方法，在前面加上required关键字</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs ruby"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Test</span> &#123;<br>	required init()&#123;&#125;<br>&#125;<br>let d = a.init() /<span class="hljs-regexp">/ d is an instance of Test</span><br><span class="hljs-regexp">let e = (c as! NSString.Type).init(stringLiteral: &quot;test&quot;) /</span><span class="hljs-regexp">/ e is &quot;test&quot;</span><br></code></pre></td></tr></table></figure>
+
+<p>当然，你也许肯定奇怪那个required的init是什么意思，其实这是Swift编译器为了避免出现你使用的这个Test.Type有继承的子类，然后子类的构造函数中使用了这个Type来构造父类这种边界情况出现（考虑的真细……）</p>
+<blockquote>
+<p>Use an initializer expression to construct an instance of a type from that type’s metatype value. For class instances, the initializer that’s called must be marked with the required keyword or the entire class marked with the final keyword.</p>
+</blockquote>
+<p>而且对于一个Protocol，可以用.Protocol来获取这个Protocol的类型（还是AnyClass），也可以用self来统一处理，因为实际上</p>
+<p><code>metatype-type(.self) -&gt; type.Type | type.Protocol</code></p>
+<p>这样的话，有了动态就可以开始干活了</p>
+<h1 id="Swift的反射"><a href="#Swift的反射" class="headerlink" title="Swift的反射"></a>Swift的反射</h1><p>或许你也想，既然我有了动态的类型实例，那么是不是能通过类似Java的反射，获取某个类型的所有Property，然后直接访问这个Property呢？答案也是有的，不过在Swift中很少用到，这里用到到了Mirror</p>
+<blockquote>
+<p>struct Mirror { … }<br>Representation of the sub-structure and optional “display style” of any arbitrary subject instance.</p>
+</blockquote>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs ruby"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Person</span> &#123;<br>    var <span class="hljs-symbol">whatThisProperty:</span><span class="hljs-title class_">String</span><br>    init(<span class="hljs-symbol">name:</span><span class="hljs-title class_">String</span>) &#123;<br>        <span class="hljs-variable language_">self</span>.whatThisProperty = name<br>    &#125;<br>&#125;<br>let p = <span class="hljs-title class_">Person</span>(<span class="hljs-symbol">name:</span> <span class="hljs-string">&quot;Bob&quot;</span>)<br>let mirror = <span class="hljs-title class_">Mirror</span>(<span class="hljs-symbol">reflecting:</span> p)<br>mirror.children.forEach &#123;<br>    print(<span class="hljs-string">&quot;\($0.label!): \($0.value)&quot;</span>) /<span class="hljs-regexp">/ whatThisProperty: Bob</span><br><span class="hljs-regexp">&#125;</span><br></code></pre></td></tr></table></figure>
+
+<p>这里的children返回的是一个AnyForwardCollection，也是可以像数组一般用index来访问或者forEach遍历的，不过索引顺是序按照你的Property的声明顺序</p>
+<h1 id="最后的小应用"><a href="#最后的小应用" class="headerlink" title="最后的小应用"></a>最后的小应用</h1><p>由于我也不怎么会写iOS，有时候遇到这样一种情况：<br>我提供了一个3D Touch的按钮，四个按钮会对应四种ViewController，iOS提供的API可以获取到用户点击的那个按钮对应的设置的一个字符串值，那么，我可以这样来玩……</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs ruby">/<span class="hljs-regexp">/ 3D Touch 传入的字符串来判断返回某个ViewController</span><br><span class="hljs-regexp">static func shortcutToViewController(type:String) -&gt; UIViewController.Type &#123;</span><br><span class="hljs-regexp">    switch type &#123;</span><br><span class="hljs-regexp">    case &quot;pe&quot;:</span><br><span class="hljs-regexp">        return RunningViewController.self</span><br><span class="hljs-regexp">    case &quot;curriculum&quot;:</span><br><span class="hljs-regexp">        return CurriculumViewController.self</span><br><span class="hljs-regexp">    case &quot;card&quot;:</span><br><span class="hljs-regexp">        return SeuCardViewController.self</span><br><span class="hljs-regexp">    case &quot;nic&quot;:</span><br><span class="hljs-regexp">        return NicViewController.self</span><br><span class="hljs-regexp">    default: return UIViewController.self</span><br><span class="hljs-regexp">    &#125;</span><br><span class="hljs-regexp">&#125;</span><br></code></pre></td></tr></table></figure>
+
+<p>这是用来判断字符串来产生对应的ViewController.Type的，然后，在真正需要实例化一个新的ViewController来显示一个View的时候，再实例化</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs ruby">func pushToViewController(<span class="hljs-symbol">vc:</span> <span class="hljs-title class_">UIViewController</span>.<span class="hljs-title class_">Type</span>) &#123;<br>    <span class="hljs-regexp">//</span> 确保要显示的<span class="hljs-title class_">ViewController</span>不是顶层显示的<span class="hljs-title class_">ViewController</span><br>    guard let duplication = navigationController?.topViewController?.isKindOfClass(vc) <span class="hljs-keyword">else</span> &#123; <span class="hljs-keyword">return</span> &#125;<br>    <span class="hljs-keyword">if</span> duplication &#123; <span class="hljs-regexp">//</span> 检查失败，重复的<span class="hljs-title class_">ViewController</span>，不需要跳转<br>        <span class="hljs-keyword">return</span><br>    &#125;<br>    let viewController = vc.init(<span class="hljs-symbol">nibName:</span> <span class="hljs-string">&quot;\(vc.classForCoder())&quot;</span>, <span class="hljs-symbol">bundle:</span> <span class="hljs-literal">nil</span>) /<span class="hljs-regexp">/ 初始化ViewController</span><br><span class="hljs-regexp">    navigationController?.pushViewController(viewController, animated: true)</span><br><span class="hljs-regexp">&#125;</span><br></code></pre></td></tr></table></figure>
+
+<p>这也是一种比较奇怪的方式……不过如果不这样，就会导致在主类和上层里面引入过多的Switch Case或者导致代码中出现纯字符串定义的nibName，这对以后重构非常不利。</p>
+<h1 id="结束语"><a href="#结束语" class="headerlink" title="结束语"></a>结束语</h1><p>嗯，好久没写东西了……主要最近在学编译原理，之后会有几篇讲解通过Java实现一个简单的支持CFG的Yacc(误)的东西……顺便就当复习编译原理的Parser部分了。</p>
+<p>Swift如今开源了：<a target="_blank" rel="noopener" href="https://github.com/apple/swift">Swift</a>，不到几天Star就超过了2年出头的Rust(lol)……现如今Star也到了2W5的程度</p>
+<p>虽然UIKit和AppKit这种宝贵的财富Apple肯定不会开源，不过Swift标准库的实现也是越来越完善，而且也有Linux的版本，很多第三方的库开始加入了对Linux的支持（非面向iOS和OS X开发的，比如对SQLite，Redis的wrapper）</p>
+<p>Swift作为一个Rust的对手，一个完全抛弃了C的现代语言，之后在除客户端开发外，更可能的领域就是系统编程和服务端编程了吧。希望能够在在安全性，易用性，效率上达到一个更大的高度，让我们这种开发者也能用的爽，用的顺。</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E6%9C%AA%E5%88%86%E7%B1%BB/" class="category-chain-item">未分类</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/Swift/" class="print-no-link">#Swift</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Swift之AnyClass与动态类型</div>
+      <div>http://ippclub.github.io/Swift之AnyClass与动态类型/</div>
+    </div>
+    <div class="license-meta">
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2015年12月26日</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>更新于</div>
+          <div>2026年4月16日</div>
+        </div>
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="NC - 非商业性使用">
+                    <i class="iconfont icon-cc-nc"></i>
+                  </span>
+                </a>
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="SA - 相同方式共享">
+                    <i class="iconfont icon-cc-sa"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/C-%E7%9A%84%E4%B8%89%E7%A7%8D%E5%AE%9E%E7%8E%B0%E6%8E%A5%E5%8F%A3%E7%9A%84%E6%96%B9%E5%BC%8F/" title="C++ 的三种实现接口的方式">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">C++ 的三种实现接口的方式</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/%E6%88%91%E5%AF%B9C-%E7%9A%84%E7%BC%96%E7%A8%8B%E6%80%9D%E8%80%83/" title="我对C++的编程思考">
+                        <span class="hidden-mobile">我对C++的编程思考</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+  <div id="waline"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#waline', function() {
+      Fluid.utils.createCssLink('https://registry.npmmirror.com/@waline/client/2.15.8/files/dist/waline.css')
+      Fluid.utils.createScript('https://registry.npmmirror.com/@waline/client/2.15.8/files/dist/waline.js', function() {
+        var options = Object.assign(
+          {"serverURL":"https://waline.harkerhand.cn/","path":"window.location.pathname","meta":["nick","mail","link"],"requiredMeta":["nick"],"lang":"zh-CN","emoji":["https://cdn.jsdelivr.net/gh/walinejs/emojis/weibo","https://cdn.jsdelivr.net/gh/walinejs/emojis/tieba","https://cdn.jsdelivr.net/gh/walinejs/emojis/bmoji","https://cdn.jsdelivr.net/gh/walinejs/emojis/bilibili"],"dark":"html[data-user-color-scheme=\"dark\"]","wordLimit":0,"pageSize":10,"search":false,"reaction":true},
+          {
+            el: '#waline',
+            path: window.location.pathname
+          }
+        )
+        Waline.init(options);
+        Fluid.utils.waitElementVisible('#waline .vcontent', () => {
+          var imgSelector = '#waline .vcontent img:not(.vemoji)';
+          Fluid.plugins.imageCaption(imgSelector);
+          Fluid.plugins.fancyBox(imgSelector);
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

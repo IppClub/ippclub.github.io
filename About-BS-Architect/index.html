@@ -1,0 +1,750 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.ico">
+  <link rel="icon" href="/img/favicon.ico">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="huan-yp">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="B&#x2F;S 架构，即浏览器&#x2F;服务器（Browser&#x2F;Server）架构，是一种现在最常见的软件架构模式。它通过浏览器作为客户端，与服务器进行交互，实现数据的展示和处理。 前端前端即 Browser（浏览器）。可以认为由 HTML、CSS 和 JavaScript 三大部分组成。 HTML 定义了网页的结构和内容（有什么），CSS 用于定义网页的样式和布局（长什么样），Ja">
+<meta property="og:type" content="article">
+<meta property="og:title" content="漫谈 B&#x2F;S 架构">
+<meta property="og:url" content="http://ippclub.github.io/About-BS-Architect/index.html">
+<meta property="og:site_name" content="I++ Club">
+<meta property="og:description" content="B&#x2F;S 架构，即浏览器&#x2F;服务器（Browser&#x2F;Server）架构，是一种现在最常见的软件架构模式。它通过浏览器作为客户端，与服务器进行交互，实现数据的展示和处理。 前端前端即 Browser（浏览器）。可以认为由 HTML、CSS 和 JavaScript 三大部分组成。 HTML 定义了网页的结构和内容（有什么），CSS 用于定义网页的样式和布局（长什么样），Ja">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://ippclub.github.io/About-BS-Architect/1.png">
+<meta property="article:published_time" content="2025-12-12T07:47:24.000Z">
+<meta property="article:modified_time" content="2026-04-16T03:07:22.146Z">
+<meta property="article:tag" content="网络">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://ippclub.github.io/About-BS-Architect/1.png">
+  
+  
+  
+  <title>漫谈 B/S 架构 - I++ Club</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"ippclub.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"always","icon":"#"},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>I++ Club</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/mainbg.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="漫谈 B/S 架构"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-author" aria-hidden="true"></i>
+        huan-yp
+      </span>
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2025-12-12 15:47" pubdate>
+          2025年12月12日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          1.7k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          22 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar category-bar" style="margin-right: -1rem">
+    
+
+
+
+
+
+<div class="category-list">
+  
+  
+</div>
+
+
+  </aside>
+
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">漫谈 B/S 架构</h1>
+            
+              <p id="updated-time" class="note note-info" style="">
+                
+                  
+                    本文最后更新于 2026年4月16日 上午
+                  
+                
+              </p>
+            
+            
+              <div class="markdown-body">
+                
+                <p>B&#x2F;S 架构，即浏览器&#x2F;服务器（Browser&#x2F;Server）架构，是一种现在最常见的软件架构模式。它通过<strong>浏览器作为客户端</strong>，与服务器进行交互，实现数据的展示和处理。</p>
+<h2 id="前端"><a href="#前端" class="headerlink" title="前端"></a>前端</h2><p>前端即 Browser（浏览器）。可以认为由 <code>HTML</code>、<code>CSS</code> 和 <code>JavaScript</code> 三大部分组成。</p>
+<p><code>HTML</code> 定义了网页的<strong>结构和内容</strong>（有什么），<code>CSS</code> 用于定义网页的<strong>样式和布局</strong>（长什么样），<code>JavaScript</code> 则负责网页的<strong>交互和动态效果</strong>（能做什么）。</p>
+<p><code>JavaScript</code> 可以操作 <code>HTML</code> 和 <code>CSS</code>，以便实现网页的<strong>动态效果</strong>和<strong>数据变化</strong>；可以控制读取 <code>HTML</code> 元素中的（用户输入的）内容，以便实现与<strong>用户的交互</strong>；可以发起网络请求，与<strong>服务器</strong>进行数据交换。</p>
+<p>举个例子，当你给一个帖子点赞时，你的输入（点击点赞按钮）的动作被 <code>JavaScript</code> 捕获，它操作 <code>CSS</code> 元素改变按钮的样式表示已点赞（通常是深蓝色）。</p>
+<p><em>同时也会发起一个网络请求将点赞信息发送到服务器。</em></p>
+<p>再举个例子，当你查看一个帖子的评论时（通常是往下滚），<code>JavaScript</code> 能检测到这个动作，并发起一个网络请求从服务器获取评论数据。获得数据后动态去修改页面上的 <code>HTML</code> 元素将评论内容显示在页面上。</p>
+<p><img src="https://ghfast.top/https://raw.githubusercontent.com/huan-yp/image_space/master/img/202512121441170.png" srcset="/img/loading.gif" lazyload alt="image-20251212144120965"></p>
+<h3 id="前端框架"><a href="#前端框架" class="headerlink" title="前端框架"></a>前端框架</h3><p>理论上只需要编写这三块就能完成前端。但是，实际开发中，我们多用 <code>Vue</code>, <code>React</code> 等<strong>前端框架</strong>来开发。</p>
+<p>这些框架提供了很多<strong>封装好的组件</strong>和<strong>工具函数</strong>，并定义了一套可拓展性很好的架构，使用它们可以大大提高前端开发效率。</p>
+<p>使用前端框架编写的前端程序，通常需要经过<strong>编译打包</strong>，生成浏览器能直接运行的 <code>HTML</code>、<code>CSS</code> 和 <code>JavaScript</code> 文件。</p>
+<h2 id="后端"><a href="#后端" class="headerlink" title="后端"></a>后端</h2><p>严格意义上，后端是 “内容服务” 和 “应用服务” 的总和。这里的 “xx服务” 指一个运行在某台物理机器上的<strong>程序</strong>，不妨叫它 “后端程序”。</p>
+<p>后端的开发比较自由，只要能监听和处理 HTTP 请求，就可以用任何编程语言和框架来实现。</p>
+<h3 id="网络请求和端口"><a href="#网络请求和端口" class="headerlink" title="网络请求和端口"></a>网络请求和端口</h3><p>在计算机网络中，常以 “IP 地址” 来区分不同的机器，而以 “端口号” 来区分同一台机器上的不同服务。</p>
+<p>一个后端程序需要<strong>监听</strong>一个端口号，以便接收和处理网络请求。</p>
+<p>一个网络请求通常需要包含三个要素：目标机器的 IP 地址、目标机器的端口号、请求的数据内容。</p>
+<p>前端（浏览器）发送网络请求后，数据包经过互联网传输到达目标机器，目标机器的<strong>操作系统</strong>根据端口号将请求数据交给对应的后端程序处理。如果后端程序有<strong>响应数据包</strong>，那么会向前端回传响应数据包。回传数据包的过程和发送请求数据包的过程类似。</p>
+<details>  
+<summary>一张快递单看完整 HTTP 旅程（点击展开）</summary>  
+
+<ol>
+<li><strong>应用层</strong>填单：<strong>浏览器</strong>把“GET &#x2F;index.html”当成货物（<strong>请求数据</strong>），意思是“请把首页发给我”。  </li>
+<li><strong>传输层</strong>打包：<strong>浏览器</strong>通过快递小哥（<strong>操作系统</strong>）提供的物流 APP（<strong>套接字接口</strong>），委托物流公司（<strong>TCP 协议传输层</strong>）来运送货物。浏览器会在物流 APP 上填写目标小区名字（<strong>目的地 IP</strong>）和门牌号（<strong>目的端口</strong>）。  </li>
+<li><strong>操作系统</strong>打包贴单：快递小哥给包裹贴上“始发地址:本机 IP（ + 临时端口”和“目的地址:服务器 IP + 端口”，然后扔进小区（<strong>物理机器</strong>）的快递网点（<strong>网卡</strong>）。  </li>
+<li><strong>路由器</strong>中转站：城市转运中心（<strong>家用路由器</strong>）只看“服务器 IP”（目标小区名字）字段，查<strong>路由表</strong>决定走哪条高速；随后每到一个新转运中心（路由器）都重复这一动作，直到包裹抵达目标城市的转运中心。  </li>
+<li>签收与分拣：目标机器的<strong>网卡</strong>签收包裹，操作系统按“<strong>目的端口</strong>”分拣，把包裹交给正在该端口“蹲守”的<strong>后端程序</strong>进程。  </li>
+<li>后端回货：<strong>后端程序</strong>拆开包裹，处理请求，再生成新的响应包裹（HTML 页面），按原路回寄，只是收发地址对调。  </li>
+<li>浏览器收件：浏览器收到响应包裹，拆开展示，页面渲染完成。</li>
+</ol>
+<p><em>这里省略了数据链路层的交互逻辑，不完全过程不完全准确。</em></p>
+</details>
+
+<h3 id="内容服务器"><a href="#内容服务器" class="headerlink" title="内容服务器"></a>内容服务器</h3><p>内容服务器一般用于提供一些<strong>静态资源</strong>；例如访问一个网站时，必须要先请求这个网站的前端程序（<code>HTML</code>、<code>CSS</code>、<code>JavaScript</code> 文件），这些文件通常存放在内容服务器上。</p>
+<p>获取到前端程序后，浏览器会解析并运行这些程序，从而实现网页的展示和交互。</p>
+<p>一些图片资源等，也放在内容服务器上。</p>
+<h3 id="应用服务器"><a href="#应用服务器" class="headerlink" title="应用服务器"></a>应用服务器</h3><p>应用服务器用于处理<strong>本网站的前端程序</strong>发起的各种请求，例如获取数据、提交数据等。</p>
+<p>当然，应用服务器和内容服务器可以是<strong>同一个后端程序提供</strong>。</p>
+<p>设计应用服务器时，务必注意<strong>鉴权</strong>问题，只能允许<strong>合法的用户</strong>以<strong>合法的方式</strong>访问<strong>合法的数据</strong>。</p>
+<h3 id="跨域资源请求"><a href="#跨域资源请求" class="headerlink" title="跨域资源请求"></a>跨域资源请求</h3><p>浏览器出于安全考虑，通常会限制前端程序<strong>向协议、域名或端口不一致</strong>的服务器发起请求，这种限制称为“同源策略”。</p>
+<p>假设前端程序是从 <code>https://example.com:443</code> 中请求获取到的，那么这个前端程序只能向 <code>https://example.com:443</code> 发起请求，不能向 <code>https://api.example.com:443</code> 或 <code>http://example.com:8000</code> 发起请求。</p>
+<p>一般来说，当内容服务器和应用服务器是同一个后端程序时，这个限制不会带来问题。</p>
+<p>但是，当你想在浏览器上执行的前端程序，向另一个服务器发起请求时（例如前端程序托管在 <code>https://example.com</code>，而应用服务器是 <code>https://api.example.com</code>），就会遇到跨域资源请求的问题。</p>
+<p>这些问题可以通过一些技术手段来解决，例如 <code>CORS</code>（跨域资源共享）。</p>
+<p><em>偶尔可能会写一写本地的 html&#x2F;javascript 程序，虽然它可以方便的运行在浏览器中，但如果需要向别的服务发送请求，请求就会被浏览器拦下来。</em></p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E7%BD%91%E7%BB%9C/" class="print-no-link">#网络</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>漫谈 B/S 架构</div>
+      <div>http://ippclub.github.io/About-BS-Architect/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>huan-yp</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2025年12月12日</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>更新于</div>
+          <div>2026年4月16日</div>
+        </div>
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="NC - 非商业性使用">
+                    <i class="iconfont icon-cc-nc"></i>
+                  </span>
+                </a>
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="SA - 相同方式共享">
+                    <i class="iconfont icon-cc-sa"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/Python%20%E5%B9%B6%E5%8F%91%E7%AD%89%E5%BE%85%E6%9C%BA%E5%88%B6/" title="Python 线程池的陷阱：如何让 concurrent.futures 优雅地响应 Ctrl+C？">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Python 线程池的陷阱：如何让 concurrent.futures 优雅地响应 Ctrl+C？</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/xv6%E4%BB%A3%E7%A0%81%E9%98%85%E8%AF%BB/" title="xv6 代码阅读">
+                        <span class="hidden-mobile">xv6 代码阅读</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+  <div id="waline"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#waline', function() {
+      Fluid.utils.createCssLink('https://registry.npmmirror.com/@waline/client/2.15.8/files/dist/waline.css')
+      Fluid.utils.createScript('https://registry.npmmirror.com/@waline/client/2.15.8/files/dist/waline.js', function() {
+        var options = Object.assign(
+          {"serverURL":"https://waline.harkerhand.cn/","path":"window.location.pathname","meta":["nick","mail","link"],"requiredMeta":["nick"],"lang":"zh-CN","emoji":["https://cdn.jsdelivr.net/gh/walinejs/emojis/weibo","https://cdn.jsdelivr.net/gh/walinejs/emojis/tieba","https://cdn.jsdelivr.net/gh/walinejs/emojis/bmoji","https://cdn.jsdelivr.net/gh/walinejs/emojis/bilibili"],"dark":"html[data-user-color-scheme=\"dark\"]","wordLimit":0,"pageSize":10,"search":false,"reaction":true},
+          {
+            el: '#waline',
+            path: window.location.pathname
+          }
+        )
+        Waline.init(options);
+        Fluid.utils.waitElementVisible('#waline .vcontent', () => {
+          var imgSelector = '#waline .vcontent img:not(.vemoji)';
+          Fluid.plugins.imageCaption(imgSelector);
+          Fluid.plugins.fancyBox(imgSelector);
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

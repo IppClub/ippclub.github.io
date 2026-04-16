@@ -1,0 +1,1013 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.ico">
+  <link rel="icon" href="/img/favicon.ico">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="李瑾">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="一、引言：让 AI 和积木愉快地玩耍！&emsp;&emsp;书接上回，我们给 Dora SSR 开源游戏引擎整了个人类含量过高而 AI 含量不足的功能。所以急需开始整新活：这次要把看似古早又低科技的积木编程，和时髦值很高的 AI 技术硬撮合到一起！ &emsp;&emsp;一开始又是一位路人用户的突发奇想（为什么要说又）：如果 AI 可以帮忙写代码，那它能不能也来帮我——搭编程积木呢？没错就是我">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Dora SSR x AI x Blockly 低科技和高科技的碰撞">
+<meta property="og:url" content="http://ippclub.github.io/Dora-SSR-x-AI-x-Blockly-%E4%BD%8E%E7%A7%91%E6%8A%80%E5%92%8C%E9%AB%98%E7%A7%91%E6%8A%80%E7%9A%84%E7%A2%B0%E6%92%9E/index.html">
+<meta property="og:site_name" content="I++ Club">
+<meta property="og:description" content="一、引言：让 AI 和积木愉快地玩耍！&emsp;&emsp;书接上回，我们给 Dora SSR 开源游戏引擎整了个人类含量过高而 AI 含量不足的功能。所以急需开始整新活：这次要把看似古早又低科技的积木编程，和时髦值很高的 AI 技术硬撮合到一起！ &emsp;&emsp;一开始又是一位路人用户的突发奇想（为什么要说又）：如果 AI 可以帮忙写代码，那它能不能也来帮我——搭编程积木呢？没错就是我">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://ippclub.github.io/Dora-SSR-x-AI-x-Blockly-%E4%BD%8E%E7%A7%91%E6%8A%80%E5%92%8C%E9%AB%98%E7%A7%91%E6%8A%80%E7%9A%84%E7%A2%B0%E6%92%9E/%E5%B0%81%E9%9D%A2.jpg">
+<meta property="article:published_time" content="2025-04-29T10:00:00.000Z">
+<meta property="article:modified_time" content="2026-04-16T03:07:22.152Z">
+<meta property="article:tag" content="DoraSSR">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://ippclub.github.io/Dora-SSR-x-AI-x-Blockly-%E4%BD%8E%E7%A7%91%E6%8A%80%E5%92%8C%E9%AB%98%E7%A7%91%E6%8A%80%E7%9A%84%E7%A2%B0%E6%92%9E/%E5%B0%81%E9%9D%A2.jpg">
+  
+  
+  
+  <title>Dora SSR x AI x Blockly 低科技和高科技的碰撞 - I++ Club</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"ippclub.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"always","icon":"#"},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>I++ Club</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/Dora-SSR-x-AI-x-Blockly-%E4%BD%8E%E7%A7%91%E6%8A%80%E5%92%8C%E9%AB%98%E7%A7%91%E6%8A%80%E7%9A%84%E7%A2%B0%E6%92%9E/%E5%B0%81%E9%9D%A2.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Dora SSR x AI x Blockly 低科技和高科技的碰撞"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-author" aria-hidden="true"></i>
+        李瑾
+      </span>
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2025-04-29 18:00" pubdate>
+          2025年4月29日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          3.8k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          48 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar category-bar" style="margin-right: -1rem">
+    
+
+
+
+
+
+<div class="category-list">
+  
+  
+    
+    
+    
+    <div class="category row nomargin-x">
+      <a class="category-item 
+          list-group-item category-item-action col-10 col-md-11 col-xm-11" title="游戏开发"
+        id="heading-03af44dfb57651192e1e5ff490e35760" role="tab" data-toggle="collapse" href="#collapse-03af44dfb57651192e1e5ff490e35760"
+        aria-expanded="true"
+      >
+        游戏开发
+        <span class="list-group-count">(9)</span>
+        <i class="iconfont icon-arrowright"></i>
+      </a>
+      
+      <div class="category-collapse collapse show" id="collapse-03af44dfb57651192e1e5ff490e35760"
+           role="tabpanel" aria-labelledby="heading-03af44dfb57651192e1e5ff490e35760">
+        
+        
+          
+          
+  <div class="category-post-list">
+    
+    
+      
+      
+        <a href="/Dora-SSR-x-AI-x-Blockly-%E4%BD%8E%E7%A7%91%E6%8A%80%E5%92%8C%E9%AB%98%E7%A7%91%E6%8A%80%E7%9A%84%E7%A2%B0%E6%92%9E/" title="Dora SSR x AI x Blockly 低科技和高科技的碰撞"
+           class="list-group-item list-group-item-action
+           active">
+          <span class="category-post">Dora SSR x AI x Blockly 低科技和高科技的碰撞</span>
+        </a>
+      
+    
+      
+      
+        <a href="/Dora-SSR-x-Blockly%E2%80%94%E8%BF%99%E7%A7%8D%E6%84%9F%E8%A7%89%E6%88%91%E4%BB%8E%E6%9C%AA%E6%8B%A5%E6%9C%89/" title="Dora SSR x Blockly—这种感觉我从未拥有"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">Dora SSR x Blockly—这种感觉我从未拥有</span>
+        </a>
+      
+    
+      
+      
+        <a href="/DoraSSR%E5%BC%95%E6%93%8E%E5%8E%9F%E7%94%9F%E9%80%82%E9%85%8D%E9%B8%BF%E8%92%99%E7%9A%84%E6%95%85%E4%BA%8B/" title="Dora SSR 引擎原生适配鸿蒙的故事"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">Dora SSR 引擎原生适配鸿蒙的故事</span>
+        </a>
+      
+    
+      
+      
+        <a href="/Lua%E9%81%87%E4%B8%8ATypeScript-TypeScriptToLua%E7%9A%84%E5%A5%87%E5%A6%99%E6%97%85%E7%A8%8B/" title="Lua 遇上 TypeScript——TSTL 的奇妙旅程"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">Lua 遇上 TypeScript——TSTL 的奇妙旅程</span>
+        </a>
+      
+    
+      
+      
+        <a href="/%E5%BC%80%E6%BA%90%E5%85%B1%E5%88%9B%EF%BC%8C%E6%B8%B8%E6%88%8F%E6%B8%A9%E5%B7%9E%E2%80%94%E2%80%9415%E5%A4%A9%E5%88%9B%E6%84%8F%E7%8B%82%E6%AC%A2/" title="开源共创，游戏温州——15 天创意狂欢"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">开源共创，游戏温州——15 天创意狂欢</span>
+        </a>
+      
+    
+      
+      
+        <a href="/%E5%BD%93Yarn%20Spinner%E9%81%87%E4%B8%8ALua%EF%BC%9A%E4%B8%80%E6%AC%A1%E5%AF%B9%E8%AF%9D%E7%B3%BB%E7%BB%9F%E7%9A%84%E6%94%BE%E6%B5%AA%E9%80%83%E4%BA%A1/" title="当Yarn Spinner遇上Lua：一次对话系统的放浪逃亡"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">当Yarn Spinner遇上Lua：一次对话系统的放浪逃亡</span>
+        </a>
+      
+    
+      
+      
+        <a href="/%E6%9E%84%E5%BB%BA%E8%87%AA%E5%8A%A8%E5%8C%96%E7%9A%84-Yarn-Spinner-%E5%89%A7%E6%9C%AC%E7%94%9F%E6%88%90%E6%B5%81%E7%A8%8B/" title="构建自动化的 Yarn Spinner 剧本生成流程"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">构建自动化的 Yarn Spinner 剧本生成流程</span>
+        </a>
+      
+    
+      
+      
+        <a href="/%E7%94%A8%E5%87%B9%E8%AF%AD%E8%A8%80%E4%B8%BA%E6%B8%B8%E6%88%8F%E5%BC%95%E6%93%8E%E8%A3%85%E4%B8%8A%E4%B8%80%E9%A2%97%E5%BC%80%E6%BA%90%E7%9A%84%E5%BF%83/" title="用凹语言为游戏引擎装上一颗开源的心"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">用凹语言为游戏引擎装上一颗开源的心</span>
+        </a>
+      
+    
+  </div>
+
+          
+  
+    
+    
+    
+    <div class="category-sub row nomargin-x">
+      <a class="category-subitem collapsed
+          list-group-item category-item-action col-10 col-md-11 col-xm-11" title="转载"
+        id="heading-aa6eb67fe55f3fb03caa5e07ee4af3d4" role="tab" data-toggle="collapse" href="#collapse-aa6eb67fe55f3fb03caa5e07ee4af3d4"
+        aria-expanded="false"
+      >
+        转载
+        <span class="list-group-count">(1)</span>
+        <i class="iconfont icon-arrowright"></i>
+      </a>
+      
+      <div class="category-collapse collapse " id="collapse-aa6eb67fe55f3fb03caa5e07ee4af3d4"
+           role="tabpanel" aria-labelledby="heading-aa6eb67fe55f3fb03caa5e07ee4af3d4">
+        
+        
+          
+  <div class="category-post-list">
+    
+    
+      
+      
+        <a href="/%E4%B8%8D%E5%88%B0100%E8%A1%8C%E4%BB%A3%E7%A0%81%E5%86%99%E5%87%BA%E6%84%A4%E6%80%92%E7%9A%84%E5%B0%8F%E9%B8%9F/" title="不到100行代码写出愤怒的小鸟"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">不到100行代码写出愤怒的小鸟</span>
+        </a>
+      
+    
+  </div>
+
+        
+      </div>
+    </div>
+  
+        
+      </div>
+    </div>
+  
+</div>
+
+
+  </aside>
+
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">Dora SSR x AI x Blockly 低科技和高科技的碰撞</h1>
+            
+              <p id="updated-time" class="note note-info" style="">
+                
+                  
+                    本文最后更新于 2026年4月16日 上午
+                  
+                
+              </p>
+            
+            
+              <div class="markdown-body">
+                
+                <h2 id="一、引言：让-AI-和积木愉快地玩耍！"><a href="#一、引言：让-AI-和积木愉快地玩耍！" class="headerlink" title="一、引言：让 AI 和积木愉快地玩耍！"></a>一、引言：让 AI 和积木愉快地玩耍！</h2><p>&emsp;&emsp;书接上回，我们给 Dora SSR 开源游戏引擎整了个人类含量过高而 AI 含量不足的功能。所以急需开始整新活：这次要把看似古早又低科技的积木编程，和时髦值很高的 AI 技术硬撮合到一起！</p>
+<p>&emsp;&emsp;一开始又是一位路人用户的突发奇想（为什么要说又）：如果 AI 可以帮忙写代码，那它能不能也来帮我——搭编程积木呢？<br>没错就是我们刚给 Dora SSR 游戏引擎加上的，小朋友玩得飞起、程序员用着头秃的、花花绿绿一堆方块的积木编程。</p>
+<p>&emsp;&emsp;积木编程表面上看起来傻乎乎，拖拖拽拽好像很人性化，但背地里其实暗藏玄机——每一块小积木，拼出来的就是一棵棵“抽象语法树”（Abstract Syntax Tree，简称 AST），如果要做的东西复杂了，手动造起来，可能会累到心梗。而如果指望 LLM 模型去模拟人类做手工拖拽？抱歉，模拟笨拙的人手操作，还要保证正确性，使用当下的 AI 技术自动完成，可能不如直接从脑子里长出一棵树来得快！</p>
+<p>&emsp;&emsp;那么问题来了，既然大模型如此聪明，为什么不干脆直接生成一颗 AST，把积木块自动排列得整整齐齐？正是基于这个灵感，我们决定彻底给 Blockly 编程这位“拖拉机玩家”减减负，直接让 AI 把抽象语法树的代码用文本代码敲出来，再转成积木布局。</p>
+<p>&emsp;&emsp;首先，为了让大家更直观感受我们的骚操作，先来一张流程图镇楼！</p>
+<img src="/Dora-SSR-x-AI-x-Blockly-%E4%BD%8E%E7%A7%91%E6%8A%80%E5%92%8C%E9%AB%98%E7%A7%91%E6%8A%80%E7%9A%84%E7%A2%B0%E6%92%9E/flow1.jpg" srcset="/img/loading.gif" lazyload class="" title="flow1">
+
+<p>&emsp;&emsp;这次有点急，要不在这里就放个已经实现的最终效果演示来快速结束文章吧。（姨马，阔阔尼）</p>
+<p>&emsp;&emsp;下面的这张是在 Dora SSR 游戏引擎中运行的 AI Agent 界面截图。已提出需求：“编写一个斐波那契数列算法”。要问为什么选择了<code>deepseek-chat</code> 的 大模型 API——因为它价格便宜。</p>
+<img src="/Dora-SSR-x-AI-x-Blockly-%E4%BD%8E%E7%A7%91%E6%8A%80%E5%92%8C%E9%AB%98%E7%A7%91%E6%8A%80%E7%9A%84%E7%A2%B0%E6%92%9E/1.jpg" srcset="/img/loading.gif" lazyload class="" title="a">
+
+<p>&emsp;&emsp;AI Agent 生成 TypeScript 代码，并反复进行编译检查，直到正确生成了调用 DSL 框架的“积木代码”。</p>
+<img src="/Dora-SSR-x-AI-x-Blockly-%E4%BD%8E%E7%A7%91%E6%8A%80%E5%92%8C%E9%AB%98%E7%A7%91%E6%8A%80%E7%9A%84%E7%A2%B0%E6%92%9E/2.jpg" srcset="/img/loading.gif" lazyload class="" title="b">
+
+<p>&emsp;&emsp;运行 “积木代码” 生成了 Blockly 积木程序文件。在 IDE 中打开积木文件，自动生成了对应的 Lua 代码。</p>
+<img src="/Dora-SSR-x-AI-x-Blockly-%E4%BD%8E%E7%A7%91%E6%8A%80%E5%92%8C%E9%AB%98%E7%A7%91%E6%8A%80%E7%9A%84%E7%A2%B0%E6%92%9E/3.jpg" srcset="/img/loading.gif" lazyload class="" title="c">
+
+<p>&emsp;&emsp;运行生成的 Lua 代码，输出运行结果。</p>
+<img src="/Dora-SSR-x-AI-x-Blockly-%E4%BD%8E%E7%A7%91%E6%8A%80%E5%92%8C%E9%AB%98%E7%A7%91%E6%8A%80%E7%9A%84%E7%A2%B0%E6%92%9E/4.jpg" srcset="/img/loading.gif" lazyload class="" title="d">
+
+<p>&emsp;&emsp;演示结束，文章继续。</p>
+<hr>
+<h2 id="二、设计思路与技术选型：聪明反被聪明误？不存在的！"><a href="#二、设计思路与技术选型：聪明反被聪明误？不存在的！" class="headerlink" title="二、设计思路与技术选型：聪明反被聪明误？不存在的！"></a>二、设计思路与技术选型：聪明反被聪明误？不存在的！</h2><p>&emsp;&emsp;其实在正式开始大搞特搞之前，我们先冷静（大概三秒钟）思考了一个问题：<br>积木编程这么可爱，怎么才能让 AI 更聪明地帮忙呢？</p>
+<p>&emsp;&emsp;首先，传统的 Blockly 使用体验是这样的：人类小手一块一块地拖拽积木，然后慢慢搭成一棵程序树，像是造房子一样堆砖头。这种方式对小朋友和初学者超级友好，但对大模型来说……呃，简直就是地狱级副本。毕竟，AI 并没有小手，它靠的可都是一行行生成文字的魔法！</p>
+<p>&emsp;&emsp;所以我们灵机一动：既然 Blockly 本质上是构建抽象语法树（AST），那为啥不让大模型直接从文本生成 AST？绕开拖拽，直接建树！</p>
+<p>&emsp;&emsp;这样一来，不仅能省去大量的模拟动作，还能让 AI 真正专注于最擅长的领域——思考和生成结构化代码，效率蹭蹭蹭地涨！</p>
+<p>&emsp;&emsp;那有没有可能让 AI 直接生成 Blockly 加载使用的 JSON 代码呢，也不是不可能，但是 JSON 代码的冗余信息很多，并且 Blockly 的 JSON 格式文件中包含了除了程序逻辑以外的用于图形显示的额外配置信息，并且根据咱编程老师傅多年的经验判断，用代码框架去正向地生成有效的 Blockly JSON 代码会比编写一个对应的 JSON 格式验证程序要容易得多，AI 敢写你也要敢验证才成。</p>
+<hr>
+<p>&emsp;&emsp;那么说干就干，可是……用什么语言来设计这套 “写积木” 的 DSL（领域专用语言）呢？<br> 经过一番激烈的头脑风暴（大概持续了 1 秒钟），作为 TypeScript 爱好者的我们决定：那就 TypeScript 没跑了！</p>
+<p>&emsp;&emsp;原因很简单：</p>
+<ul>
+<li>静态类型保护：TypeScript 能在编译阶段就把你潜伏的 bug 揪出来。</li>
+<li>开发体验一级棒：写起代码来清晰优雅，语法又不像其他硬核语言那么拗口，最适合给 AI 这种”学霸型选手”准备，当然也适合人类手工给 AI 生成的代码做售后。</li>
+<li>自动补全友好：以后扩展功能的时候，不仅 AI 写得舒服，人类也能跟着一起快乐修改维护！</li>
+</ul>
+<p>&emsp;&emsp;总之，TypeScript + 积木 DSL &#x3D; AI 高效写积木神器，完美！</p>
+<hr>
+<p>&emsp;&emsp;当然啦，为了让一切顺利进行，我们还搭了个超灵巧的执行链条—— AI 一边撸代码，一边检查自己是不是写歪了，一旦发现问题还能自我修正，这就进入了下一节的精彩内容啦！</p>
+<p>&emsp;&emsp;敬请期待下一集：“AI 特工（Agent）行动大计划”！（才怪）</p>
+<h2 id="三、实现原理：积木、代码和魔法混合炼金术！"><a href="#三、实现原理：积木、代码和魔法混合炼金术！" class="headerlink" title="三、实现原理：积木、代码和魔法混合炼金术！"></a>三、实现原理：积木、代码和魔法混合炼金术！</h2><h3 id="再说说基础的-DSL-框架"><a href="#再说说基础的-DSL-框架" class="headerlink" title="再说说基础的 DSL 框架"></a>再说说基础的 DSL 框架</h3><p>&emsp;&emsp;这套 TS 的 DSL 框架，本身也是用一种极其”懒惰而高效”的方式搞定的！</p>
+<p>&emsp;&emsp;简单来说，这个 DSL 框架的使命，就是在运行之后，自动吐出一份标准、纯净、能直接被 Blockly 引擎吃进去的 JSON 积木定义文件。<br> 听上去好像很复杂？——其实，连这份 DSL 框架我们都几乎没动手亲自写！</p>
+<p>&emsp;&emsp;秘诀在于：直接拿现成的 Blockly 导出的 JSON 代码，丢给大模型，让它自己推理、自己总结、自己动手设计 DSL。</p>
+<p>&emsp;&emsp;没错，大模型在这件事情上就像一个聪明又勤快的助理：<br> 只要给它看一眼示范，它就能自个儿举一反三、归纳总结，一口气生成一整套可以直接使用的 TypeScript 框架。</p>
+<p>&emsp;&emsp;而人类呢？人类只需要做好两件事：</p>
+<ul>
+<li>复制</li>
+<li>粘贴</li>
+</ul>
+<p>&emsp;&emsp;（偶尔心情好可以顺便鼓励一下 AI：“做得好，感谢”）</p>
+<p>&emsp;&emsp;于是，一场积木 DSL 的工厂大作战，就在不知不觉中被大模型高效完成。人类变身无情的“复制粘贴器”，只需要轻松点鼠标，就能看到积木 DSL 代码从无到有、呼啸而来！</p>
+<img src="/Dora-SSR-x-AI-x-Blockly-%E4%BD%8E%E7%A7%91%E6%8A%80%E5%92%8C%E9%AB%98%E7%A7%91%E6%8A%80%E7%9A%84%E7%A2%B0%E6%92%9E/5.jpg" srcset="/img/loading.gif" lazyload class="" title="e">
+
+<h3 id="关于-AI-Agent-编程：硅基生物开始自己生小孩了？"><a href="#关于-AI-Agent-编程：硅基生物开始自己生小孩了？" class="headerlink" title="关于 AI Agent 编程：硅基生物开始自己生小孩了？"></a>关于 AI Agent 编程：硅基生物开始自己生小孩了？</h3><p>&emsp;&emsp;有了 DSL 模块之后，当然得搭一个能自己干活的自动化工厂啦！</p>
+<p>&emsp;&emsp;这时候，PocketFlow 框架隆重登场！那么 PocketFlow 究竟是个什么神奇玩意呢？这里直接引用作者自己画的一张梗图：</p>
+<img src="/Dora-SSR-x-AI-x-Blockly-%E4%BD%8E%E7%A7%91%E6%8A%80%E5%92%8C%E9%AB%98%E7%A7%91%E6%8A%80%E7%9A%84%E7%A2%B0%E6%92%9E/meme.jpg" srcset="/img/loading.gif" lazyload class="" title="meme">
+
+<p>&emsp;&emsp;太喜欢这种极客感拉满的风格了，直接开大嘲讽了一众复杂到飞起的 AI 开发设施项目。</p>
+<p>&emsp;&emsp;其实想想也有原因：</p>
+<p>&emsp;&emsp;早期大模型还很弱鸡，为了榨出一点点聪明劲儿，只能在外围堆一大堆复杂工程设计来“挤牙膏”；</p>
+<p>&emsp;&emsp;而 PocketFlow 出生在大模型能力已经爆棚的今天，因此可以豪气地只用 100 行代码，就做出一个干净利落的基础 AI Agent 框架！</p>
+<p>&emsp;&emsp;更酷的是，作者还贴心地给 PocketFlow配了一套辅助提示词系统，加上整理精美、能直接拿来喂给 Cursor 编程工具使用的规则文档。</p>
+<p>&emsp;&emsp;最终效果就是：</p>
+<p>&emsp;&emsp;只需要用自然语言描述你的需求，然后……</p>
+<p>&emsp;&emsp;Boooom～AI Agent 自己开发出了新的 AI Agent！</p>
+<p>&emsp;&emsp;（硅基生物居然掌握了劳动力再生产，等等，这难道是 AI 的一种“生育”行为？）</p>
+<hr>
+<p>&emsp;&emsp;回到 Dora SSR 这边，情况稍微复杂一点点：</p>
+<p>&emsp;&emsp;因为我们用的不是常规的 TypeScript 运行环境（比如 Web 浏览器、Node.js），而是一个把 TS 代码编译成 Lua、在 Dora C++ 引擎层运行的神奇环境。</p>
+<p>&emsp;&emsp;比如，发起大模型 API 调用，需要通过 Lua 代码调用 C++ 提供的 Http 请求接口。</p>
+<p>&emsp;&emsp;这种奇葩（划掉）特别的环境，估计大模型还不太熟，所以……</p>
+<p>&emsp;&emsp;我们选择了保守治疗！</p>
+<p>&emsp;&emsp;这次的 AI Agent 程序还是手动撸的，不过也没啥压力：</p>
+<p>&emsp;&emsp;整个程序加起来才 400 行，在游戏引擎里写得飞快，写起来的手感还行～</p>
+<hr>
+<p>&emsp;&emsp;这次要写的 AI 工作流也非常简单直接，一句话概括：</p>
+<p>&emsp;&emsp;接需求 -&gt; 编码 -&gt; 编译 -&gt; 修错 -&gt; 保存</p>
+<p>&emsp;&emsp;画成流程图长这样（或者换个高大上的说法也可以叫做 AI 智能体流程编排图？）：</p>
+<img src="/Dora-SSR-x-AI-x-Blockly-%E4%BD%8E%E7%A7%91%E6%8A%80%E5%92%8C%E9%AB%98%E7%A7%91%E6%8A%80%E7%9A%84%E7%A2%B0%E6%92%9E/flow2.jpg" srcset="/img/loading.gif" lazyload class="" title="flow2">
+
+<p>&emsp;&emsp;可以看到，整个流程就是模拟了人类程序员写代码时的常规动作：</p>
+<p>&emsp;&emsp;理解需求 → 写代码 → 编译通过 → 成功保存 or 出错修 bug。</p>
+<p>&emsp;&emsp;本来还可以加上处理运行时错误的自动修复流程，不过考虑到使用的是设计良好的 TS DSL 框架，能通过编译的代码大概率也能顺利运行，所以……</p>
+<p>&emsp;&emsp;我们又光荣地偷了个懒！</p>
+<p>&emsp;&emsp;其实在这个 AI Agent 程序中最核心的代码只有下面这一小段：</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs typescript"><span class="hljs-keyword">const</span> chatNode = <span class="hljs-keyword">new</span> <span class="hljs-title class_">ChatNode</span>(); <span class="hljs-comment">// 和 AI 聊天，下单子</span><br><span class="hljs-keyword">const</span> llmCode = <span class="hljs-keyword">new</span> <span class="hljs-title class_">LLMCode</span>(<span class="hljs-number">2</span>, <span class="hljs-number">1</span>); <span class="hljs-comment">// 让 AI 按照规则写 TypeScript 积木代码</span><br><span class="hljs-keyword">const</span> compileNode = <span class="hljs-keyword">new</span> <span class="hljs-title class_">CompileNode</span>(); <span class="hljs-comment">// 编译 TS 积木代码</span><br><span class="hljs-keyword">const</span> saveNode = <span class="hljs-keyword">new</span> <span class="hljs-title class_">SaveNode</span>(); <span class="hljs-comment">// 成功？保存下来！</span><br><span class="hljs-keyword">const</span> fixNode = <span class="hljs-keyword">new</span> <span class="hljs-title class_">FixNode</span>(); <span class="hljs-comment">// 失败？回去改！</span><br><br>chatNode.<span class="hljs-title function_">next</span>(llmCode);<br>llmCode.<span class="hljs-title function_">next</span>(compileNode);<br>compileNode.<span class="hljs-title function_">on</span>(<span class="hljs-string">&#x27;Success&#x27;</span>, saveNode);<br>compileNode.<span class="hljs-title function_">on</span>(<span class="hljs-string">&#x27;Failed&#x27;</span>, fixNode);<br>fixNode.<span class="hljs-title function_">next</span>(llmCode);<br>saveNode.<span class="hljs-title function_">next</span>(chatNode);<br></code></pre></td></tr></table></figure>
+
+<p>&emsp;&emsp;有没有发现这一段代码很像是在写一个小型的状态机（State Machine）的程序呢？</p>
+<p>&emsp;&emsp;对的，虽然咱们看上去只是简单地串了一串 <code>Node</code>，但实际上，每个节点（Node）就代表了一个工作状态，每个 <code>.next()</code> 和 <code>.on()</code> 则定义了状态之间的跳转条件。</p>
+<p>&emsp;&emsp;比如：</p>
+<ul>
+<li>从 <code>ChatNode</code> 出发，拿到需求；</li>
+<li>跳到 <code>LLMCode</code>，让 AI 开始写代码；</li>
+<li>写完以后交给 <code>CompileNode</code> 检查；<ul>
+<li>如果编译成功，就跳到 <code>SaveNode</code> 保存成果；</li>
+<li>如果编译失败，就跳到 <code>FixNode</code> 生成修复提示词；</li>
+</ul>
+</li>
+<li>修好以后，重新回到 <code>LLMCode</code>，继续尝试；</li>
+<li>一轮一轮地循环，直到成果入袋！</li>
+</ul>
+<p>&emsp;&emsp;整个流程流畅自然，像一台精密运作的小机器，<br> 只不过这台机器的燃料不是汽油，而是燃烧的大模型 API 的 token 计费。</p>
+<p>&emsp;&emsp;其实就把这个代码逻辑换成更加简单的 if-else 控制流也是完全能实现的。用这样的节点连接状态机的方式，最主要还是为了提升代码的可维护性，比如想增加新功能？直接插个新 Node，比如 <code>RunNode</code> 做运行测试、<code>OptimizeNode</code> 做性能优化。想调整流程？随便换换 <code>.next()</code> 的连线，修改很少的代码就能完成，非常灵活。</p>
+<hr>
+<p>&emsp;&emsp;顺便分享一些实测小趣事：</p>
+<p>&emsp;&emsp;在这个流程里，发现 Deepseek V3 的实际表现比 ChatGPT 4o 要弱上好一截。</p>
+<p>&emsp;&emsp;起初我以为现在大模型都很强了，就没加思维链提示词优化，结果——</p>
+<p>&emsp;&emsp;Deepseek 抽卡脸黑的时候，要反复修 6-10 次才能把代码编译通过，总是莫名其妙括号数不对，气得人想给它塞点编程培训班广告。</p>
+<p>&emsp;&emsp;而 ChatGPT 4o 表现就好得多，通常 0-2 次就能修正成功，十分靠谱。</p>
+<p>&emsp;&emsp;后来，我简单给 Deepseek V3 加上了思维链优化（引导它多想一想再动笔），才稍微好转了一点。</p>
+<p>&emsp;&emsp;不过一到更难的挑战，比如让它自己写一份快速排序算法的积木代码——</p>
+<p>&emsp;&emsp;Deepseek V3 彻底缴械投降，直到靠我手动喂了一份 Lua 快排代码给它“照着抄”，才勉强拼出来。</p>
+<hr>
+<p>&emsp;&emsp;当然，AI 在画画方面的表现还是一如既往地令人欣慰：</p>
+<p>&emsp;&emsp;比如下面这两幅，AI 熟练运用类似 Canvas API 的接口，自动绘制出了星星和月亮！</p>
+<img src="/Dora-SSR-x-AI-x-Blockly-%E4%BD%8E%E7%A7%91%E6%8A%80%E5%92%8C%E9%AB%98%E7%A7%91%E6%8A%80%E7%9A%84%E7%A2%B0%E6%92%9E/6.jpg" srcset="/img/loading.gif" lazyload class="" title="star">
+
+<hr>
+<img src="/Dora-SSR-x-AI-x-Blockly-%E4%BD%8E%E7%A7%91%E6%8A%80%E5%92%8C%E9%AB%98%E7%A7%91%E6%8A%80%E7%9A%84%E7%A2%B0%E6%92%9E/7.jpg" srcset="/img/loading.gif" lazyload class="" title="moon">
+
+<p>&emsp;&emsp;绘图小能手，认证通过！</p>
+<hr>
+<h2 id="四、总结与展望：从造积木到造未来"><a href="#四、总结与展望：从造积木到造未来" class="headerlink" title="四、总结与展望：从造积木到造未来"></a>四、总结与展望：从造积木到造未来</h2><p>&emsp;&emsp;这一次的 Dora SSR x AI x Blockly 实验，虽然只是第一步小小的探索，但已经让我们看到了非常激动人心的画面：</p>
+<p>&emsp;&emsp;AI 不再只是个听指令的小帮手，它正在成为可以协助设计、协助创造、甚至协助自己”生孩子”（AI Agent 生成 AI Agent）的超级搭档！</p>
+<p>&emsp;&emsp;通过给 Dora SSR 增加这样一套 AI 驱动的 Blockly 积木代码自动化生成系统，我们收获了不少有趣的经验，比如：</p>
+<ul>
+<li>把抽象语法树直接当作生成目标，反而比模拟人工拖拽更靠谱；</li>
+<li>TypeScript + 大模型是超强组合，静态类型检查帮了大忙；</li>
+<li>PocketFlow 框架简单又优雅，让 Agent 流程开发低成本又高效率；</li>
+<li>现实中的大模型，还远远没有完美，需要设计合理的流程和提示词来”带飞”。</li>
+</ul>
+<p>&emsp;&emsp;更重要的是，这套方法论本身并不局限于 Blockly，也不局限于 Dora SSR。<br> 未来，它可以扩展到任何需要结构化编程、流程式建模、或者人机共创的领域里去！</p>
+<hr>
+<p>&emsp;&emsp;展望未来，我们还有好多好玩的事情可以继续搞，比如：</p>
+<ul>
+<li>自动做策划设计的 AI Agent：让 AI 不只是写代码，还能帮我们规划故事大纲、设计玩法、想出奇妙的创意点子！</li>
+<li>自动编写 Yarn Spinner 剧本，直接能玩的文字冒险游戏 Agent：只要给个大致主题，AI 就能自己生出分支剧情，玩家可以马上沉浸体验。</li>
+<li>自动生成横版冒险游戏关卡的设计 Agent：地图布局、障碍设置、道具藏点，AI 一条龙打包搞定，让每次游戏都独一无二。</li>
+<li>自动编写游戏 UI 功能的 Agent：按钮、面板、弹窗、界面逻辑，通通交给 AI，程序员们终于可以摆脱枯燥重复的 UI 小活啦！</li>
+</ul>
+<p>&emsp;&emsp;我们相信，只要敢想，AI + 游戏开发的边界还能被不断打破。</p>
+<p>&emsp;&emsp;当然啦，梦想的森林需要更多园丁来一起耕耘——</p>
+<p>&emsp;&emsp;希望有更多的伙伴加入 Dora SSR 社区，一起来探索，一起尝试，一起共建，让这场属于开源、创意和冒险精神的旅程越走越远！</p>
+<h3 id="代码地址"><a href="#代码地址" class="headerlink" title="代码地址"></a>代码地址</h3><ul>
+<li>Github：<a target="_blank" rel="noopener" href="https://github.com/IppClub/Dora-SSR/blob/main/Assets/Script/Tools/BlocklyCoder.ts">https://github.com/IppClub/Dora-SSR/blob/main/Assets/Script/Tools/BlocklyCoder.ts</a></li>
+<li>AtomGit：<a target="_blank" rel="noopener" href="https://atomgit.com/ippclub/Dora-SSR/blob/main/Assets/Script/Tools/BlocklyCoder.ts">https://atomgit.com/ippclub/Dora-SSR/blob/main/Assets/Script/Tools/BlocklyCoder.ts</a></li>
+</ul>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E6%B8%B8%E6%88%8F%E5%BC%80%E5%8F%91/" class="category-chain-item">游戏开发</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/DoraSSR/" class="print-no-link">#DoraSSR</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Dora SSR x AI x Blockly 低科技和高科技的碰撞</div>
+      <div>http://ippclub.github.io/Dora-SSR-x-AI-x-Blockly-低科技和高科技的碰撞/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>李瑾</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2025年4月29日</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>更新于</div>
+          <div>2026年4月16日</div>
+        </div>
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="NC - 非商业性使用">
+                    <i class="iconfont icon-cc-nc"></i>
+                  </span>
+                </a>
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="SA - 相同方式共享">
+                    <i class="iconfont icon-cc-sa"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/%E6%9E%84%E5%BB%BA%E8%87%AA%E5%8A%A8%E5%8C%96%E7%9A%84-Yarn-Spinner-%E5%89%A7%E6%9C%AC%E7%94%9F%E6%88%90%E6%B5%81%E7%A8%8B/" title="构建自动化的 Yarn Spinner 剧本生成流程">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">构建自动化的 Yarn Spinner 剧本生成流程</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/%E5%BC%80%E6%BA%90%E7%9A%84%E5%A4%9A%E9%87%8D%E6%80%A7%E4%B8%8E%E7%AC%AC%E4%B8%89%E8%B7%AF%E5%BE%84%E5%AE%A3%E8%A8%80/" title="开源的多重性与第三路径宣言">
+                        <span class="hidden-mobile">开源的多重性与第三路径宣言</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+  <div id="waline"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#waline', function() {
+      Fluid.utils.createCssLink('https://registry.npmmirror.com/@waline/client/2.15.8/files/dist/waline.css')
+      Fluid.utils.createScript('https://registry.npmmirror.com/@waline/client/2.15.8/files/dist/waline.js', function() {
+        var options = Object.assign(
+          {"serverURL":"https://waline.harkerhand.cn/","path":"window.location.pathname","meta":["nick","mail","link"],"requiredMeta":["nick"],"lang":"zh-CN","emoji":["https://cdn.jsdelivr.net/gh/walinejs/emojis/weibo","https://cdn.jsdelivr.net/gh/walinejs/emojis/tieba","https://cdn.jsdelivr.net/gh/walinejs/emojis/bmoji","https://cdn.jsdelivr.net/gh/walinejs/emojis/bilibili"],"dark":"html[data-user-color-scheme=\"dark\"]","wordLimit":0,"pageSize":10,"search":false,"reaction":true},
+          {
+            el: '#waline',
+            path: window.location.pathname
+          }
+        )
+        Waline.init(options);
+        Fluid.utils.waitElementVisible('#waline .vcontent', () => {
+          var imgSelector = '#waline .vcontent img:not(.vemoji)';
+          Fluid.plugins.imageCaption(imgSelector);
+          Fluid.plugins.fancyBox(imgSelector);
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

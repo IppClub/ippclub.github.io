@@ -1,0 +1,898 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.ico">
+  <link rel="icon" href="/img/favicon.ico">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="传统 interface想要实现 interface，在绝大多数 OOP 语言中，会被认为只有一种。如 java 和 C# 的 interface specifier，C++ 的 pure virtual function。通常接口类中强制的不能拥有实现，继承接口的子类至少享有两个名字，一个是自身定义的命名，一个是接口名。通常子类转父类（up-cast）在编译期（compile-time）决定，父">
+<meta property="og:type" content="article">
+<meta property="og:title" content="C++ 的三种实现接口的方式">
+<meta property="og:url" content="http://ippclub.github.io/C-%E7%9A%84%E4%B8%89%E7%A7%8D%E5%AE%9E%E7%8E%B0%E6%8E%A5%E5%8F%A3%E7%9A%84%E6%96%B9%E5%BC%8F/index.html">
+<meta property="og:site_name" content="I++ Club">
+<meta property="og:description" content="传统 interface想要实现 interface，在绝大多数 OOP 语言中，会被认为只有一种。如 java 和 C# 的 interface specifier，C++ 的 pure virtual function。通常接口类中强制的不能拥有实现，继承接口的子类至少享有两个名字，一个是自身定义的命名，一个是接口名。通常子类转父类（up-cast）在编译期（compile-time）决定，父">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2016-03-11T13:45:12.000Z">
+<meta property="article:modified_time" content="2026-04-16T03:07:22.149Z">
+<meta property="article:tag" content="C++">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>C++ 的三种实现接口的方式 - I++ Club</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"ippclub.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"always","icon":"#"},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>I++ Club</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/mainbg.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="C++ 的三种实现接口的方式"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2016-03-11 21:45" pubdate>
+          2016年3月11日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          1.3k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          16 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar category-bar" style="margin-right: -1rem">
+    
+
+
+
+
+
+<div class="category-list">
+  
+  
+    
+    
+    
+    <div class="category row nomargin-x">
+      <a class="category-item 
+          list-group-item category-item-action col-10 col-md-11 col-xm-11" title="未分类"
+        id="heading-ecf7ebb59328ebf2369ce693a2423566" role="tab" data-toggle="collapse" href="#collapse-ecf7ebb59328ebf2369ce693a2423566"
+        aria-expanded="true"
+      >
+        未分类
+        <span class="list-group-count">(13)</span>
+        <i class="iconfont icon-arrowright"></i>
+      </a>
+      
+      <div class="category-collapse collapse show" id="collapse-ecf7ebb59328ebf2369ce693a2423566"
+           role="tabpanel" aria-labelledby="heading-ecf7ebb59328ebf2369ce693a2423566">
+        
+        
+          
+  <div class="category-post-list">
+    
+    
+      
+      
+        <a href="/C-%E7%9A%84%E4%B8%89%E7%A7%8D%E5%AE%9E%E7%8E%B0%E6%8E%A5%E5%8F%A3%E7%9A%84%E6%96%B9%E5%BC%8F/" title="C++ 的三种实现接口的方式"
+           class="list-group-item list-group-item-action
+           active">
+          <span class="category-post">C++ 的三种实现接口的方式</span>
+        </a>
+      
+    
+      
+      
+        <a href="/I-Club/" title="I++俱乐部"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">I++俱乐部</span>
+        </a>
+      
+    
+      
+      
+        <a href="/Implementing-an-unique-ptr/" title="Implementing an unique_ptr"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">Implementing an unique_ptr</span>
+        </a>
+      
+    
+      
+      
+        <a href="/Random-Binary-Search-Tree-Treap/" title="Random Binary Search Tree - Treap"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">Random Binary Search Tree - Treap</span>
+        </a>
+      
+    
+      
+      
+        <a href="/React-Native-%E4%B8%8B%E4%B8%80%E4%BB%A3UI%E5%BC%80%E5%8F%91%E6%80%9D%E7%BB%B4/" title="React-Native -- 下一代UI开发思维"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">React-Native -- 下一代UI开发思维</span>
+        </a>
+      
+    
+      
+      
+        <a href="/Swift%E4%B9%8BAnyClass%E4%B8%8E%E5%8A%A8%E6%80%81%E7%B1%BB%E5%9E%8B/" title="Swift之AnyClass与动态类型"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">Swift之AnyClass与动态类型</span>
+        </a>
+      
+    
+      
+      
+        <a href="/mongo-%E6%BA%90%E7%A0%81%E9%98%85%E8%AF%BB%E6%84%9F%E6%82%9F%EF%BC%88%E4%B8%80%EF%BC%89/" title="mongo 源码阅读感悟（一）"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">mongo 源码阅读感悟（一）</span>
+        </a>
+      
+    
+      
+      
+        <a href="/%E5%85%B3%E4%BA%8E-Redis-3-0-%E4%B8%AD%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" title="关于 Redis 3.0 中的数据结构"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">关于 Redis 3.0 中的数据结构</span>
+        </a>
+      
+    
+      
+      
+        <a href="/%E5%85%B3%E4%BA%8E-boost-noncopyable-%E7%9A%84%E4%B8%80%E7%82%B9%E6%80%9D%E8%80%83/" title="关于 boost::noncopyable 的一点思考"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">关于 boost::noncopyable 的一点思考</span>
+        </a>
+      
+    
+      
+      
+        <a href="/%E6%88%91%E5%AF%B9C-%E7%9A%84%E7%BC%96%E7%A8%8B%E6%80%9D%E8%80%83/" title="我对C++的编程思考"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">我对C++的编程思考</span>
+        </a>
+      
+    
+      
+      
+        <a href="/%E6%8F%90%E4%BA%A4%E6%96%87%E7%AB%A0%E6%A0%BC%E5%BC%8F%E8%A6%81%E6%B1%82/" title="提交文章格式要求"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">提交文章格式要求</span>
+        </a>
+      
+    
+      
+      
+        <a href="/%E7%94%A8-C-%E5%86%99%E4%B8%80%E4%B8%AA-Inet4Address-%E7%B1%BB/" title="用 C++ 写一个 Inet4Address 类"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">用 C++ 写一个 Inet4Address 类</span>
+        </a>
+      
+    
+      
+      
+        <a href="/%E8%AF%BB-leveldb-%E7%9A%84%E6%84%9F%E6%82%9F-%EF%BC%9ACache%E7%9A%84%E8%AE%BE%E8%AE%A1/" title="读 leveldb 的感悟 ：Cache的设计"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">读 leveldb 的感悟 ：Cache的设计</span>
+        </a>
+      
+    
+  </div>
+
+        
+      </div>
+    </div>
+  
+</div>
+
+
+  </aside>
+
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">C++ 的三种实现接口的方式</h1>
+            
+              <p id="updated-time" class="note note-info" style="">
+                
+                  
+                    本文最后更新于 2026年4月16日 上午
+                  
+                
+              </p>
+            
+            
+              <div class="markdown-body">
+                
+                <h2 id="传统-interface"><a href="#传统-interface" class="headerlink" title="传统 interface"></a>传统 interface</h2><p>想要实现 interface，在绝大多数 OOP 语言中，会被认为只有一种。如 java 和 C# 的 <code>interface</code> specifier，C++ 的 pure virtual function。通常接口类中强制的不能拥有实现，继承接口的子类至少享有<strong>两个名字</strong>，一个是自身定义的命名，一个是接口名。通常子类转父类（up-cast）在编译期（compile-time）决定，父类转子类（down-cast）在运行时（run-time）决定。</p>
+<p>我们太过于习惯这种接口的方式，而这种接口方式也确实能十分灵活地应用在编程中，以至于我们常常不自觉的在设计中增加不必要的层数。如果你也喜欢 “flat is better than nested” 的理念的话，我接下来将会介绍两种 alternatives，用来代替传统的接口实现。</p>
+<h2 id="Functor"><a href="#Functor" class="headerlink" title="Functor"></a>Functor</h2><p>使用 C 语言同样也可以进行 OOP，思路就是 function pointer。通过注册回调函数，用来替代传统的通过继承来实现接口。 C++11 所提供的<code>std::function</code>，<code>std::bind</code> 和 lambda function 为此提供了极大的便利。</p>
+<h4 id="Example"><a href="#Example" class="headerlink" title="Example"></a>Example</h4><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Comparator</span> &#123;<br> <span class="hljs-keyword">public</span>:<br><br>  <span class="hljs-keyword">typedef</span> std::function&lt;<span class="hljs-type">int</span>(<span class="hljs-type">const</span> Slice &amp;, <span class="hljs-type">const</span> Slice &amp;)&gt; CompareFunc;<br><br>  <span class="hljs-built_in">Comparator</span>(<span class="hljs-type">const</span> CompareFunc &amp;compare_fn) :<br>      <span class="hljs-built_in">compare_</span>(compare_fn)<br>  &#125;<br><br>  <span class="hljs-comment">// Three-way comparison.</span><br>  <span class="hljs-function"><span class="hljs-keyword">virtual</span> <span class="hljs-type">int</span> <span class="hljs-title">Compare</span><span class="hljs-params">(<span class="hljs-type">const</span> std::string &amp;lhs,</span></span><br><span class="hljs-params"><span class="hljs-function">                      <span class="hljs-type">const</span> std::string &amp;rhs)</span> <span class="hljs-type">const</span> </span>&#123;<br>    <span class="hljs-keyword">return</span> <span class="hljs-built_in">compare_</span>(lhs, rhs);<br>  &#125;<br><br> <span class="hljs-keyword">private</span>:<br>  <span class="hljs-type">const</span> CompareFunc compare_;<br>&#125;;<br></code></pre></td></tr></table></figure>
+<p>每种 <code>Comparator</code> 的示例都可能实现某一种策略(Strategy)。而如果为每一个策略都定义一个子类，会将问题复杂化(flat is better than nested)。</p>
+<h4 id="限制"><a href="#限制" class="headerlink" title="限制"></a>限制</h4><ul>
+<li>所有实例只能拥有父类的名字，不拥有自己的名字。当然设计上也不应该使实例拥有自己的名字。</li>
+</ul>
+<h4 id="适用"><a href="#适用" class="headerlink" title="适用"></a>适用</h4><ul>
+<li><a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Strategy_pattern">Strategy Pattern</a></li>
+<li>可以通过<a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Decorator_pattern">Decorator Pattern</a>来进行向下扩展。</li>
+</ul>
+<h2 id="CRTP"><a href="#CRTP" class="headerlink" title="CRTP"></a>CRTP</h2><p>所谓接口其实是一种协议，换言之就是，继承接口的子类必须<strong>全部</strong>实现某些功能（函数），由于子类必须不可妥协地全部实现，因此从设计的角度讲，接口的粒度也应该越细越好。</p>
+<p>为了某一个类去实现多个接口，可能不是一种干净的方法，因为这些接口将来可能不一定会被使用。C++ 的设计者为我们提供了无比强大的 template，用来更灵活地设计模块间关系。</p>
+<p>CRTP，即 <a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Curiously_recurring_template_pattern">Curiously recurring template pattern</a>。简单说就是将类自身作为自身模板的参数。 <a target="_blank" rel="noopener" href="http://www.boost.org/doc/libs/1_54_0/libs/iterator/doc/iterator_facade.html">boost::iterator_facade</a> 就利用了这种方法设计了一个 iterator 的抽象类，我们可以通过继承 <code>boost::iterator_facade</code> 轻易地实现一个 iterator。（吐槽一下，Boost.Iterator 这个库实在是太臃肿了，实际工程上完全可以写一个简易版本）</p>
+<p>我们通过实现一个 <code>IteratorFacade</code> 来介绍这种方法，然而这种方法的实例较长，所以我们分开来讲。</p>
+<h4 id="IteratorFacade"><a href="#IteratorFacade" class="headerlink" title="IteratorFacade"></a>IteratorFacade</h4><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-keyword">template</span>&lt;<span class="hljs-keyword">class</span> <span class="hljs-title class_">Derived</span>, <span class="hljs-keyword">class</span> <span class="hljs-title class_">T</span>&gt;<br><span class="hljs-keyword">class</span> <span class="hljs-title class_">IteratorFacade</span> &#123;<br></code></pre></td></tr></table></figure>
+<p>我们自己定义的 <code>Iterator</code> 只要继承 <code>IteratorFacade</code> 就能拥有一堆跟标准库容器一样的细枝末节的功能了（这些功能确实多而且杂）。我们首先假设 <code>Iterator</code>需要是一个 <a target="_blank" rel="noopener" href="http://en.cppreference.com/w/cpp/concept/ForwardIterator">forward iterator</a>。</p>
+<figure class="highlight angelscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs angelscript"><span class="hljs-keyword">class</span> <span class="hljs-symbol">Iterator:</span><br><span class="hljs-symbol">    <span class="hljs-symbol">public</span></span> <span class="hljs-symbol">IteratorFacade</span>&lt;<br>        <span class="hljs-symbol">Iterator,</span><br><span class="hljs-symbol">        <span class="hljs-symbol">int</span>,</span><br><span class="hljs-symbol">        <span class="hljs-symbol">std</span>::<span class="hljs-symbol">forward_iterator_tag</span></span>&gt; &#123;<br><br></code></pre></td></tr></table></figure>
+
+<p>其中 <code>Derived</code> 参数就是 <code>Iterator</code> 自己了，而 <code>int</code> 对应的 <code>T</code> 参数表示这个 iterator 所指的值。</p>
+<p>现在我们来仔细看看 <code>IteratorFacade</code> 的定义：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-keyword">template</span>&lt;<br>    <span class="hljs-keyword">class</span> <span class="hljs-title class_">Derived</span>,<br>    <span class="hljs-keyword">class</span> <span class="hljs-title class_">T</span>,<br>    <span class="hljs-keyword">class</span> <span class="hljs-title class_">Category</span>&gt;<br><span class="hljs-keyword">class</span> <span class="hljs-title class_">IteratorFacade</span> &#123;<br> <span class="hljs-keyword">public</span>:<br>  <span class="hljs-keyword">typedef</span> T&amp; Reference;<br>  <span class="hljs-function">Derived <span class="hljs-title">Next</span><span class="hljs-params">()</span> </span>&#123;<br>    <span class="hljs-function">Derived <span class="hljs-title">tmp</span><span class="hljs-params">(derived())</span></span>;<br>    IteratorCoreAccess::<span class="hljs-built_in">increment</span>(<span class="hljs-built_in">derived</span>());<br>    <span class="hljs-keyword">return</span> tmp;<br>  &#125;<br>  <span class="hljs-function"><span class="hljs-keyword">template</span>&lt;<span class="hljs-keyword">class</span> Facade&gt;</span><br><span class="hljs-function">  <span class="hljs-type">static</span> <span class="hljs-keyword">typename</span> Facade::reference <span class="hljs-title">dereference</span><span class="hljs-params">(Facade <span class="hljs-type">const</span> &amp;f)</span> </span>&#123;<br>    <span class="hljs-keyword">return</span> f.<span class="hljs-built_in">dereference</span>();<br>  &#125;<br>  <span class="hljs-function">Reference <span class="hljs-title">Value</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> </span>&#123;<br>    <span class="hljs-keyword">return</span> IteratorCoreAccess::<span class="hljs-built_in">dereference</span>(<span class="hljs-built_in">derived</span>());<br>  &#125;<br> <span class="hljs-keyword">protected</span>:<br>  <span class="hljs-function">Derived &amp;<span class="hljs-title">derived</span><span class="hljs-params">()</span> </span>&#123;<br>    <span class="hljs-keyword">return</span> *<span class="hljs-built_in">static_cast</span>&lt;Derived *&gt;(<span class="hljs-keyword">this</span>);<br>  &#125;<br>&#125;;<br></code></pre></td></tr></table></figure>
+
+<p>这里为了方便，我们使用 <code>Next</code> 而非 <code>operator++</code>（因为 ++ 操作符还分 postfix 和 prefix…），希望阅读到此处的读者不要奇怪。</p>
+<h4 id="实现接口"><a href="#实现接口" class="headerlink" title="实现接口"></a>实现接口</h4><p>我们要在 <code>IteratorFacade</code> 中实现的就是，用户只需实现 <code>increment</code>，<code>dereference</code> 函数，并且将 <code>IteratorCoreAccess</code> 设为友元类，即可实现一个 forward iterator（<code>Next()</code>函数可用）。如果我们想要实现一个 <a target="_blank" rel="noopener" href="http://en.cppreference.com/w/cpp/concept/BidirectionalIterator">bidirectional iterator</a>，我们可以实现 <code>decrement</code>，这样 <code>Prev()</code>函数即可用。</p>
+<p>这里的秘密在于 <code>IteratorCoreAccess</code>，由于其中的成员函数用 static 声明，例如只有在 <code>decrement</code> 被调用时，编译器才会去检查 <code>Facade</code> 类型是否具有 member function <code>decrement</code>。</p>
+<figure class="highlight perl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs perl"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">IteratorCoreAccess</span> </span>&#123;<br>  template&lt;<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">D</span>, <span class="hljs-title">class</span> <span class="hljs-title">T</span>, <span class="hljs-title">class</span> <span class="hljs-title">C</span>&gt; <span class="hljs-title">friend</span></span><br><span class="hljs-class">  <span class="hljs-title">class</span> <span class="hljs-title">IteratorFacade</span></span>;<br> private:<br>  template&lt;<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Facade</span>&gt;</span><br><span class="hljs-class">  <span class="hljs-title">static</span> <span class="hljs-title">void</span> <span class="hljs-title">increment</span>(<span class="hljs-title">Facade</span> &amp;<span class="hljs-title">f</span>) </span>&#123;<br>    f.increment();<br>  &#125;<br>  template&lt;<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Facade</span>&gt;</span><br><span class="hljs-class">  <span class="hljs-title">static</span> <span class="hljs-title">void</span> <span class="hljs-title">decrement</span>(<span class="hljs-title">Facade</span> &amp;<span class="hljs-title">f</span>) </span>&#123;<br>    f.decrement();<br>  &#125;<br>  template&lt;<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Facade</span>&gt;</span><br><span class="hljs-class">  <span class="hljs-title">static</span> <span class="hljs-title">typename</span> <span class="hljs-title">Facade</span>::<span class="hljs-title">reference</span> <span class="hljs-title">dereference</span>(<span class="hljs-title">Facade</span> <span class="hljs-title">const</span> &amp;<span class="hljs-title">f</span>) </span>&#123;<br>    <span class="hljs-keyword">return</span> f.dereference();<br>  &#125;<br>  // Objects of this <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">are</span> <span class="hljs-title">useless</span>.</span><br><span class="hljs-class">  <span class="hljs-title">IteratorCoreAccess</span>() = <span class="hljs-title">delete</span></span>;<br>&#125;;<br></code></pre></td></tr></table></figure>
+
+<p>相对于传统的 interface，这种方法（或者说设计模式）是强耦合的。它提供给用户有限的几种方案，用户根据自身需求（比如需要 forward iterator 还是 bidirectional iterator），实现相应的函数。</p>
+<h4 id="限制-1"><a href="#限制-1" class="headerlink" title="限制"></a>限制</h4><ul>
+<li>这种方法几乎没有多态可言，因为父类的名字不可被使用（由于模板参数的不同，<code>IteratorFacade</code> 的两个子类不一定享有同一个父类）。这导致一定程度上扩展性降低，适用于需求极其稳定的情形。</li>
+<li>不可向下扩展。</li>
+</ul>
+<h4 id="优点"><a href="#优点" class="headerlink" title="优点"></a>优点</h4><ul>
+<li>灵活性强。</li>
+<li>简化了接口的设计。有点像 @叛逆者 曾经在知乎上回答的，<a target="_blank" rel="noopener" href="https://www.zhihu.com/question/37208466/answer/71549555">游戏主机效率PC高的回答</a>中提到的，把原先积木拼装结构，变成电焊焊死的，更加结实，也失去了可扩展性。</li>
+</ul>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E6%9C%AA%E5%88%86%E7%B1%BB/" class="category-chain-item">未分类</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/C/" class="print-no-link">#C++</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>C++ 的三种实现接口的方式</div>
+      <div>http://ippclub.github.io/C-的三种实现接口的方式/</div>
+    </div>
+    <div class="license-meta">
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2016年3月11日</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>更新于</div>
+          <div>2026年4月16日</div>
+        </div>
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="NC - 非商业性使用">
+                    <i class="iconfont icon-cc-nc"></i>
+                  </span>
+                </a>
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="SA - 相同方式共享">
+                    <i class="iconfont icon-cc-sa"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/%E8%AF%BB-leveldb-%E7%9A%84%E6%84%9F%E6%82%9F-%EF%BC%9ACache%E7%9A%84%E8%AE%BE%E8%AE%A1/" title="读 leveldb 的感悟 ：Cache的设计">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">读 leveldb 的感悟 ：Cache的设计</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/Swift%E4%B9%8BAnyClass%E4%B8%8E%E5%8A%A8%E6%80%81%E7%B1%BB%E5%9E%8B/" title="Swift之AnyClass与动态类型">
+                        <span class="hidden-mobile">Swift之AnyClass与动态类型</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+  <div id="waline"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#waline', function() {
+      Fluid.utils.createCssLink('https://registry.npmmirror.com/@waline/client/2.15.8/files/dist/waline.css')
+      Fluid.utils.createScript('https://registry.npmmirror.com/@waline/client/2.15.8/files/dist/waline.js', function() {
+        var options = Object.assign(
+          {"serverURL":"https://waline.harkerhand.cn/","path":"window.location.pathname","meta":["nick","mail","link"],"requiredMeta":["nick"],"lang":"zh-CN","emoji":["https://cdn.jsdelivr.net/gh/walinejs/emojis/weibo","https://cdn.jsdelivr.net/gh/walinejs/emojis/tieba","https://cdn.jsdelivr.net/gh/walinejs/emojis/bmoji","https://cdn.jsdelivr.net/gh/walinejs/emojis/bilibili"],"dark":"html[data-user-color-scheme=\"dark\"]","wordLimit":0,"pageSize":10,"search":false,"reaction":true},
+          {
+            el: '#waline',
+            path: window.location.pathname
+          }
+        )
+        Waline.init(options);
+        Fluid.utils.waitElementVisible('#waline .vcontent', () => {
+          var imgSelector = '#waline .vcontent img:not(.vemoji)';
+          Fluid.plugins.imageCaption(imgSelector);
+          Fluid.plugins.fancyBox(imgSelector);
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

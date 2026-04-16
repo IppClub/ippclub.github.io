@@ -1,0 +1,906 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.ico">
+  <link rel="icon" href="/img/favicon.ico">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="React 与状态React.js自从Facebook一推出，就受到Web前端工程师的强烈推崇。虽说曾经火过一时的Angular.js颠覆了前端的工程，但是React更多颠覆的，是下一代UI编程的思维。 传统UI编程，基本很多地方都需要将数据来源，绑定到对应的UI对象，比如用户点击了一个操作，更改了名称，那么你需要更新执行一个回调函数来处理点击操作，并且把新的数据更新原有的UI对象的属性，比如大概">
+<meta property="og:type" content="article">
+<meta property="og:title" content="React-Native -- 下一代UI开发思维">
+<meta property="og:url" content="http://ippclub.github.io/React-Native-%E4%B8%8B%E4%B8%80%E4%BB%A3UI%E5%BC%80%E5%8F%91%E6%80%9D%E7%BB%B4/index.html">
+<meta property="og:site_name" content="I++ Club">
+<meta property="og:description" content="React 与状态React.js自从Facebook一推出，就受到Web前端工程师的强烈推崇。虽说曾经火过一时的Angular.js颠覆了前端的工程，但是React更多颠覆的，是下一代UI编程的思维。 传统UI编程，基本很多地方都需要将数据来源，绑定到对应的UI对象，比如用户点击了一个操作，更改了名称，那么你需要更新执行一个回调函数来处理点击操作，并且把新的数据更新原有的UI对象的属性，比如大概">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://facebook.github.io/react-native/img/TutorialFinal.png">
+<meta property="og:image" content="https://facebook.github.io/react-native/img/TutorialFinal2.png">
+<meta property="article:published_time" content="2015-11-04T17:30:17.000Z">
+<meta property="article:modified_time" content="2026-04-16T03:07:22.220Z">
+<meta property="article:tag" content="React-Native">
+<meta property="article:tag" content="IOS">
+<meta property="article:tag" content="Javascript">
+<meta property="article:tag" content="Swift">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://facebook.github.io/react-native/img/TutorialFinal.png">
+  
+  
+  
+  <title>React-Native -- 下一代UI开发思维 - I++ Club</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"ippclub.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"always","icon":"#"},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>I++ Club</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/mainbg.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="React-Native -- 下一代UI开发思维"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2015-11-05 01:30" pubdate>
+          2015年11月5日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          2k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          25 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar category-bar" style="margin-right: -1rem">
+    
+
+
+
+
+
+<div class="category-list">
+  
+  
+    
+    
+    
+    <div class="category row nomargin-x">
+      <a class="category-item 
+          list-group-item category-item-action col-10 col-md-11 col-xm-11" title="未分类"
+        id="heading-ecf7ebb59328ebf2369ce693a2423566" role="tab" data-toggle="collapse" href="#collapse-ecf7ebb59328ebf2369ce693a2423566"
+        aria-expanded="true"
+      >
+        未分类
+        <span class="list-group-count">(13)</span>
+        <i class="iconfont icon-arrowright"></i>
+      </a>
+      
+      <div class="category-collapse collapse show" id="collapse-ecf7ebb59328ebf2369ce693a2423566"
+           role="tabpanel" aria-labelledby="heading-ecf7ebb59328ebf2369ce693a2423566">
+        
+        
+          
+  <div class="category-post-list">
+    
+    
+      
+      
+        <a href="/C-%E7%9A%84%E4%B8%89%E7%A7%8D%E5%AE%9E%E7%8E%B0%E6%8E%A5%E5%8F%A3%E7%9A%84%E6%96%B9%E5%BC%8F/" title="C++ 的三种实现接口的方式"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">C++ 的三种实现接口的方式</span>
+        </a>
+      
+    
+      
+      
+        <a href="/I-Club/" title="I++俱乐部"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">I++俱乐部</span>
+        </a>
+      
+    
+      
+      
+        <a href="/Implementing-an-unique-ptr/" title="Implementing an unique_ptr"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">Implementing an unique_ptr</span>
+        </a>
+      
+    
+      
+      
+        <a href="/Random-Binary-Search-Tree-Treap/" title="Random Binary Search Tree - Treap"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">Random Binary Search Tree - Treap</span>
+        </a>
+      
+    
+      
+      
+        <a href="/React-Native-%E4%B8%8B%E4%B8%80%E4%BB%A3UI%E5%BC%80%E5%8F%91%E6%80%9D%E7%BB%B4/" title="React-Native -- 下一代UI开发思维"
+           class="list-group-item list-group-item-action
+           active">
+          <span class="category-post">React-Native -- 下一代UI开发思维</span>
+        </a>
+      
+    
+      
+      
+        <a href="/Swift%E4%B9%8BAnyClass%E4%B8%8E%E5%8A%A8%E6%80%81%E7%B1%BB%E5%9E%8B/" title="Swift之AnyClass与动态类型"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">Swift之AnyClass与动态类型</span>
+        </a>
+      
+    
+      
+      
+        <a href="/mongo-%E6%BA%90%E7%A0%81%E9%98%85%E8%AF%BB%E6%84%9F%E6%82%9F%EF%BC%88%E4%B8%80%EF%BC%89/" title="mongo 源码阅读感悟（一）"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">mongo 源码阅读感悟（一）</span>
+        </a>
+      
+    
+      
+      
+        <a href="/%E5%85%B3%E4%BA%8E-Redis-3-0-%E4%B8%AD%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" title="关于 Redis 3.0 中的数据结构"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">关于 Redis 3.0 中的数据结构</span>
+        </a>
+      
+    
+      
+      
+        <a href="/%E5%85%B3%E4%BA%8E-boost-noncopyable-%E7%9A%84%E4%B8%80%E7%82%B9%E6%80%9D%E8%80%83/" title="关于 boost::noncopyable 的一点思考"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">关于 boost::noncopyable 的一点思考</span>
+        </a>
+      
+    
+      
+      
+        <a href="/%E6%88%91%E5%AF%B9C-%E7%9A%84%E7%BC%96%E7%A8%8B%E6%80%9D%E8%80%83/" title="我对C++的编程思考"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">我对C++的编程思考</span>
+        </a>
+      
+    
+      
+      
+        <a href="/%E6%8F%90%E4%BA%A4%E6%96%87%E7%AB%A0%E6%A0%BC%E5%BC%8F%E8%A6%81%E6%B1%82/" title="提交文章格式要求"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">提交文章格式要求</span>
+        </a>
+      
+    
+      
+      
+        <a href="/%E7%94%A8-C-%E5%86%99%E4%B8%80%E4%B8%AA-Inet4Address-%E7%B1%BB/" title="用 C++ 写一个 Inet4Address 类"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">用 C++ 写一个 Inet4Address 类</span>
+        </a>
+      
+    
+      
+      
+        <a href="/%E8%AF%BB-leveldb-%E7%9A%84%E6%84%9F%E6%82%9F-%EF%BC%9ACache%E7%9A%84%E8%AE%BE%E8%AE%A1/" title="读 leveldb 的感悟 ：Cache的设计"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">读 leveldb 的感悟 ：Cache的设计</span>
+        </a>
+      
+    
+  </div>
+
+        
+      </div>
+    </div>
+  
+</div>
+
+
+  </aside>
+
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">React-Native -- 下一代UI开发思维</h1>
+            
+              <p id="updated-time" class="note note-info" style="">
+                
+                  
+                    本文最后更新于 2026年4月16日 上午
+                  
+                
+              </p>
+            
+            
+              <div class="markdown-body">
+                
+                <h2 id="React-与状态"><a href="#React-与状态" class="headerlink" title="React 与状态"></a>React 与状态</h2><p><code>React.js</code>自从Facebook一推出，就受到Web前端工程师的强烈推崇。虽说曾经火过一时的<code>Angular.js</code>颠覆了前端的工程，但是<code>React</code>更多颠覆的，是下一代UI编程的思维。</p>
+<p>传统UI编程，基本很多地方都需要将数据来源，绑定到对应的UI对象，比如用户点击了一个操作，更改了名称，那么你需要更新执行一个回调函数来处理点击操作，并且把新的数据更新原有的UI对象的属性，比如大概就是这样的东西</p>
+<figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs haskell"><span class="hljs-title">func</span> onClick(sender) &#123;<br>	var <span class="hljs-class"><span class="hljs-keyword">data</span> = getData(<span class="hljs-title">sender</span>);</span><br>	self.button.title = <span class="hljs-class"><span class="hljs-keyword">data</span>.name;</span><br>	self.button.color = <span class="hljs-class"><span class="hljs-keyword">data</span>.color;</span><br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>这样虽然说直观，但是有很大的问题。试想，假如有很多种的回调函数，每个回调函数监听不同的操作，比如<code>onMounseDown</code>,<code>onMouseUp</code>,<code>onKeyDown</code>,<code>onScroll</code>……甚至根据不同的sender，我们会有不同的操作，我们就必须得手写很多机械的</p>
+<figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs haskell"><span class="hljs-title">self</span>.xx = <span class="hljs-class"><span class="hljs-keyword">data</span>.xx</span><br><span class="hljs-title">self</span>.xy = <span class="hljs-class"><span class="hljs-keyword">data</span>.xy</span><br></code></pre></td></tr></table></figure>
+
+<p>这类的代码，这就给日后维护和扩展带来了灾难，假如我要换一个UI组件，又得一个个检查是否赋值成功；假如我要把这个UI组件在新的UIView里面重用，我又得改动所有的赋值代码，对于大型项目这种UI对象成百上千，UI属性上万，这样是非常可怕的。</p>
+<p>而<code>React</code>，就将所有的赋值，数据绑定，抽象成为一个个状态，不同的事件监听，就是不同的状态而已，而这些状态之间相互独立，不会受到某些全局变量更改而造成UI混乱的情况，更好的是，开发者不需要考虑到底这个属性什么时候赋值，是在数据更新之前还是之后，需不需要定时刷新这种无意义的苦力活上。</p>
+<h2 id="React-Native-示例"><a href="#React-Native-示例" class="headerlink" title="React-Native 示例"></a>React-Native 示例</h2><blockquote>
+<p>完整代码：<a target="_blank" rel="noopener" href="https://facebook.github.io/react-native/docs/tutorial.html#content">Tutorial</a></p>
+</blockquote>
+<p>看看<code>React-Native</code>的sample，需求就是实现一个电影列表显示的View。类似这样：</p>
+<p><img src="https://facebook.github.io/react-native/img/TutorialFinal.png" srcset="/img/loading.gif" lazyload alt="iOS"> <img src="https://facebook.github.io/react-native/img/TutorialFinal2.png" srcset="/img/loading.gif" lazyload alt="Android"></p>
+<p>这段代码中，只有View和ViewModel（Model就是临时的JSON），React用状态把UI属性和数据绑定起来，从而避免了事件监听手动判断时机来赋值</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><code class="hljs javascript"><span class="hljs-keyword">var</span> <span class="hljs-title class_">AwesomeProject</span> = <span class="hljs-title class_">React</span>.<span class="hljs-title function_">createClass</span>(&#123;<br>  <span class="hljs-comment">//初始状态，不渲染</span><br>  <span class="hljs-attr">getInitialState</span>: <span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) &#123;<br>    <span class="hljs-keyword">return</span> &#123;<br>      <span class="hljs-attr">dataSource</span>: <span class="hljs-keyword">new</span> <span class="hljs-title class_">ListView</span>.<span class="hljs-title class_">DataSource</span>(&#123;<br>        <span class="hljs-attr">rowHasChanged</span>: <span class="hljs-function">(<span class="hljs-params">row1, row2</span>) =&gt;</span> row1 !== row2,<br>      &#125;),<br>      <span class="hljs-attr">loaded</span>: <span class="hljs-literal">false</span>,<br>    &#125;;<br>  &#125;,<br><br>  <span class="hljs-comment">//模型层变动导致状态改变，渲染</span><br><br>  <span class="hljs-attr">fetchData</span>: <span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) &#123;<br>    <span class="hljs-title function_">fetch</span>(<span class="hljs-variable constant_">REQUEST_URL</span>)<br>      .<span class="hljs-title function_">then</span>(<span class="hljs-function">(<span class="hljs-params">response</span>) =&gt;</span> response.<span class="hljs-title function_">json</span>())<br>      .<span class="hljs-title function_">then</span>(<span class="hljs-function">(<span class="hljs-params">responseData</span>) =&gt;</span> &#123;<br>        <span class="hljs-variable language_">this</span>.<span class="hljs-title function_">setState</span>(&#123;<br>          <span class="hljs-attr">dataSource</span>: <span class="hljs-variable language_">this</span>.<span class="hljs-property">state</span>.<span class="hljs-property">dataSource</span>.<span class="hljs-title function_">cloneWithRows</span>(responseData.<span class="hljs-property">movies</span>),<br>          <span class="hljs-attr">loaded</span>: <span class="hljs-literal">true</span>,<br>        &#125;);<br>      &#125;)<br>      .<span class="hljs-title function_">done</span>();<br>  &#125;,<br><br>  <span class="hljs-comment">//渲染层，绑定状态和UI属性</span><br><br>  <span class="hljs-attr">render</span>: <span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) &#123;<br>    <span class="hljs-keyword">return</span> (<br>      <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">ListView</span>	//<span class="hljs-attr">这里是JSX语法</span>，<span class="hljs-attr">在JS里面返回标签</span></span></span><br><span class="hljs-tag"><span class="language-xml">        <span class="hljs-attr">dataSource</span>=<span class="hljs-string">&#123;this.state.dataSource&#125;</span></span></span><br><span class="hljs-tag"><span class="language-xml">        <span class="hljs-attr">renderRow</span>=<span class="hljs-string">&#123;this.renderMovie&#125;</span></span></span><br><span class="hljs-tag"><span class="language-xml">        <span class="hljs-attr">style</span>=<span class="hljs-string">&#123;styles.listView&#125;</span></span></span><br><span class="hljs-tag"><span class="language-xml">      /&gt;</span></span><br>    );<br>  &#125;<br> &#125;<br></code></pre></td></tr></table></figure>
+
+<blockquote>
+<p>完整代码：<a target="_blank" rel="noopener" href="https://github.com/lizhuoli1126/iOS-Demo-Project">iOS Demo</a></p>
+</blockquote>
+<p>相比来说，原生Cocoa Touch的实现，就要丑陋的多了，尤其是渲染部分绑定UI对象的属性和数据来源，假如你有多处数据来源，多种UI属性，你就得写很多判断来保证你的UI对象的属性符合预期的赋值顺序。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><code class="hljs javascript"><span class="hljs-comment">//初始化UI对象，调用模型去获取数据</span><br>override func <span class="hljs-title function_">viewDidLoad</span>(<span class="hljs-params"></span>) &#123;<br>   <span class="hljs-variable language_">super</span>.<span class="hljs-title function_">viewDidLoad</span>()<br>   <span class="hljs-title function_">fetchData</span>()<br>&#125;<br><br><span class="hljs-comment">//获取数据，需要手动维护状态，比如开启indicator(旋转等待条)，数据获取成功后渲染</span><br>func <span class="hljs-title function_">fetchData</span>(<span class="hljs-params"></span>) &#123;<br>   indicator.<span class="hljs-title function_">startAnimating</span>()<br>   <span class="hljs-title function_">request</span>(.<span class="hljs-property">GET</span>, <span class="hljs-variable constant_">API_URL</span>, <span class="hljs-attr">parameters</span>: [<span class="hljs-string">&quot;apikey&quot;</span>: <span class="hljs-variable constant_">API_KEY</span>, <span class="hljs-string">&quot;page_limit&quot;</span>: <span class="hljs-variable constant_">PAGE_SIZE</span>])<br>       .<span class="hljs-property">responseJSON</span>&#123; _, _, data, _ <span class="hljs-keyword">in</span><br>           self.<span class="hljs-title function_">render</span>(<span class="hljs-title class_">JSON</span>(data!))<br>   &#125;<br>&#125;<br><br><span class="hljs-comment">//渲染UI对象，需要手动维护状态，比如关闭indicator(旋转等待条)</span><br>func <span class="hljs-title function_">render</span>(<span class="hljs-params">result:<span class="hljs-built_in">JSON</span></span>) &#123;<br>   indicator.<span class="hljs-title function_">stopAnimating</span>()<br>   movieJSON = result<br>   self.<span class="hljs-property">tableView</span>.<span class="hljs-title function_">reloadData</span>()<br>&#125;<br><br><span class="hljs-comment">//这都算好的了，TableView会自动回调你的代码，返回这个TableView里面的Cell个数</span><br>func <span class="hljs-title function_">tableView</span>(<span class="hljs-attr">tableView</span>: <span class="hljs-title class_">UITableView</span>, numberOfRowsInSection <span class="hljs-attr">section</span>: <span class="hljs-title class_">Int</span>) -&gt; <span class="hljs-title class_">Int</span> &#123;<br>   <span class="hljs-keyword">var</span> movieNum = movieJSON[<span class="hljs-string">&quot;movies&quot;</span>].<span class="hljs-property">arrayValue</span>.<span class="hljs-property">count</span><br>   <span class="hljs-keyword">return</span> movieNum<br>&#125;<br><br><span class="hljs-comment">//可怕的地方，需要手动赋值给UI对象的属性</span><br>func <span class="hljs-title function_">tableView</span>(<span class="hljs-attr">tableView</span>: <span class="hljs-title class_">UITableView</span>, cellForRowAtIndexPath <span class="hljs-attr">indexPath</span>: <span class="hljs-title class_">NSIndexPath</span>) -&gt; <span class="hljs-title class_">UITableViewCell</span> &#123;<br>   <span class="hljs-keyword">let</span> cell = self.<span class="hljs-property">tableView</span>.<span class="hljs-title function_">dequeueReusableCellWithIdentifier</span>(<span class="hljs-string">&quot;movieIdentifier&quot;</span>, <span class="hljs-attr">forIndexPath</span>: indexPath)<br>   		<span class="hljs-keyword">as</span>! <span class="hljs-title class_">MovieTableViewCell</span><br><br>   <span class="hljs-keyword">let</span> row = indexPath.<span class="hljs-property">row</span><br><br>   <span class="hljs-comment">//手动维护状态，JSON解析再赋值给对应的UI对象，这里省略了UI对象的代码和样式</span><br>   <span class="hljs-comment">//（一般可以通过Interface Builder做或者专门一个类写UI代码）</span><br>   cell.<span class="hljs-property">movieTitle</span>.<span class="hljs-property">text</span> = movieJSON[<span class="hljs-string">&quot;movies&quot;</span>][row][<span class="hljs-string">&quot;title&quot;</span>].<span class="hljs-property">stringValue</span><br>   cell.<span class="hljs-property">movieYear</span>.<span class="hljs-property">text</span> = movieJSON[<span class="hljs-string">&quot;movies&quot;</span>][row][<span class="hljs-string">&quot;year&quot;</span>].<span class="hljs-property">stringValue</span><br>   <span class="hljs-keyword">var</span> movieImageUrl = movieJSON[<span class="hljs-string">&quot;movies&quot;</span>][row][<span class="hljs-string">&quot;posters&quot;</span>][<span class="hljs-string">&quot;thumbnail&quot;</span>].<span class="hljs-property">stringValue</span><br><br>   <span class="hljs-comment">//最可怕是渲染中还需要新的数据，再回调模型，就很难维护了</span><br>   <span class="hljs-keyword">if</span> cell.<span class="hljs-property">movieImage</span>.<span class="hljs-property">image</span> == nil &#123;<br>       <span class="hljs-title function_">request</span>(.<span class="hljs-property">GET</span>, movieImageUrl).<span class="hljs-property">response</span>&#123; _, _, data, _ <span class="hljs-keyword">in</span><br>           <span class="hljs-keyword">let</span> movieImage = <span class="hljs-title class_">UIImage</span>(<span class="hljs-attr">data</span>: data <span class="hljs-keyword">as</span>! <span class="hljs-title class_">NSData</span>)<br>           cell.<span class="hljs-property">movieImage</span>.<span class="hljs-property">image</span> = movieImage<br>       &#125;<br>   &#125;<br><br>   <span class="hljs-keyword">return</span> cell<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h1 id="React-与函数式"><a href="#React-与函数式" class="headerlink" title="React 与函数式"></a>React 与函数式</h1><p><code>React</code>更多的，就是一种类似函数式的想法，把UI对象属性，数据来源，当作一个Monad包裹起来，传统意义上的不同数据来源进行UI属性赋值，相当于这个Monad经过不同的函数作用，达到状态的切换，好处就是大大减少了开发者手动维护UI属性的工作，而且可以达到更高的开发效率。而且再也不怕扩展了，因为这时候可以把多个组件分配给不同的人，每个人完全不需要管别人内部的变量名是什么，UI属性是什么，只要把自己的状态管理好，Model层接口统一，剩下的合并即可。</p>
+<h1 id="React-与效率"><a href="#React-与效率" class="headerlink" title="React 与效率"></a>React 与效率</h1><p>既然提到了状态，因为<code>React</code>采取<code>VirtualDOM</code>来diff需要进行状态更新的UI对象，每次确保了只更新属性发生改变的部分。实现也很高效，使用了一个普通的二叉树<code>vtree</code>。每个结点<code>vnode</code>就是对应的Tag，比如<Image>之类，结点还存储了一个struct用来保存这些Tag的属性（比如Image的size）</p>
+<p>其中的diff算法可以一看……代码地址在：<a target="_blank" rel="noopener" href="https://github.com/Matt-Esch/virtual-dom/blob/master/vtree/diff.js">GitHub-vtree</a></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><code class="hljs javascript"><span class="hljs-comment">//主要逻辑，就是对b树进行reorder，找出a树与b树的同结点不同属性的diff</span><br><span class="hljs-comment">//剩下可以无痛patch的部分只需要下面的for循环就可以处理</span><br><span class="hljs-keyword">var</span> aChildren = a.<span class="hljs-property">children</span><br><span class="hljs-keyword">var</span> orderedSet = <span class="hljs-title function_">reorder</span>(aChildren, b.<span class="hljs-property">children</span>)<br><span class="hljs-keyword">var</span> bChildren = orderedSet.<span class="hljs-property">children</span><br><br><span class="hljs-keyword">var</span> len = aLen &gt; bLen ? aLen : bLen<br><br><span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> i = <span class="hljs-number">0</span>; i &lt; len; i++) &#123;<br>   <span class="hljs-keyword">var</span> leftNode = aChildren[i]<br>   <span class="hljs-keyword">var</span> rightNode = bChildren[i]<br>   index += <span class="hljs-number">1</span><br><br>   <span class="hljs-keyword">if</span> (!leftNode) &#123;<br>       <span class="hljs-keyword">if</span> (rightNode) &#123;<br>           <span class="hljs-comment">//这里处理的多余的结点，直接加到b树上即可</span><br>           apply = <span class="hljs-title function_">appendPatch</span>(apply,<br>               <span class="hljs-keyword">new</span> <span class="hljs-title class_">VPatch</span>(<span class="hljs-title class_">VPatch</span>.<span class="hljs-property">INSERT</span>, <span class="hljs-literal">null</span>, rightNode))<br>       &#125;<br>   &#125; <span class="hljs-keyword">else</span> &#123;<br>       <span class="hljs-title function_">walk</span>(leftNode, rightNode, patch, index)<br>   &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>这是核心reorder代码，目标找到是同一结点不同属性的diff，多出来的不需要管</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><code class="hljs javascript"><span class="hljs-comment">//遍历a树，如果b树中结点集合含有a的key，标记下b树中这些key，更新旧的标记</span><br><span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> i = <span class="hljs-number">0</span> ; i &lt; aChildren.<span class="hljs-property">length</span>; i++) &#123;<br>   <span class="hljs-keyword">var</span> aItem = aChildren[i]<br>   <span class="hljs-keyword">var</span> itemIndex<br><br>   <span class="hljs-keyword">if</span> (aItem.<span class="hljs-property">key</span>) &#123;<br>       <span class="hljs-keyword">if</span> (bKeys.<span class="hljs-title function_">hasOwnProperty</span>(aItem.<span class="hljs-property">key</span>)) &#123;<br>           <span class="hljs-comment">// Match up the old keys</span><br>           itemIndex = bKeys[aItem.<span class="hljs-property">key</span>]<br>           newChildren.<span class="hljs-title function_">push</span>(bChildren[itemIndex])<br><br>       &#125; <span class="hljs-keyword">else</span> &#123;<br>           <span class="hljs-comment">// Remove old keyed items</span><br>           itemIndex = i - deletedItems++<br>           newChildren.<span class="hljs-title function_">push</span>(<span class="hljs-literal">null</span>)<br>       &#125;<br>   &#125;<br>   <span class="hljs-comment">//......</span><br>	&#125;<br><br><br><span class="hljs-comment">//遍历b树，添加上面标记的所有key到一个集合，暂时未排序</span><br><span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> j = <span class="hljs-number">0</span>; j &lt; bChildren.<span class="hljs-property">length</span>; j++) &#123;<br>   <span class="hljs-keyword">var</span> newItem = bChildren[j]<br>   <span class="hljs-keyword">if</span> (newItem.<span class="hljs-property">key</span>) &#123;<br>       <span class="hljs-keyword">if</span> (!aKeys.<span class="hljs-title function_">hasOwnProperty</span>(newItem.<span class="hljs-property">key</span>)) &#123;<br>           newChildren.<span class="hljs-title function_">push</span>(newItem)<br>       &#125;<br>       <span class="hljs-comment">//......</span><br> &#125;<br><br><span class="hljs-comment">//对上述集合，真实的b树删除多余结点，直到上述集合为空为止，复杂度O(n)</span><br><span class="hljs-keyword">var</span> simulate = newChildren.<span class="hljs-title function_">slice</span>()<br><br><span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> k = <span class="hljs-number">0</span>; k &lt; bChildren.<span class="hljs-property">length</span>;) &#123;<br><span class="hljs-keyword">var</span> wantedItem = bChildren[k]<br>simulateItem = simulate[simulateIndex]<br><br><span class="hljs-comment">//最后删除剩下虚拟的结点</span><br><span class="hljs-keyword">while</span>(simulateIndex &lt; simulate.<span class="hljs-property">length</span>) &#123;<br>   simulateItem = simulate[simulateIndex]<br>   removes.<span class="hljs-title function_">push</span>(<span class="hljs-title function_">remove</span>(simulate, simulateIndex, simulateItem &amp;&amp; simulateItem.<span class="hljs-property">key</span>))<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>整体的时间复杂度，达到了<br>$$ O(M+N) $$<br>已经是理论下界了。比起手动管理状态来说，效率可以说是直接持平，甚至对部分滥用事件监听的写法效率会更高。</p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>虽然我并不喜欢UI编程，但是自从图形化出现之后，UI已经成为了继数据结构、算法外，面向终端用户的应用又一个大工程。</p>
+<p>从最早的指令式跳转赋值UI，函数指针响应处理，到中期的面向对象，消息发送回调事件，手动管理属性，在到如今的React以状态和VirualDOM来绑定数据和组件。</p>
+<p>UI编程其实也是在不断进化的，也许今后会有更好的开发方式让我们这群不会写UI的人也能够轻松写起来UI。</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E6%9C%AA%E5%88%86%E7%B1%BB/" class="category-chain-item">未分类</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/React-Native/" class="print-no-link">#React-Native</a>
+      
+        <a href="/tags/IOS/" class="print-no-link">#IOS</a>
+      
+        <a href="/tags/Javascript/" class="print-no-link">#Javascript</a>
+      
+        <a href="/tags/Swift/" class="print-no-link">#Swift</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>React-Native -- 下一代UI开发思维</div>
+      <div>http://ippclub.github.io/React-Native-下一代UI开发思维/</div>
+    </div>
+    <div class="license-meta">
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2015年11月5日</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>更新于</div>
+          <div>2026年4月16日</div>
+        </div>
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="NC - 非商业性使用">
+                    <i class="iconfont icon-cc-nc"></i>
+                  </span>
+                </a>
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="SA - 相同方式共享">
+                    <i class="iconfont icon-cc-sa"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/%E6%88%91%E5%AF%B9C-%E7%9A%84%E7%BC%96%E7%A8%8B%E6%80%9D%E8%80%83/" title="我对C++的编程思考">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">我对C++的编程思考</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/Random-Binary-Search-Tree-Treap/" title="Random Binary Search Tree - Treap">
+                        <span class="hidden-mobile">Random Binary Search Tree - Treap</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+  <div id="waline"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#waline', function() {
+      Fluid.utils.createCssLink('https://registry.npmmirror.com/@waline/client/2.15.8/files/dist/waline.css')
+      Fluid.utils.createScript('https://registry.npmmirror.com/@waline/client/2.15.8/files/dist/waline.js', function() {
+        var options = Object.assign(
+          {"serverURL":"https://waline.harkerhand.cn/","path":"window.location.pathname","meta":["nick","mail","link"],"requiredMeta":["nick"],"lang":"zh-CN","emoji":["https://cdn.jsdelivr.net/gh/walinejs/emojis/weibo","https://cdn.jsdelivr.net/gh/walinejs/emojis/tieba","https://cdn.jsdelivr.net/gh/walinejs/emojis/bmoji","https://cdn.jsdelivr.net/gh/walinejs/emojis/bilibili"],"dark":"html[data-user-color-scheme=\"dark\"]","wordLimit":0,"pageSize":10,"search":false,"reaction":true},
+          {
+            el: '#waline',
+            path: window.location.pathname
+          }
+        )
+        Waline.init(options);
+        Fluid.utils.waitElementVisible('#waline .vcontent', () => {
+          var imgSelector = '#waline .vcontent img:not(.vemoji)';
+          Fluid.plugins.imageCaption(imgSelector);
+          Fluid.plugins.fancyBox(imgSelector);
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

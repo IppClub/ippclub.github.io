@@ -1,0 +1,951 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.ico">
+  <link rel="icon" href="/img/favicon.ico">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="D-major">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="前置知识C&#x2F;C++ 的基础语法，Shell中命令的基本结构:命令名 [选项] [参数]，文件依赖关系：某个文件需要引用、包含或使用其他文件的内容才能正常工作。  第一个例子首先，让我们来看一个简单的C++源码从预处理，编译，链接到一个完整的可执行程序在 CLI(Command Line Interface) 中需要什么命令吧。 以 Ubuntu 上的 bash 为例 源码： 123456">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Makefile 的食用方法">
+<meta property="og:url" content="http://ippclub.github.io/Makefile%E7%9A%84%E4%BD%BF%E7%94%A8%E6%96%B9%E6%B3%95/index.html">
+<meta property="og:site_name" content="I++ Club">
+<meta property="og:description" content="前置知识C&#x2F;C++ 的基础语法，Shell中命令的基本结构:命令名 [选项] [参数]，文件依赖关系：某个文件需要引用、包含或使用其他文件的内容才能正常工作。  第一个例子首先，让我们来看一个简单的C++源码从预处理，编译，链接到一个完整的可执行程序在 CLI(Command Line Interface) 中需要什么命令吧。 以 Ubuntu 上的 bash 为例 源码： 123456">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://ippclub.github.io/Makefile%E7%9A%84%E4%BD%BF%E7%94%A8%E6%96%B9%E6%B3%95/%E5%B0%81%E9%9D%A2.jpg">
+<meta property="article:published_time" content="2025-04-04T08:43:06.000Z">
+<meta property="article:modified_time" content="2026-04-16T03:07:22.217Z">
+<meta property="article:tag" content="C++">
+<meta property="article:tag" content="shell">
+<meta property="article:tag" content="命令行">
+<meta property="article:tag" content="makefile">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://ippclub.github.io/Makefile%E7%9A%84%E4%BD%BF%E7%94%A8%E6%96%B9%E6%B3%95/%E5%B0%81%E9%9D%A2.jpg">
+  
+  
+  
+  <title>Makefile 的食用方法 - I++ Club</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"ippclub.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"always","icon":"#"},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>I++ Club</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/Makefile%E7%9A%84%E4%BD%BF%E7%94%A8%E6%96%B9%E6%B3%95/%E5%B0%81%E9%9D%A2.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Makefile 的食用方法"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-author" aria-hidden="true"></i>
+        D-major
+      </span>
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2025-04-04 16:43" pubdate>
+          2025年4月4日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          3k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          38 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar category-bar" style="margin-right: -1rem">
+    
+
+
+
+
+
+<div class="category-list">
+  
+  
+    
+    
+    
+    <div class="category row nomargin-x">
+      <a class="category-item 
+          list-group-item category-item-action col-10 col-md-11 col-xm-11" title="科普"
+        id="heading-cb5909f2fd6a1fab81c85d60b5ef82a5" role="tab" data-toggle="collapse" href="#collapse-cb5909f2fd6a1fab81c85d60b5ef82a5"
+        aria-expanded="true"
+      >
+        科普
+        <span class="list-group-count">(8)</span>
+        <i class="iconfont icon-arrowright"></i>
+      </a>
+      
+      <div class="category-collapse collapse show" id="collapse-cb5909f2fd6a1fab81c85d60b5ef82a5"
+           role="tabpanel" aria-labelledby="heading-cb5909f2fd6a1fab81c85d60b5ef82a5">
+        
+        
+          
+  <div class="category-post-list">
+    
+    
+      
+      
+        <a href="/1123%E6%B4%BB%E5%8A%A8/" title="1123活动"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">1123活动</span>
+        </a>
+      
+    
+      
+      
+        <a href="/Makefile%E7%9A%84%E4%BD%BF%E7%94%A8%E6%96%B9%E6%B3%95/" title="Makefile 的食用方法"
+           class="list-group-item list-group-item-action
+           active">
+          <span class="category-post">Makefile 的食用方法</span>
+        </a>
+      
+    
+      
+      
+        <a href="/xv6%E4%BB%A3%E7%A0%81%E9%98%85%E8%AF%BB/" title="xv6 代码阅读"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">xv6 代码阅读</span>
+        </a>
+      
+    
+      
+      
+        <a href="/%E4%B8%80%E4%BA%9B%E6%97%A5%E5%B8%B8%E5%8F%AF%E8%83%BD%E4%BC%9A%E7%94%A8%E5%BE%97%E4%B8%8A%E7%9A%84%E6%8A%80%E6%9C%AF%EF%BC%88%E4%BA%8C%EF%BC%89/" title="一些日常可能会用得上的技术（二）"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">一些日常可能会用得上的技术（二）</span>
+        </a>
+      
+    
+      
+      
+        <a href="/%E4%B8%80%E4%BA%9B%E6%97%A5%E5%B8%B8%E7%94%A8%E7%9A%84%E4%B8%8A%E7%9A%84%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%8A%80%E6%9C%AF%EF%BC%88%E4%B8%80%EF%BC%89/" title="一些日常用的上的计算机技术（一）"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">一些日常用的上的计算机技术（一）</span>
+        </a>
+      
+    
+      
+      
+        <a href="/%E7%88%B1%E4%B8%8E%E9%AD%94%E6%B3%95/" title="爱与魔法"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">爱与魔法</span>
+        </a>
+      
+    
+      
+      
+        <a href="/%E8%BD%AF%E4%BB%B6%E7%BA%A7%E7%A8%8B%E5%BA%8F%E7%9A%84%E7%BC%96%E8%AF%91/" title="软件级应用的编译"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">软件级应用的编译</span>
+        </a>
+      
+    
+      
+      
+        <a href="/%E9%9D%A2%E5%90%91%E6%96%B0%E6%8E%A5%E8%A7%A6%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%9A%84%E5%90%8C%E5%AD%A6%E7%9A%84%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E7%A7%91%E6%99%AE%EF%BC%88%E4%B8%80%EF%BC%89/" title="面向新接触计算机的同学的计算机基础知识科普（一）"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">面向新接触计算机的同学的计算机基础知识科普（一）</span>
+        </a>
+      
+    
+  </div>
+
+        
+      </div>
+    </div>
+  
+</div>
+
+
+  </aside>
+
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">Makefile 的食用方法</h1>
+            
+              <p id="updated-time" class="note note-info" style="">
+                
+                  
+                    本文最后更新于 2026年4月16日 上午
+                  
+                
+              </p>
+            
+            
+              <div class="markdown-body">
+                
+                <h2 id="前置知识"><a href="#前置知识" class="headerlink" title="前置知识"></a>前置知识</h2><p>C&#x2F;C++ 的基础语法，Shell中命令的基本结构:<code>命令名 [选项] [参数]</code>，文件依赖关系：某个文件需要引用、包含或使用其他文件的内容才能正常工作。</p>
+<hr>
+<h2 id="第一个例子"><a href="#第一个例子" class="headerlink" title="第一个例子"></a>第一个例子</h2><p>首先，让我们来看一个简单的C++源码从预处理，编译，链接到一个完整的可执行程序在 CLI(Command Line Interface) 中需要什么命令吧。</p>
+<p><em>以 Ubuntu 上的 bash 为例</em></p>
+<p>源码：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-comment">//Hello_world.cpp</span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;Print.h&quot;</span></span><br><span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;<br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span>&#123;<br>    <span class="hljs-built_in">print_w</span>(<span class="hljs-string">&quot;Hello, world.\n&quot;</span>);<br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-comment">//Print.cpp</span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;iostream&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;string&gt;</span></span><br><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">print_w</span><span class="hljs-params">(std::string str)</span></span>&#123;<br>    std::cout &lt;&lt; str;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-comment">//Print.h</span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;iostream&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;string&gt;</span></span><br><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">print_w</span><span class="hljs-params">(std::string)</span></span>;<br></code></pre></td></tr></table></figure>
+
+
+
+<p>其文件依赖关系是：</p>
+<p><img src="https://raw.githubusercontent.com/Davidwadesmith/image-hosting/main/img/202504041719657.svg" srcset="/img/loading.gif" lazyload alt="makefile_tutorial_01"></p>
+<p>CLI：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">g++ -c Hello_world.cpp Print.cpp<br>g++ Print.o Hello_world.o -o Hello_world<br></code></pre></td></tr></table></figure>
+
+<p>需要两行命令。</p>
+<hr>
+<h2 id="Makefile-的用处"><a href="#Makefile-的用处" class="headerlink" title="Makefile 的用处"></a>Makefile 的用处</h2><p>makefile 被设计出来是为了简化构建 (build) 一个项目的流程，在上面的例子中构建一个项目仅需两行命令即可，但是更可能的情况是，有一堆<code>.cpp</code>文件，一个一个的添加十分麻烦。并且代码的相互依赖关系相当复杂。比如，想象一个C++程序，它是一个模块化的应用系统，通过核心引擎 (Core Engine) 整合物理模拟、3D渲染和日志系统，使用JSON配置管理，依赖STL容器和第三方数学库实现跨模块数据交互：</p>
+<p><img src="https://raw.githubusercontent.com/Davidwadesmith/image-hosting/main/img/202504041720758.svg" srcset="/img/loading.gif" lazyload alt="makefile_tutorial_02"></p>
+<p>万一其中一个文件被改动，比如<code>math_utils.hpp</code>，全部编译将花费大量时间。而理想的状况是：</p>
+<p><img src="https://raw.githubusercontent.com/Davidwadesmith/image-hosting/main/img/202504041720878.svg" srcset="/img/loading.gif" lazyload alt="makefile_tutorial_03"></p>
+<p><em>其中橙色是需要改动的文件</em></p>
+<p>因此，编写 makefile 的目的是省下一些写重复代码的工作，便于发现使用编译命令时的错误。</p>
+<hr>
+<h2 id="编写自己的第一个-Makefile"><a href="#编写自己的第一个-Makefile" class="headerlink" title="编写自己的第一个 Makefile"></a>编写自己的第一个 Makefile</h2><p>makefile 是如何减少重复的代码的呢？我们先来看看之前的工作流中有哪些重复的工作：</p>
+<ul>
+<li><p>每次编译都需要输入几乎完全相同的多行命令</p>
+</li>
+<li><p>每次都需要弄清楚各个文件的依赖关系</p>
+</li>
+<li><p>每次都需要在文件系统中多次跳转</p>
+</li>
+<li><p>…</p>
+</li>
+</ul>
+<p>makefile是如何解决这些问题的呢？其实比较简单粗暴，它仅仅是一个自动化工具罢了，我们来看一个例子：</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs makefile"><span class="hljs-comment">#Makefile</span><br><span class="hljs-section">all: </span><br>	g++ -c Hello_world.cpp Print.cpp<br>	g++ Print.o Hello_world.o -o Hello_world<br></code></pre></td></tr></table></figure>
+
+<p>接下来在CLI中执行：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">make all<br></code></pre></td></tr></table></figure>
+
+<p>你也许会看到：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash">❯ make all<br>g++ -c Hello_world.cpp Print.cpp<br>g++ Print.o Hello_world.o -o Hello_world<br></code></pre></td></tr></table></figure>
+
+<p>即使你完全不懂 makefile 的语法，你也大概能看出，<code>make</code>程序寻找当前目录下的<code>Makefile</code>文件并解读，还有<code>all</code>代表了它冒号后面的几行命令，以后只需要执行<code>make</code>这个程序时给它加上参数<code>all</code>便可以自动让它执行多个命令。这个以<code>all</code>开头的代码段被称为一种<strong>规则</strong></p>
+<p>发散一下，如果我们想执行不同的命令组合，可不可以通过给<code>make</code>不同的参数达到这一点呢？当然可以，我们先修改<code>Makefile</code>：</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs makefile"><span class="hljs-comment">#Makefile</span><br><span class="hljs-section">all: </span><br>	g++ -c Hello_world.cpp Print.cpp<br>	g++ Print.o Hello_world.o -o Hello_world<br><span class="hljs-section">clean:</span><br>	rm -v ./Hello_world ./print.o ./Hello_world.o<br></code></pre></td></tr></table></figure>
+
+<p>接下来在CLI中执行：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">make clean<br></code></pre></td></tr></table></figure>
+
+<p>你也许就能看到：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs bash">❯ make clean<br><span class="hljs-built_in">rm</span> -v ./Hello_world ./Print.o ./Hello_world.o<br>removed <span class="hljs-string">&#x27;./Hello_world&#x27;</span><br>removed <span class="hljs-string">&#x27;./Print.o&#x27;</span><br>removed <span class="hljs-string">&#x27;./Hello_world.o&#x27;</span><br></code></pre></td></tr></table></figure>
+
+<p><em>其中<code>-v</code>会让 rm 在删除时输出删除相关的信息</em></p>
+<p>于是，我们可以在 makefile 中写很多条指令，而只需要给它指定一个参数即可。</p>
+<p>这样已经很实用了，可惜的是，这并不是 makefile 最原生的用法。</p>
+<hr>
+<h2 id="编写自己的第一个真正的-Makefile"><a href="#编写自己的第一个真正的-Makefile" class="headerlink" title="编写自己的第一个真正的  Makefile"></a>编写自己的第一个真正的  Makefile</h2><p>makefile 在设计之初考虑到了代码编译的过程中形成了文件和文件之间的依赖。还记得那个<code>all</code>吗？其实<code>make</code>程序将其视为一个文件名，而<code>make</code>在当前目录中并没有找到<code>all</code>这个文件，所以<code>make</code>执行冒号之后的语句来生成这个文件。这也是 <code>make</code>如何执行的：首先执行<code>make</code>后面跟的参数（文件）对应的规则（没有参数那就是第一个规则），如果这个文件不存在就执行后面的语句，如果这个文件的依赖文件也不存在，那么就先寻找生成这个依赖文件的规则来先生成依赖文件（符合直觉的）。从这个观点来看，makefile 中冒号前的东西被称为目标文件，后面的语句是生成这个文件需要的命令。比方说：</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs makefile"><span class="hljs-comment">#Makefile</span><br>Hello_world.o : Hello_world.cpp<br>	g++ -c Hello_world.cpp<br></code></pre></td></tr></table></figure>
+
+<p>你会发现冒号后多了一个文件<code>Hello_world.cpp</code>，这个文件就是<code>Hello_world.o</code>的依赖文件，这就告诉<code>make</code>，如果<code>Hello_world.cpp</code>没有被更改（根据文件系统提供的时间戳判断）那么<code>Hello_world.o</code>也不需要更改，下面的语句可以不执行。这就省去了一部分编译时间。</p>
+<h2 id="伪目标-Phony"><a href="#伪目标-Phony" class="headerlink" title="伪目标 .Phony"></a>伪目标 .Phony</h2><p>既然知道了<code>all</code>被<code>make</code>程序视为一个文件，再看看<code>all</code>这个“文件名”，你可能会想，万一真有一个叫<code>all</code>的文件该怎么办，比如在之前的基础上：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">touch</span> all <span class="hljs-comment"># 创建一个新文件叫做&quot;all&quot;</span><br>make all<br></code></pre></td></tr></table></figure>
+
+<p>你也许会看到：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">❯ make all<br>make: <span class="hljs-string">&#x27;all&#x27;</span> is up to <span class="hljs-built_in">date</span>.<br></code></pre></td></tr></table></figure>
+
+<p>这时候make发现<code>all</code>已经存在，而且没有依赖文件，那它就放心的不更新<code>all</code>也就不执行语句了。为了解决这个问题，makefile 引入了一个叫伪目标的概念，其实简单来看，就是 makefile 需要把<code>all</code>标记成一个永远都不存在的文件：</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs makefile"><span class="hljs-comment">#Makefile</span><br>.PHONY : all<br><br><span class="hljs-section">all: </span><br>	g++ -c Hello_world.cpp Print.cpp<br>	g++ Print.o Hello_world.o -o Hello_world<br></code></pre></td></tr></table></figure>
+
+<p>既然<code>all</code>永远不存在，它对应的语句就肯定能执行。这样的好处是，”目标文件” 可以不一定是文件，更像我们一开始以为的命令行参数（比如一眼便知其用途的 clean），这样就得到了更好的易读性 (readability).</p>
+<hr>
+<h2 id="变量"><a href="#变量" class="headerlink" title="变量"></a>变量</h2><p>讲到这里你可能发现，makefile 的语法很像 shell 脚本，只不过 shell 更通用，而 makefile 对文件的依赖处理的更加好。任何一种脚本都有变量，makefile 也不例外。例如：</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs makefile">SRC = Hello_world.cpp<br><br><span class="hljs-section">all: <span class="hljs-variable">$(SRC)</span></span><br>	g++ -c %(SRC)<br></code></pre></td></tr></table></figure>
+
+<p><em>类似<code>constexpr</code>?</em></p>
+<p>你可以看到，这里调用变量的语法和<code>.sh</code>脚本中差不多。</p>
+<p>既然有变量，那么没有返回变量的函数就说不过去了，makefile 中有一个名为<code>wildcard</code>的函数，其作用是将通配符 (wildcard) 展开，例如：</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs makefile"><span class="hljs-comment">#Makefile</span><br>SRC = <span class="hljs-variable">$(<span class="hljs-built_in">wildcard</span> *.c)</span><br>OBJS = <span class="hljs-variable">$(<span class="hljs-built_in">patsubst</span> %c, %o, $SRC)</span><br>TARGET = Hello_world<br><br><span class="hljs-section">$TARGET: <span class="hljs-variable">$(OBJS)</span></span><br>	g++ -o <span class="hljs-variable">$(TARGET)</span> <span class="hljs-variable">$(OBJS)</span><br></code></pre></td></tr></table></figure>
+
+<p>我们先只看第二行，<code>SRC</code>通常是源代码 (source code) 的缩写。这里<code>wildcard</code>函数接收一个<code>*.c</code>作为参数，输出它展开后的字符串，也就是任意符合以<code>.c</code>结尾的文件名。再看第三行，<code>patsubst</code>又是一个函数，它的作用是替换字符串中的字符，它有三个参数，第一个是用来匹配原始字符串的，第二个是替换的目标，第三个就是原始字符串。例如第三行中<code>patsubst</code>的作用就是将所有<code>SRC</code>中的<code>.c</code>文件替换成同名的<code>.o</code>文件。当然它还有一种更为简单的形式：<code>OBJS = $(SRCS:.c=.o)</code> 写开来看就是：<code>$([原始字符串]:[匹配字串][替换字串])</code></p>
+<p>有时候，我们希望在执行语句内部指代目标文件，这时可以用<strong>自动变量</strong>来指代：</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs makefile"><span class="hljs-comment">#Makefile</span><br><span class="hljs-section">Hello_world: Hello_world.o Print.o</span><br>	g++ -o <span class="hljs-variable">$@</span> <span class="hljs-variable">$^</span><br></code></pre></td></tr></table></figure>
+
+<p>这种写法比用普通变量来指代语义更加明确，同时也更加泛用。比如想要指代第一个依赖文件的话，可以用<code>@&lt;</code></p>
+<hr>
+<h2 id="模式规则"><a href="#模式规则" class="headerlink" title="模式规则"></a>模式规则</h2><p>你刚才也许注意到，我们在没写生成<code>.o</code>的规则的情况下直接写了生成可执行文件的规则，这是因为 makefile 内置的一些模式匹配规则，当没有找到生成<code>.o</code>的规则时，就执行默认的规则，这个规则可能是这样的：</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs makefile"><span class="hljs-comment">#Makefile</span><br><span class="hljs-section">%.o: %.c</span><br>	@echo &#x27;compiling <span class="hljs-variable">$&lt;</span>...&#x27;<br>	g++ -c -o <span class="hljs-variable">$@</span> <span class="hljs-variable">$&lt;</span><br></code></pre></td></tr></table></figure>
+
+<p><em>代码来自<a target="_blank" rel="noopener" href="https://liaoxuefeng.com/books/makefile/pattern-rules/index.html">廖雪峰的官方网站</a></em></p>
+<p>这里<code>@echo</code>的意思是执行<code>echo</code>这个语句的时候不在CLI中显示这个语句，直接输出结果，即你的屏幕上不会显示<code>echo ...</code>。</p>
+<p>看到这里的<code>%.c</code>和<code>%.o</code>，你可能想到了刚才<code>patsubst</code>的参数中也有这些写法，这就是 makefile 自己的模式匹配规则，完全类似<code>*.c</code>。通过这样的写法我们能够写出较少重复的代码，也就降低了出错的概率和补救的成本。</p>
+<hr>
+<h2 id="自动生成依赖"><a href="#自动生成依赖" class="headerlink" title="自动生成依赖"></a>自动生成依赖</h2><p>目前我们还无法解决一个问题，就是<code>.cpp</code>文件依赖<code>.h</code>的问题。因为这个依赖信息存在于<code>.cpp</code>文件的<code>#include</code>里，并不一定是同文件名的。如何才能分析文件里的内容呢？编译器非常方便的帮我们承担了这一职责，调用<code>g++ -MM Hello_world.cpp</code>将会输出一个 makefile 格式的依赖信息<code>Hello_world.o: Hello_world.cpp Print.h</code>。这就是<code>Hello_world.cpp</code>依赖的头文件的信息。我们想要把这条依赖规则添加到 makefile 中，可是当<code>make</code>运行的时候已经将<code>Makefile</code>占用了，我们不能在运行时添加这个信息，这又应该怎么办呢？解决方法是 makefile 语法中的<code>include</code>，字面意思，包含另一些文件给<code>make</code>参考，这些文件一般为<code>.d</code>文件，即依赖文件 (dependency) 。我们直接将<code>g++ -MM Hello_world.cpp</code>的输出写入<code>.d</code>文件，再在<code>Makefile</code>中添加一行<code>include ...</code>这样就能把头文件依赖问题解决了：</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><code class="hljs makefile"><span class="hljs-comment"># 列出所有 .c 文件:</span><br>SRCS = <span class="hljs-variable">$(<span class="hljs-built_in">wildcard</span> *.c)</span><br><br><span class="hljs-comment"># 根据SRCS生成 .o 文件列表:</span><br>OBJS = $(SRCS:.c=.o)<br><br><span class="hljs-comment"># 根据SRCS生成 .d 文件列表:</span><br>DEPS = $(SRCS:.c=.d)<br><br>TARGET = world.out<br><br><span class="hljs-comment"># 默认目标:</span><br><span class="hljs-variable">$(TARGET)</span>: <span class="hljs-variable">$(OBJS)</span><br>	<span class="hljs-variable">$(CC)</span> -o <span class="hljs-variable">$@</span> <span class="hljs-variable">$^</span><br><br><span class="hljs-comment"># xyz.d 的规则由 xyz.c 生成:</span><br><span class="hljs-section">%.d: %.c</span><br>	rm -f <span class="hljs-variable">$@</span>; \<br>	<span class="hljs-variable">$(CC)</span> -MM <span class="hljs-variable">$&lt;</span> &gt;<span class="hljs-variable">$@</span>.tmp; \<br>	sed &#x27;s,\(<span class="hljs-variable">$*</span>\)\.o[ :]*,\1.o <span class="hljs-variable">$@</span> : ,g&#x27; &lt; <span class="hljs-variable">$@</span>.tmp &gt; <span class="hljs-variable">$@</span>; \<br>	rm -f <span class="hljs-variable">$@</span>.tmp<br><br><span class="hljs-comment"># 模式规则:</span><br><span class="hljs-section">%.o: %.c</span><br>	<span class="hljs-variable">$(CC)</span> -c -o <span class="hljs-variable">$@</span> <span class="hljs-variable">$&lt;</span><br><br><span class="hljs-section">clean:</span><br>	rm -rf *.o *.d <span class="hljs-variable">$(TARGET)</span><br><br><span class="hljs-comment"># 引入所有 .d 文件:</span><br><span class="hljs-keyword">include</span> <span class="hljs-variable">$(DEPS)</span><br></code></pre></td></tr></table></figure>
+
+<p><em>用<code>;</code>分隔的语句会在同一个Shell环境中执行，不用的则不会。<code>\</code>和宏定义一样用来把一行语句拆成多行。</em></p>
+<p><em>代码来自<a target="_blank" rel="noopener" href="https://liaoxuefeng.com/books/makefile/pattern-rules/index.html">廖雪峰的官方网站</a></em></p>
+<p>这个代码中<code>.d</code>文件被<code>sed</code>（一个文字处理程序）修改了一下，将<code>.d</code>也作为了目标文件。这是因为当文件被改动时，重新编译之余，<code>.d</code>也要更新，否则要是改动把头文件改了，依赖文件就不对了。</p>
+<hr>
+<h2 id="makefile-中的小技巧"><a href="#makefile-中的小技巧" class="headerlink" title="makefile 中的小技巧"></a>makefile 中的小技巧</h2><p>想象一下<code>make</code>对上面<code>Makefile</code>的读取过程，其实分为两个阶段，一个是解析阶段，它会处理所有变量定义，规则解析，以及<code>include</code>。然后在执行阶段才会执行规则内的语句。这就导致一个问题，第一次编译时，<code>.d</code>文件还不存在，这下怎么包含呢？（虽然第一次编译肯定用不到<code>.d</code>，想想看，<code>.d</code>是为了侦测<code>.h</code>的改动而存在的）因此第一次编译会报错。这不会中断<code>make</code>程序，不过看起来不好看，这时我们可以把<code>include ...</code>换成<code>-include ...</code>来使这个报错沉默。这个技巧对规则内语句也适用。</p>
+<hr>
+<h2 id="Github上的例子"><a href="#Github上的例子" class="headerlink" title="Github上的例子"></a>Github上的例子</h2><p>如今我们很少有机会手搓 makefile 了，大部分工程也不会直接使用 makefile 。因此，我们只以 <a target="_blank" rel="noopener" href="https://github.com/chaselambda/makefiletutorial">makefile教程</a>为例：</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs makefile"><span class="hljs-section">blah: blah.o</span><br>    cc blah.o -o blah <span class="hljs-comment"># Runs third</span><br><br><span class="hljs-section">blah.o: blah.c</span><br>    cc -c blah.c -o blah.o <span class="hljs-comment"># Runs second</span><br><br><span class="hljs-section">blah.c:</span><br>	echo <span class="hljs-string">&quot;int main() &#123; return 0; &#125;&quot;</span> &gt; blah.c <span class="hljs-comment"># Runs first</span><br></code></pre></td></tr></table></figure>
+
+<img src="https://raw.githubusercontent.com/Davidwadesmith/image-hosting/main/img/202504041729639.png" srcset="/img/loading.gif" lazyload alt="image-20250404172903513" style="width: 20%; display: block; margin: 0 auto;" />
+
+<p><em>其中表示箭头表示依赖关系</em></p>
+<p>这个图示已经足够清楚，一个十分简单的依赖关系。</p>
+<hr>
+<h3 id="结语"><a href="#结语" class="headerlink" title="结语"></a>结语</h3><p>其实还有很多深层的 makefile 的语法没有在此涉及，但是希望你通过这篇文章能够理解 makefile 的设计思路，从而有足够的储备知识来在之后遇到陌生语法时不会一头雾水，而是能够仅从查阅的资料就能理解。</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E7%A7%91%E6%99%AE/" class="category-chain-item">科普</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/C/" class="print-no-link">#C++</a>
+      
+        <a href="/tags/shell/" class="print-no-link">#shell</a>
+      
+        <a href="/tags/%E5%91%BD%E4%BB%A4%E8%A1%8C/" class="print-no-link">#命令行</a>
+      
+        <a href="/tags/makefile/" class="print-no-link">#makefile</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Makefile 的食用方法</div>
+      <div>http://ippclub.github.io/Makefile的使用方法/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>D-major</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2025年4月4日</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>更新于</div>
+          <div>2026年4月16日</div>
+        </div>
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="NC - 非商业性使用">
+                    <i class="iconfont icon-cc-nc"></i>
+                  </span>
+                </a>
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="SA - 相同方式共享">
+                    <i class="iconfont icon-cc-sa"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/%E5%BC%80%E6%BA%90%E7%9A%84%E5%A4%9A%E9%87%8D%E6%80%A7%E4%B8%8E%E7%AC%AC%E4%B8%89%E8%B7%AF%E5%BE%84%E5%AE%A3%E8%A8%80/" title="开源的多重性与第三路径宣言">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">开源的多重性与第三路径宣言</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/CPP%E7%A7%BB%E5%8A%A8%E8%AF%AD%E4%B9%89%E7%9A%84%E5%AE%9E%E4%BE%8B-%E6%8C%87%E9%92%88%E5%AE%9E%E7%8E%B0%E5%B7%A6%E5%81%8F%E6%A0%91/" title="现代 C++ 之旅——使用智能指针实现左偏树">
+                        <span class="hidden-mobile">现代 C++ 之旅——使用智能指针实现左偏树</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+  <div id="waline"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#waline', function() {
+      Fluid.utils.createCssLink('https://registry.npmmirror.com/@waline/client/2.15.8/files/dist/waline.css')
+      Fluid.utils.createScript('https://registry.npmmirror.com/@waline/client/2.15.8/files/dist/waline.js', function() {
+        var options = Object.assign(
+          {"serverURL":"https://waline.harkerhand.cn/","path":"window.location.pathname","meta":["nick","mail","link"],"requiredMeta":["nick"],"lang":"zh-CN","emoji":["https://cdn.jsdelivr.net/gh/walinejs/emojis/weibo","https://cdn.jsdelivr.net/gh/walinejs/emojis/tieba","https://cdn.jsdelivr.net/gh/walinejs/emojis/bmoji","https://cdn.jsdelivr.net/gh/walinejs/emojis/bilibili"],"dark":"html[data-user-color-scheme=\"dark\"]","wordLimit":0,"pageSize":10,"search":false,"reaction":true},
+          {
+            el: '#waline',
+            path: window.location.pathname
+          }
+        )
+        Waline.init(options);
+        Fluid.utils.waitElementVisible('#waline .vcontent', () => {
+          var imgSelector = '#waline .vcontent img:not(.vemoji)';
+          Fluid.plugins.imageCaption(imgSelector);
+          Fluid.plugins.fancyBox(imgSelector);
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

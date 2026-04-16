@@ -1,0 +1,902 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.ico">
+  <link rel="icon" href="/img/favicon.ico">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="幻影彭">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="简介左偏树是一种可并堆，核心操作是 $O(\log{n} + \log{m})$ 的 merge 操作。 通过 merge 操作来实现 push 和 pop 操作。 基本信息 左偏树的结构是二叉树。 每个节点具有一个额外属性 dist。定义一个节点是边缘节点，当且仅当它的儿子个数不为 2。dist 表示该节点往儿子方向走，走到边缘节点需要经过的最小边数，空节点 dist 定义为 -1。 左偏树每个">
+<meta property="og:type" content="article">
+<meta property="og:title" content="现代 C++ 之旅——使用智能指针实现左偏树">
+<meta property="og:url" content="http://ippclub.github.io/CPP%E7%A7%BB%E5%8A%A8%E8%AF%AD%E4%B9%89%E7%9A%84%E5%AE%9E%E4%BE%8B-%E6%8C%87%E9%92%88%E5%AE%9E%E7%8E%B0%E5%B7%A6%E5%81%8F%E6%A0%91/index.html">
+<meta property="og:site_name" content="I++ Club">
+<meta property="og:description" content="简介左偏树是一种可并堆，核心操作是 $O(\log{n} + \log{m})$ 的 merge 操作。 通过 merge 操作来实现 push 和 pop 操作。 基本信息 左偏树的结构是二叉树。 每个节点具有一个额外属性 dist。定义一个节点是边缘节点，当且仅当它的儿子个数不为 2。dist 表示该节点往儿子方向走，走到边缘节点需要经过的最小边数，空节点 dist 定义为 -1。 左偏树每个">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://ippclub.github.io/CPP%E7%A7%BB%E5%8A%A8%E8%AF%AD%E4%B9%89%E7%9A%84%E5%AE%9E%E4%BE%8B-%E6%8C%87%E9%92%88%E5%AE%9E%E7%8E%B0%E5%B7%A6%E5%81%8F%E6%A0%91/%E5%B0%81%E9%9D%A2.jpg">
+<meta property="article:published_time" content="2025-03-31T08:33:05.000Z">
+<meta property="article:modified_time" content="2026-04-16T03:07:22.149Z">
+<meta property="article:tag" content="C++">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://ippclub.github.io/CPP%E7%A7%BB%E5%8A%A8%E8%AF%AD%E4%B9%89%E7%9A%84%E5%AE%9E%E4%BE%8B-%E6%8C%87%E9%92%88%E5%AE%9E%E7%8E%B0%E5%B7%A6%E5%81%8F%E6%A0%91/%E5%B0%81%E9%9D%A2.jpg">
+  
+  
+  
+  <title>现代 C++ 之旅——使用智能指针实现左偏树 - I++ Club</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"ippclub.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"always","icon":"#"},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>I++ Club</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/CPP%E7%A7%BB%E5%8A%A8%E8%AF%AD%E4%B9%89%E7%9A%84%E5%AE%9E%E4%BE%8B-%E6%8C%87%E9%92%88%E5%AE%9E%E7%8E%B0%E5%B7%A6%E5%81%8F%E6%A0%91/%E5%B0%81%E9%9D%A2.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="现代 C++ 之旅——使用智能指针实现左偏树"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-author" aria-hidden="true"></i>
+        幻影彭
+      </span>
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2025-03-31 16:33" pubdate>
+          2025年3月31日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          2.6k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          33 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar category-bar" style="margin-right: -1rem">
+    
+
+
+
+
+
+<div class="category-list">
+  
+  
+    
+    
+    
+    <div class="category row nomargin-x">
+      <a class="category-item 
+          list-group-item category-item-action col-10 col-md-11 col-xm-11" title="技术"
+        id="heading-a95dd3e179418be1ecd2a719a22db70e" role="tab" data-toggle="collapse" href="#collapse-a95dd3e179418be1ecd2a719a22db70e"
+        aria-expanded="true"
+      >
+        技术
+        <span class="list-group-count">(4)</span>
+        <i class="iconfont icon-arrowright"></i>
+      </a>
+      
+      <div class="category-collapse collapse show" id="collapse-a95dd3e179418be1ecd2a719a22db70e"
+           role="tabpanel" aria-labelledby="heading-a95dd3e179418be1ecd2a719a22db70e">
+        
+        
+          
+  <div class="category-post-list">
+    
+    
+      
+      
+        <a href="/OSI%20%E4%B8%83%E5%B1%82%E6%A8%A1%E5%9E%8B%E7%AE%80%E5%8D%95%E7%90%86%E8%A7%A3/" title="OSI 七层模型简单理解"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">OSI 七层模型简单理解</span>
+        </a>
+      
+    
+      
+      
+        <a href="/SEUOJ%20%E7%BD%91%E7%BB%9C%E6%95%85%E9%9A%9C%E6%8E%92%E6%9F%A5%E6%97%A5%E5%BF%97/" title="SEUOJ 网络故障排查日志"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">SEUOJ 网络故障排查日志</span>
+        </a>
+      
+    
+      
+      
+        <a href="/CPP%E7%A7%BB%E5%8A%A8%E8%AF%AD%E4%B9%89%E7%9A%84%E5%AE%9E%E4%BE%8B-%E6%8C%87%E9%92%88%E5%AE%9E%E7%8E%B0%E5%B7%A6%E5%81%8F%E6%A0%91/" title="现代 C++ 之旅——使用智能指针实现左偏树"
+           class="list-group-item list-group-item-action
+           active">
+          <span class="category-post">现代 C++ 之旅——使用智能指针实现左偏树</span>
+        </a>
+      
+    
+      
+      
+        <a href="/%E8%81%8A%E8%81%8A%E6%93%8D%E4%BD%9C%E6%97%A5%E5%BF%97/" title="谈谈操作日志"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">谈谈操作日志</span>
+        </a>
+      
+    
+  </div>
+
+        
+      </div>
+    </div>
+  
+</div>
+
+
+  </aside>
+
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">现代 C++ 之旅——使用智能指针实现左偏树</h1>
+            
+              <p id="updated-time" class="note note-info" style="">
+                
+                  
+                    本文最后更新于 2026年4月16日 上午
+                  
+                
+              </p>
+            
+            
+              <div class="markdown-body">
+                
+                <h3 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h3><p>左偏树是一种<strong>可并堆</strong>，核心操作是 $O(\log{n} + \log{m})$ 的 merge 操作。</p>
+<p>通过 merge 操作来实现 push 和 pop 操作。</p>
+<h3 id="基本信息"><a href="#基本信息" class="headerlink" title="基本信息"></a>基本信息</h3><ul>
+<li>左偏树的结构是<strong>二叉树</strong>。</li>
+<li>每个节点具有一个额外属性 dist。定义一个节点是<strong>边缘节点</strong>，当且仅当它的<strong>儿子个数不为 2</strong>。dist 表示<strong>该节点往儿子方向走，走到边缘节点需要经过的最小边数</strong>，空节点 dist 定义为 -1。</li>
+<li>左偏树每个节点的左子树的 dist <strong>不小于</strong>右子树的 dist，所以显然有 <code>dist = right_son-&gt;dist + 1</code>。</li>
+</ul>
+<h3 id="算法流程"><a href="#算法流程" class="headerlink" title="算法流程"></a>算法流程</h3><h4 id="push"><a href="#push" class="headerlink" title="push"></a>push</h4><p>创建一个新的堆，只分配一个节点，将新堆合并进原有堆。</p>
+<h4 id="pop"><a href="#pop" class="headerlink" title="pop"></a>pop</h4><p>原有根节点删去，合并其左右儿子，得到新的根节点。</p>
+<h4 id="merge"><a href="#merge" class="headerlink" title="merge"></a>merge</h4><ol>
+<li>找到根节点 val 较小的那个堆，将它的根节点作为新堆的根节点，它的左儿子作为新堆的左儿子，它的右儿子和另一个堆合并，作为新堆的右儿子。</li>
+<li>合并时遇到一个堆为空时，非空堆即合并结果，可以直接返回。</li>
+<li>如果合并后右儿子的 dist 大于左儿子的 dist，交换两个儿子。</li>
+</ol>
+<h3 id="复杂度分析"><a href="#复杂度分析" class="headerlink" title="复杂度分析"></a>复杂度分析</h3><p>结论：</p>
+<ul>
+<li>push：$O(\log{n})$</li>
+<li>pop：$O(\log{n})$</li>
+<li>merge：$O(\log{n} + \log{m})$</li>
+</ul>
+<p>证明：</p>
+<ol>
+<li>若一个节点的 dist 为 $x$，则它及其子树至少有 $2^x$ 个节点。故 dist 的值是 $O(\log{n})$ 级别的。</li>
+<li>进行合并时，每递归一层，参与合并的<strong>两个堆的 dist 之和减少 1</strong>，故递归层数为 $O(\log{n} + \log{m})$。</li>
+</ol>
+<h3 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h3><h4 id="结构"><a href="#结构" class="headerlink" title="结构"></a>结构</h4><ul>
+<li>一个内部的类 <code>Node</code> 表示左偏树的一个节点，包含 <code>dist</code>，<code>val</code> 两个变量，以及 <code>son[0], son[1]</code> 两个指针，分别指向左儿子和右儿子。</li>
+<li>一个类 <code>Heap</code>，表示一个堆，包含一个 <code>Node</code> 指针，表示根节点。</li>
+</ul>
+<h4 id="声明"><a href="#声明" class="headerlink" title="声明"></a>声明</h4><p>这里希望练习使用 C++11 中的<strong>智能指针</strong>和<strong>移动语义</strong>，所以声明为：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Heap</span>&#123;<br><span class="hljs-keyword">private</span>:<br>    <span class="hljs-keyword">class</span> <span class="hljs-title class_">Node</span>&#123;<br>    <span class="hljs-keyword">public</span>:<br>        unique_ptr&lt;Node&gt; son[<span class="hljs-number">2</span>];<br>        <span class="hljs-type">int</span> val, dist;<br>        <span class="hljs-built_in">Node</span>(<span class="hljs-type">int</span> val=<span class="hljs-number">0</span>)&#123;<br>            <span class="hljs-keyword">this</span>-&gt;son[<span class="hljs-number">0</span>]=<span class="hljs-literal">nullptr</span>;<br>            <span class="hljs-keyword">this</span>-&gt;son[<span class="hljs-number">1</span>]=<span class="hljs-literal">nullptr</span>;<br>            <span class="hljs-keyword">this</span>-&gt;val=val;<br>            <span class="hljs-keyword">this</span>-&gt;dist=<span class="hljs-number">0</span>;<br>        &#125;<br>    &#125;;<br>    unique_ptr&lt;Node&gt; root;<br><span class="hljs-keyword">public</span>:<br><span class="hljs-comment">/*</span><br><span class="hljs-comment">    其它部分暂时省略</span><br><span class="hljs-comment">*/</span><br>&#125;;<br></code></pre></td></tr></table></figure>
+
+<h4 id="构造函数"><a href="#构造函数" class="headerlink" title="构造函数"></a>构造函数</h4><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Heap</span>&#123;<br>    <span class="hljs-built_in">Heap</span>(unique_ptr&lt;Node&gt; root)&#123;<br>        <span class="hljs-keyword">this</span>-&gt;root=<span class="hljs-built_in">move</span>(root);<br>    &#125;<br>&#125;;<br></code></pre></td></tr></table></figure>
+
+<p>通过传入一个 <code>unique_ptr&lt;Node&gt;</code>，构造一个 <code>Heap</code> 对象。</p>
+<p><code>unique_ptr</code> 是一种智能指针，它指向的对象是它独享的，不能被其它东西访问。</p>
+<p><code>unique_ptr</code> <strong>仅支持移动语义</strong>，这用于<strong>转移</strong>对象的所有权，对象所有权转移后，原来的 <code>unique_ptr</code> 将失效。</p>
+<p><code>unique_ptr</code> <strong>不支持拷贝和赋值</strong>操作，所以上面的构造函数严格来说是有问题的，如果传入的 <code>unique_ptr</code> 不是右值则会<strong>尝试调用不存在的拷贝构造函数</strong>，导致编译错误。故应该将参数声明为<strong>右值引用</strong>(注意区分<strong>右值引用</strong>和<strong>常值引用</strong>)。</p>
+<p>具体如下：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Heap</span>&#123;<br>    <span class="hljs-built_in">Heap</span>(unique_ptr&lt;Node&gt; &amp;&amp;root)&#123;<br>        <span class="hljs-keyword">this</span>-&gt;root=<span class="hljs-built_in">move</span>(root);<br>    &#125;<br>&#125;;<br></code></pre></td></tr></table></figure>
+
+<p>至于为什么第一份代码是正确的，是因为只要保证传入的 <code>unique_ptr</code> 是右值，编译器就会<strong>优先自动调用移动构造函数</strong>，所以不需要在调用函数时显式地写出 <code>move</code>。</p>
+<p>至于为什么第二份代码中<strong>右值引用</strong>的 <code>root</code> 仍然需要使用 <code>move</code> 来显式的转化为右值，这是因为<strong>右值在绑定到一个右值引用后，其本身在作用域内是一个具名变量，行为会退化退化为左值。</strong>，故需要显式的使用移动语义来调用移动构造函数。</p>
+<h4 id="merge-1"><a href="#merge-1" class="headerlink" title="merge"></a>merge</h4><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Heap</span>&#123;<br>    <span class="hljs-function">Heap&amp; <span class="hljs-title">merge</span><span class="hljs-params">(Heap &amp;&amp;other)</span></span>&#123;<br>        <span class="hljs-keyword">if</span>(root==<span class="hljs-literal">nullptr</span>)&#123;<br>            root=<span class="hljs-built_in">move</span>(other.root);<br>        &#125;<br>        <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span>(other.root==<span class="hljs-literal">nullptr</span>)&#123;<br><br>        &#125;<br>        <span class="hljs-keyword">else</span>&#123;<br>            <span class="hljs-keyword">if</span>(root-&gt;val &gt; other.root-&gt;val)&#123;<br>                <span class="hljs-built_in">swap</span>(<span class="hljs-keyword">this</span>-&gt;root, other.root);<br>            &#125;<br>            root-&gt;son[<span class="hljs-number">1</span>] = <span class="hljs-built_in">move</span>(<span class="hljs-built_in">Heap</span>(<span class="hljs-built_in">move</span>(root-&gt;son[<span class="hljs-number">1</span>])).<span class="hljs-built_in">merge</span>(<span class="hljs-built_in">move</span>(other.root)).root);<br>            <span class="hljs-keyword">if</span>(root-&gt;son[<span class="hljs-number">0</span>] == <span class="hljs-literal">nullptr</span> || <br>                (root-&gt;son[<span class="hljs-number">1</span>] != <span class="hljs-literal">nullptr</span> &amp;&amp; root-&gt;son[<span class="hljs-number">0</span>]-&gt;dist &lt; root-&gt;son[<span class="hljs-number">1</span>]-&gt;dist))&#123;<br>                <span class="hljs-built_in">swap</span>(root-&gt;son[<span class="hljs-number">0</span>], root-&gt;son[<span class="hljs-number">1</span>]);<br>            &#125;<br>            <span class="hljs-keyword">if</span>(root-&gt;son[<span class="hljs-number">1</span>] != <span class="hljs-literal">nullptr</span>)<br>                root-&gt;dist = root-&gt;son[<span class="hljs-number">1</span>]-&gt;dist + <span class="hljs-number">1</span>;<br>            <span class="hljs-keyword">else</span><br>                root-&gt;dist = <span class="hljs-number">0</span>;<br>        &#125;<br>        <span class="hljs-keyword">return</span> *<span class="hljs-keyword">this</span>;<br>    &#125;<br>&#125;;<br></code></pre></td></tr></table></figure>
+
+<p>merge 返回一个<strong>左值引用</strong>是为了方便链式调用。</p>
+<p>有几个细节：</p>
+<ul>
+<li><p><code>swap</code>: 可以用于交换 <code>unique_ptr</code>, 它应该是实现了这种移动语义的交换。</p>
+</li>
+<li><p>隐式构造: <code>Heap(xxx).merge(move(other.root)).root</code> 这里使用了<strong>隐式构造</strong>，<code>Heap.merge</code> 支持的参数是一个右值的 <code>Heap</code>，传入时传的一个右值的 <code>unique_ptr</code>，由于定义了右值 <code>unique_ptr</code> 到 <code>Heap</code> 的构造函数，这里直接<strong>隐式调用</strong>了构造函数，构造了一个<strong>右值的</strong> <code>Heap</code> 并作为参数传递给了 <code>merge</code>。</p>
+</li>
+<li><p>返回左值引用: <code>return *this</code> 返回左值引用的目的是方便<strong>链式调用</strong>，至于为什么临时构造的 <code>Heap</code> 能返回一个左值引用，是因为<strong>临时对象</strong>的<strong>生存周期</strong>是到<strong>表达式结束</strong>为止，而<strong>临时对象在生命周期内可以被左值引用。</strong></p>
+</li>
+</ul>
+<h4 id="push-pop-top"><a href="#push-pop-top" class="headerlink" title="push &amp;&amp; pop &amp;&amp; top"></a>push &amp;&amp; pop &amp;&amp; top</h4><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Heap</span>&#123;<br>    <span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">top</span><span class="hljs-params">()</span> <span class="hljs-type">const</span></span>&#123;<br>        <span class="hljs-keyword">return</span> root-&gt;val;<br>    &#125;<br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">push</span><span class="hljs-params">(<span class="hljs-type">int</span> x)</span></span>&#123;<br>        <span class="hljs-keyword">this</span>-&gt;<span class="hljs-built_in">merge</span>(<span class="hljs-built_in">unique_ptr</span>&lt;Node&gt;(<span class="hljs-keyword">new</span> <span class="hljs-built_in">Node</span>(x)));<br>    &#125;<br>    <span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">pop</span><span class="hljs-params">()</span></span>&#123;<br>        <span class="hljs-keyword">this</span>-&gt;root = <span class="hljs-built_in">move</span>(<span class="hljs-built_in">Heap</span>(<span class="hljs-built_in">move</span>(root-&gt;son[<span class="hljs-number">0</span>])).<span class="hljs-built_in">merge</span>(<span class="hljs-built_in">move</span>(root-&gt;son[<span class="hljs-number">1</span>])).root);<br>        <span class="hljs-comment">// 当 merge 函数返回时, 它返回的是临时对象的左值引用, 临时对象在生命周期内可以被左值引用.</span><br>        <span class="hljs-keyword">return</span> <span class="hljs-built_in">top</span>();<br>    &#125;<br>&#125;;<br></code></pre></td></tr></table></figure>
+
+<p>比较简单, 不解释了.</p>
+<h3 id="左值右值的理解"><a href="#左值右值的理解" class="headerlink" title="左值右值的理解"></a>左值右值的理解</h3><p>简单的说：</p>
+<ul>
+<li><p>右值是<strong>只能放到表达式右边的值</strong>，左值是<strong>既能放到表达式右边，也能放到左边的值</strong>。</p>
+</li>
+<li><p>右值一般是<strong>没有命名的值</strong>，左值一般是<strong>有名字的值</strong>。</p>
+</li>
+<li><p>右值是<strong>临时的值</strong>，左值是<strong>持久的值</strong>。</p>
+</li>
+</ul>
+<p>更具体一点：</p>
+<h4 id="左值的特性"><a href="#左值的特性" class="headerlink" title="左值的特性"></a>左值的特性</h4><ul>
+<li><p>有固定内存地址：左值通常存储在堆或栈上，可以通过取地址操作符（&amp;）获取其地址。</p>
+</li>
+<li><p>可以被多次访问：左值的生命周期较长，可以在多个语句中被访问。</p>
+</li>
+<li><p>可以被修改：左值通常可以被修改，例如变量赋值操作。</p>
+</li>
+</ul>
+<h4 id="右值的特性"><a href="#右值的特性" class="headerlink" title="右值的特性"></a>右值的特性</h4><ul>
+<li><p>没有固定内存地址：右值通常是临时对象，没有<strong>固定的存储位置</strong>，或者其存储位置在表达式结束后立即失效。</p>
+</li>
+<li><p>不能被取地址：右值不能使用取地址操作符（&amp;）获取其地址。</p>
+</li>
+<li><p>不能被多次访问：右值的生命周期仅限于当前表达式，不能被多次访问。</p>
+</li>
+<li><p>通常不可修改：右值通常是不可修改的，因为它们是临时的。</p>
+</li>
+</ul>
+<h4 id="右值举例"><a href="#右值举例" class="headerlink" title="右值举例"></a>右值举例</h4><p>C++ 的值除了右值就是左值，下面几个右值的例子：</p>
+<ul>
+<li>函数的返回值是一个右值。</li>
+<li>字面量，<code>10</code>, <code>&quot;hello&quot;</code> 是右值。</li>
+<li>临时对象是右值，例如 <code>c = a + b;</code> 中的 <code>a + b</code> 这个整体。</li>
+</ul>
+<p>下面是左值的例子：</p>
+<ul>
+<li>命名变量名是左值，例如 <code>int a = 10;</code> 中的 <code>a</code>，<code>a = b = c = 10;</code> 的 <code>a, b, c</code> 都是左值。</li>
+</ul>
+<h3 id="左值引用和右值引用"><a href="#左值引用和右值引用" class="headerlink" title="左值引用和右值引用"></a>左值引用和右值引用</h3><h4 id="名词解释"><a href="#名词解释" class="headerlink" title="名词解释"></a>名词解释</h4><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-type">int</span> a = <span class="hljs-number">10</span>; <span class="hljs-comment">// 左值 被赋值为 右值 , a 是左值, 10 是右值.</span><br><span class="hljs-type">int</span> &amp;&amp;x1 = <span class="hljs-number">10</span>; <span class="hljs-comment">// 右值引用 绑定到 右值, x1 是右值引用, 10 是右值, 允许.</span><br><span class="hljs-type">int</span> &amp;&amp;x2 = a; <span class="hljs-comment">// 右值引用 绑定到 左值, x2 是右值引用, a 是左值, 允许, 一般用于模板编程.</span><br><span class="hljs-type">int</span> &amp;y = a; <span class="hljs-comment">// 左值引用 绑定到 左值, y 是左值引用, a 是左值, 允许.</span><br><span class="hljs-type">int</span> &amp;y1 = <span class="hljs-number">10</span>; <span class="hljs-comment">// 左值引用 绑定到 右值, y1 是左值引用, 10 是左值, 编译错误.</span><br><span class="hljs-type">int</span> &amp;y2 = x1; <span class="hljs-comment">// 左值引用 绑定到 右值引用, y2 是左值引用, x1 是右值引用, 编译错误.</span><br><span class="hljs-type">int</span> &amp;&amp;z1 = y; <span class="hljs-comment">// 右值引用 绑定到 左值引用, z1 是右值引用, y 是左值引用, 允许, 并且, 支持引用折叠语法, 所以 z1 的实际行为是左值引用.</span><br><span class="hljs-type">int</span> &amp;z2 = z1; <span class="hljs-comment">// 左值引用 绑定到 可折叠为左值的 右值引用, z2 是左值引用, z1 是右值引用, 但可折叠到对 a 的左值引用, 允许.</span><br><span class="hljs-type">int</span> &amp;z3 = x2; <span class="hljs-comment">// 左值引用 绑定到 可折叠为左值的 右值引用, z3 是左值引用, x2 是右值引用 但可折叠到对 a 的左值引用, 允许.</span><br></code></pre></td></tr></table></figure>
+
+<h4 id="右值引用的特性"><a href="#右值引用的特性" class="headerlink" title="右值引用的特性"></a>右值引用的特性</h4><p>右值引用似乎是<strong>命名变量</strong>吧？</p>
+<p>所以：右值引用可以在不发生内存操作的前提下将<strong>临时右值变为左值</strong>，可以延长右值的生命周期，降低读写内存的开销。</p>
+<p>进一步的，函数需要右值时，用右值引用船底右值仍然需要使用 <code>std::move</code>。</p>
+<h4 id="左值引用的特性"><a href="#左值引用的特性" class="headerlink" title="左值引用的特性"></a>左值引用的特性</h4><p>左值引用等价于为变量取了一个别名。</p>
+<p>特别的，在函数传参如果使用左值引用传参，函数类通过左值引用可以修改原变量的值。</p>
+<h4 id="引用折叠"><a href="#引用折叠" class="headerlink" title="引用折叠"></a>引用折叠</h4><p>在不发生编译错误的情况下, 可以支持引用折叠, 名词解释中的 <code>z1, z2, z3</code> 例子解释了这个特性。</p>
+<p>具体的，在发生多次引用绑定时，按照以下规则折叠：</p>
+<ul>
+<li>左 + 左 &#x3D; 左</li>
+<li>右 + 左 &#x3D; 左</li>
+<li>左 + 右 &#x3D; 左</li>
+<li>右 + 右 &#x3D; 右</li>
+</ul>
+<h3 id="完整代码"><a href="#完整代码" class="headerlink" title="完整代码"></a>完整代码</h3><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;bits/stdc++.h&quot;</span></span><br><br><span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;<br><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">Heap</span>&#123;<br><span class="hljs-keyword">private</span>:<br>    <span class="hljs-keyword">class</span> <span class="hljs-title class_">Node</span>&#123;<br>    <span class="hljs-keyword">public</span>:<br>        unique_ptr&lt;Node&gt; son[<span class="hljs-number">2</span>];<br>        <span class="hljs-type">int</span> val, dist;<br>        <span class="hljs-built_in">Node</span>(<span class="hljs-type">int</span> val=<span class="hljs-number">0</span>)&#123;<br>            <span class="hljs-keyword">this</span>-&gt;son[<span class="hljs-number">0</span>]=<span class="hljs-literal">nullptr</span>;<br>            <span class="hljs-keyword">this</span>-&gt;son[<span class="hljs-number">1</span>]=<span class="hljs-literal">nullptr</span>;<br>            <span class="hljs-keyword">this</span>-&gt;val=val;<br>            <span class="hljs-keyword">this</span>-&gt;dist=<span class="hljs-number">0</span>;<br>        &#125;<br>    &#125;;<br>    unique_ptr&lt;Node&gt; root;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-built_in">Heap</span>(unique_ptr&lt;Node&gt; &amp;&amp;root)&#123;<br>        <span class="hljs-keyword">this</span>-&gt;root=<span class="hljs-built_in">move</span>(root);<br>    &#125;<br>    <span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">top</span><span class="hljs-params">()</span> <span class="hljs-type">const</span></span>&#123;<br>        <span class="hljs-keyword">return</span> root-&gt;val;<br>    &#125;<br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">push</span><span class="hljs-params">(<span class="hljs-type">int</span> x)</span></span>&#123;<br>        <span class="hljs-keyword">this</span>-&gt;<span class="hljs-built_in">merge</span>(<span class="hljs-built_in">unique_ptr</span>&lt;Node&gt;(<span class="hljs-keyword">new</span> <span class="hljs-built_in">Node</span>(x)));<br>    &#125;<br>    <span class="hljs-function">Heap&amp; <span class="hljs-title">merge</span><span class="hljs-params">(Heap &amp;&amp;other)</span></span>&#123;<br>        <span class="hljs-keyword">if</span>(root==<span class="hljs-literal">nullptr</span>)&#123;<br>            root=<span class="hljs-built_in">move</span>(other.root);<br>        &#125;<br>        <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span>(other.root==<span class="hljs-literal">nullptr</span>)&#123;<br><br>        &#125;<br>        <span class="hljs-keyword">else</span>&#123;<br>            <span class="hljs-keyword">if</span>(root-&gt;val &gt; other.root-&gt;val)&#123;<br>                <span class="hljs-built_in">swap</span>(<span class="hljs-keyword">this</span>-&gt;root, other.root);<br>            &#125;<br>            root-&gt;son[<span class="hljs-number">1</span>] = <span class="hljs-built_in">move</span>(<span class="hljs-built_in">Heap</span>(<span class="hljs-built_in">move</span>(root-&gt;son[<span class="hljs-number">1</span>])).<span class="hljs-built_in">merge</span>(<span class="hljs-built_in">move</span>(other.root)).root);<br>            <span class="hljs-keyword">if</span>(root-&gt;son[<span class="hljs-number">0</span>] == <span class="hljs-literal">nullptr</span> || <br>                (root-&gt;son[<span class="hljs-number">1</span>] != <span class="hljs-literal">nullptr</span> &amp;&amp; root-&gt;son[<span class="hljs-number">0</span>]-&gt;dist &lt; root-&gt;son[<span class="hljs-number">1</span>]-&gt;dist))&#123;<br>                <span class="hljs-built_in">swap</span>(root-&gt;son[<span class="hljs-number">0</span>], root-&gt;son[<span class="hljs-number">1</span>]);<br>            &#125;<br>            <span class="hljs-keyword">if</span>(root-&gt;son[<span class="hljs-number">1</span>] != <span class="hljs-literal">nullptr</span>)<br>                root-&gt;dist = root-&gt;son[<span class="hljs-number">1</span>]-&gt;dist + <span class="hljs-number">1</span>;<br>            <span class="hljs-keyword">else</span><br>                root-&gt;dist = <span class="hljs-number">0</span>;<br>        &#125;<br>        <span class="hljs-keyword">return</span> *<span class="hljs-keyword">this</span>;<br>    &#125;<br>    <span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">pop</span><span class="hljs-params">()</span></span>&#123;<br>        <span class="hljs-keyword">this</span>-&gt;root = <span class="hljs-built_in">move</span>(<span class="hljs-built_in">Heap</span>(<span class="hljs-built_in">move</span>(root-&gt;son[<span class="hljs-number">0</span>])).<span class="hljs-built_in">merge</span>(<span class="hljs-built_in">move</span>(root-&gt;son[<span class="hljs-number">1</span>])).root);<br>        <span class="hljs-comment">// 当 merge 函数返回时, 它返回的是临时对象的左值引用, 临时对象在生命周期内可以被左值引用.</span><br>        <span class="hljs-keyword">return</span> <span class="hljs-built_in">top</span>();<br>    &#125;<br>&#125;;<br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span>&#123;<br>    <span class="hljs-function">Heap <span class="hljs-title">h</span><span class="hljs-params">(<span class="hljs-literal">nullptr</span>)</span></span>;<br>    <span class="hljs-type">int</span> n;<br>    cin &gt;&gt; n;<br>    <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=<span class="hljs-number">1</span>;i&lt;=n;i++)&#123;<br>        <span class="hljs-type">int</span> tp, x;<br>        cin &gt;&gt; tp;<br>        <span class="hljs-keyword">switch</span> (tp)&#123;<br>            <span class="hljs-keyword">case</span> <span class="hljs-number">1</span>:<br>                cin &gt;&gt; x;<br>                h.<span class="hljs-built_in">push</span>(x);<br>                <span class="hljs-keyword">break</span>;<br>            <span class="hljs-keyword">case</span> <span class="hljs-number">2</span>:<br>                cout &lt;&lt; h.<span class="hljs-built_in">top</span>() &lt;&lt; endl;<br>                <span class="hljs-keyword">break</span>;<br>            <span class="hljs-keyword">case</span> <span class="hljs-number">3</span>:<br>                h.<span class="hljs-built_in">pop</span>();<br>                <span class="hljs-keyword">break</span>;<br>            <span class="hljs-keyword">default</span>:<br>                <span class="hljs-keyword">throw</span> <span class="hljs-string">&quot;unsupported operation&quot;</span>;<br>        &#125;<br>    &#125;<br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E6%8A%80%E6%9C%AF/" class="category-chain-item">技术</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/C/" class="print-no-link">#C++</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>现代 C++ 之旅——使用智能指针实现左偏树</div>
+      <div>http://ippclub.github.io/CPP移动语义的实例-指针实现左偏树/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>幻影彭</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2025年3月31日</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>更新于</div>
+          <div>2026年4月16日</div>
+        </div>
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="NC - 非商业性使用">
+                    <i class="iconfont icon-cc-nc"></i>
+                  </span>
+                </a>
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="SA - 相同方式共享">
+                    <i class="iconfont icon-cc-sa"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/Makefile%E7%9A%84%E4%BD%BF%E7%94%A8%E6%96%B9%E6%B3%95/" title="Makefile 的食用方法">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Makefile 的食用方法</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/Dora-SSR-x-Blockly%E2%80%94%E8%BF%99%E7%A7%8D%E6%84%9F%E8%A7%89%E6%88%91%E4%BB%8E%E6%9C%AA%E6%8B%A5%E6%9C%89/" title="Dora SSR x Blockly—这种感觉我从未拥有">
+                        <span class="hidden-mobile">Dora SSR x Blockly—这种感觉我从未拥有</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+  <div id="waline"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#waline', function() {
+      Fluid.utils.createCssLink('https://registry.npmmirror.com/@waline/client/2.15.8/files/dist/waline.css')
+      Fluid.utils.createScript('https://registry.npmmirror.com/@waline/client/2.15.8/files/dist/waline.js', function() {
+        var options = Object.assign(
+          {"serverURL":"https://waline.harkerhand.cn/","path":"window.location.pathname","meta":["nick","mail","link"],"requiredMeta":["nick"],"lang":"zh-CN","emoji":["https://cdn.jsdelivr.net/gh/walinejs/emojis/weibo","https://cdn.jsdelivr.net/gh/walinejs/emojis/tieba","https://cdn.jsdelivr.net/gh/walinejs/emojis/bmoji","https://cdn.jsdelivr.net/gh/walinejs/emojis/bilibili"],"dark":"html[data-user-color-scheme=\"dark\"]","wordLimit":0,"pageSize":10,"search":false,"reaction":true},
+          {
+            el: '#waline',
+            path: window.location.pathname
+          }
+        )
+        Waline.init(options);
+        Fluid.utils.waitElementVisible('#waline .vcontent', () => {
+          var imgSelector = '#waline .vcontent img:not(.vemoji)';
+          Fluid.plugins.imageCaption(imgSelector);
+          Fluid.plugins.fancyBox(imgSelector);
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

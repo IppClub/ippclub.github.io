@@ -1,0 +1,816 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.ico">
+  <link rel="icon" href="/img/favicon.ico">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="李瑾">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="代码宇宙里的一场音乐恶作剧&emsp;&emsp;如果你是一名开发者，对编程的世界有着热爱和执着，那你一定要来我们的 I++ 俱乐部。这里不仅是程序员们的乌托邦，也是不折不扣的“整活”先锋。这一次，我们决定搞点真正有趣的事情——创作一首属于 I++ 的猫娘主题曲！ &emsp;&emsp;什么是猫娘？简单来说，就是长着猫耳朵、性格顽皮可爱的少女。而我们的猫娘，不仅仅是个普通的萌物，她还是个能修改变">
+<meta property="og:type" content="article">
+<meta property="og:title" content="I++ 猫娘主题曲——编程宇宙最强外挂！">
+<meta property="og:url" content="http://ippclub.github.io/Ipp%E7%8C%AB%E5%A8%98%E4%B8%BB%E9%A2%98%E6%9B%B2%E2%80%94%E2%80%94%E7%BC%96%E7%A8%8B%E4%B8%96%E7%95%8C%E7%9A%84%E6%9C%80%E5%BC%BA%E5%A4%96%E6%8C%82%EF%BC%81/index.html">
+<meta property="og:site_name" content="I++ Club">
+<meta property="og:description" content="代码宇宙里的一场音乐恶作剧&emsp;&emsp;如果你是一名开发者，对编程的世界有着热爱和执着，那你一定要来我们的 I++ 俱乐部。这里不仅是程序员们的乌托邦，也是不折不扣的“整活”先锋。这一次，我们决定搞点真正有趣的事情——创作一首属于 I++ 的猫娘主题曲！ &emsp;&emsp;什么是猫娘？简单来说，就是长着猫耳朵、性格顽皮可爱的少女。而我们的猫娘，不仅仅是个普通的萌物，她还是个能修改变">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://ippclub.github.io/%E5%B0%8F%E9%BB%91%E7%8C%AB%E8%BF%9B%E5%8C%96%E5%95%A6%EF%BC%81%E4%B8%80%E8%B5%B7%E8%A7%81%E8%AF%81Ipp%E7%9A%84%E6%88%90%E9%95%BF/nya.png">
+<meta property="article:published_time" content="2025-03-21T10:03:00.000Z">
+<meta property="article:modified_time" content="2026-04-16T03:07:22.206Z">
+<meta property="article:tag" content="IppClub">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://ippclub.github.io/%E5%B0%8F%E9%BB%91%E7%8C%AB%E8%BF%9B%E5%8C%96%E5%95%A6%EF%BC%81%E4%B8%80%E8%B5%B7%E8%A7%81%E8%AF%81Ipp%E7%9A%84%E6%88%90%E9%95%BF/nya.png">
+  
+  
+  
+  <title>I++ 猫娘主题曲——编程宇宙最强外挂！ - I++ Club</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"ippclub.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"always","icon":"#"},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>I++ Club</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/mainbg.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="I++ 猫娘主题曲——编程宇宙最强外挂！"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-author" aria-hidden="true"></i>
+        李瑾
+      </span>
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2025-03-21 18:03" pubdate>
+          2025年3月21日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          1.9k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          24 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar category-bar" style="margin-right: -1rem">
+    
+
+
+
+
+
+<div class="category-list">
+  
+  
+    
+    
+    
+    <div class="category row nomargin-x">
+      <a class="category-item 
+          list-group-item category-item-action col-10 col-md-11 col-xm-11" title="俱乐部文创"
+        id="heading-c8e1de24b9f36eb99e77b5e4a74ec627" role="tab" data-toggle="collapse" href="#collapse-c8e1de24b9f36eb99e77b5e4a74ec627"
+        aria-expanded="true"
+      >
+        俱乐部文创
+        <span class="list-group-count">(3)</span>
+        <i class="iconfont icon-arrowright"></i>
+      </a>
+      
+      <div class="category-collapse collapse show" id="collapse-c8e1de24b9f36eb99e77b5e4a74ec627"
+           role="tabpanel" aria-labelledby="heading-c8e1de24b9f36eb99e77b5e4a74ec627">
+        
+        
+          
+  <div class="category-post-list">
+    
+    
+      
+      
+        <a href="/Ipp%E7%8C%AB%E5%A8%98%E4%B8%BB%E9%A2%98%E6%9B%B2%E2%80%94%E2%80%94%E7%BC%96%E7%A8%8B%E4%B8%96%E7%95%8C%E7%9A%84%E6%9C%80%E5%BC%BA%E5%A4%96%E6%8C%82%EF%BC%81/" title="I++ 猫娘主题曲——编程宇宙最强外挂！"
+           class="list-group-item list-group-item-action
+           active">
+          <span class="category-post">I++ 猫娘主题曲——编程宇宙最强外挂！</span>
+        </a>
+      
+    
+      
+      
+        <a href="/%E4%BB%8E%E2%80%9C%E6%AF%9B%E2%80%9D%E5%88%B0%E4%B8%83%E5%B7%A7%E6%9D%BF%E2%80%94%E2%80%94Ipp%E4%BF%B1%E4%B9%90%E9%83%A8Logo%E7%9A%84%E6%95%85%E4%BA%8B/" title="从“毛”到七巧板——I++ 俱乐部 Logo 的故事"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">从“毛”到七巧板——I++ 俱乐部 Logo 的故事</span>
+        </a>
+      
+    
+      
+      
+        <a href="/%E5%B0%8F%E9%BB%91%E7%8C%AB%E8%BF%9B%E5%8C%96%E5%95%A6%EF%BC%81%E4%B8%80%E8%B5%B7%E8%A7%81%E8%AF%81Ipp%E7%9A%84%E6%88%90%E9%95%BF/" title="小黑猫进化啦！一起见证 I++ 的成长"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">小黑猫进化啦！一起见证 I++ 的成长</span>
+        </a>
+      
+    
+  </div>
+
+        
+      </div>
+    </div>
+  
+</div>
+
+
+  </aside>
+
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">I++ 猫娘主题曲——编程宇宙最强外挂！</h1>
+            
+              <p id="updated-time" class="note note-info" style="">
+                
+                  
+                    本文最后更新于 2026年4月16日 上午
+                  
+                
+              </p>
+            
+            
+              <div class="markdown-body">
+                
+                <h2 id="代码宇宙里的一场音乐恶作剧"><a href="#代码宇宙里的一场音乐恶作剧" class="headerlink" title="代码宇宙里的一场音乐恶作剧"></a>代码宇宙里的一场音乐恶作剧</h2><p>&emsp;&emsp;如果你是一名开发者，对编程的世界有着热爱和执着，那你一定要来我们的 I++ 俱乐部。这里不仅是程序员们的乌托邦，也是不折不扣的“整活”先锋。这一次，我们决定搞点真正有趣的事情——创作一首属于 I++ 的猫娘主题曲！</p>
+<p>&emsp;&emsp;什么是猫娘？简单来说，就是长着猫耳朵、性格顽皮可爱的少女。而我们的猫娘，不仅仅是个普通的萌物，她还是个能修改变量、藏回车键、让鼠标点不动的编程小捣蛋鬼！</p>
+<p>&emsp;&emsp;这首歌的创作以 AI 赋于创作力，由 Suno.ai 的 Persona 功能生成了三位风格各异的歌姬，各自带来了不同的音乐演绎方式，让 I++ 的猫娘在各种曲风中尽情撒欢。</p>
+<h2 id="主题曲的故事：最强外挂的声音"><a href="#主题曲的故事：最强外挂的声音" class="headerlink" title="主题曲的故事：最强外挂的声音"></a>主题曲的故事：最强外挂的声音</h2><p>&emsp;&emsp;整首歌充满了程序员的“苦恼”——代码迷宫、变量乱跑、莫名其妙的 bug，但在 I++ 的猫娘眼里，这些都不过是她玩闹的乐趣。我们不是在修 bug，而是在写最强外挂！</p>
+<p>&emsp;&emsp;这是一场音乐恶作剧，也是一场编程狂欢。</p>
+<p>&emsp;&emsp;完整的歌词如下：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><code class="hljs cpp">I++ 猫娘主题曲<br><br>[Verse <span class="hljs-number">1</span>]<br>开机！Neko mimi 娘上线！（喵～）<br>嘻嘻，偷偷改了你的桌面！（喵喵！）<br>变量调皮地跳来跳去，<br>你找不到？喵～藏好了！<br><br>[Chorus]<br>统统让开 我要出招！（喵！）<br>规则？（嘿嘿）才不管！（喵喵！）<br>乱敲几行 蹦出个宇宙，<br>I++ 就是最强外挂！（喵喵喵～）<br><br>[Verse <span class="hljs-number">2</span>]<br>鼠标点不动？是不是 bug？（喵？）<br>不不，是我藏了你的回车键！（喵嘿耶～）<br>代码迷宫 一起捣蛋，<br>想解密？先说“猫娘最可爱”！（喵喵！）<br><br>[Chorus]<br>统统让开 我要出招！（喵！）<br>规则？（嘿嘿）才不管！（喵喵！）<br>乱敲几行 蹦出个宇宙，<br>I++ 就是最强外挂！（喵喵喵～）<br><br>[Bridge]（更俏皮的小插曲）<br>（喵喵喵~♪）<br>全局变量 我偷偷改，<br>运行一下 惊喜打开！（喵！）<br>CTRL+Z？ 不不不行！<br>后悔可没 返回键！（喵嘿耶！）<br><br>[Final Chorus]（更加疯狂！）<br>I++ up up up！（喵！）<br>突破次元 level up！（喵喵！）<br>无限循环 闯进未来，<br>编程世界 任我捣乱！（喵喵喵～）<br><br>[Outro <span class="hljs-number">1</span>]（调皮收尾）<br>滴滴滴！黑屏了？<br>喵~ 吓你一跳！<br>放心放心 改回来了，<br>下次再整 记得留糖！<br><br>[Outro <span class="hljs-number">2</span>]（从玩闹回归俱乐部的初心）<br>刚刚的恶作剧 别介意，（喵～）<br>其实啊 我想告诉你，（喵……）<br>这片代码宇宙 无边无际，<br>I++ 等你一起前行！（喵喵！）<br></code></pre></td></tr></table></figure>
+
+<h2 id="三位-AI-歌姬，各自精彩！"><a href="#三位-AI-歌姬，各自精彩！" class="headerlink" title="三位 AI 歌姬，各自精彩！"></a>三位 AI 歌姬，各自精彩！</h2><p>&emsp;&emsp;为了让这首歌更加生动，我们尝试了不同风格的 AI Persona，并创造了三位风格迥异的歌姬，每位歌姬带来的演绎都别具一格。</p>
+<h3 id="1-热闹非凡的电波猫娘"><a href="#1-热闹非凡的电波猫娘" class="headerlink" title="1. 热闹非凡的电波猫娘"></a>1. 热闹非凡的电波猫娘</h3><ul>
+<li><strong>风格关键词</strong>：kawaii, funky, theme, rave, jazz, rap, french hip hop</li>
+</ul>
+<p>&emsp;&emsp;这位歌姬的风格是最炸裂的，电子感十足，仿佛是某个二次元角色喧宾夺主的登场 BGM。她的演绎方式带着满满的节奏感和游戏感，充满冲击力和疯狂的能量。猫娘登场，规则无效！</p>
+<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=3&id=3073984430&auto=0&height=66"></iframe>
+
+<p>&emsp;&emsp;这位歌姬的曲风如同一场电波派对，猫娘带着强劲的节奏破次元而来，敲着键盘、调皮捣蛋。这种躁动的电子律动，正呼应了 <strong>Rave 文化</strong>——起源于 80 年代的地下电子派对，它象征着自由、创新、挑战规则的精神，而这正是 I++ 俱乐部的理念！编程就像 Rave，一行行代码构建起属于自己的节奏，而 I++ 猫娘则是最“炸场”的 DJ，用捣蛋与恶作剧，让规则变得毫无束缚。最有趣的是，这首曲子的灵感竟来自尝试用 AI 复刻《弹丸论破》游戏配乐的过程中，意外发现了这位锐舞灵魂的歌姬，于是干脆让她带着猫耳，在编程世界中开启最燃的 <strong>I++ Rave 派对！</strong></p>
+<h3 id="2-调皮捣蛋的小恶魔猫娘"><a href="#2-调皮捣蛋的小恶魔猫娘" class="headerlink" title="2. 调皮捣蛋的小恶魔猫娘"></a>2. 调皮捣蛋的小恶魔猫娘</h3><ul>
+<li><strong>风格关键词</strong>：bossa nova, jazz hiphop, kawaii rap</li>
+</ul>
+<p>&emsp;&emsp;这位歌姬本该是温柔甜美的，但她的演绎却完全颠覆了常规，rap 起来故意带着调皮的语调，好像在戏弄听众一样。她的声音像一只最顽皮的猫咪，随时准备给你设置一个可爱的“陷阱”。</p>
+<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=3&id=3074090075&auto=0&height=66"></iframe>
+
+<p>&emsp;&emsp;第二位歌姬原本擅长甜美轻盈的旋律，这次却彻底“黑化”，用慵懒又俏皮的语调戏弄听众。<strong>Bossa Nova</strong> 作为巴西音乐的代表之一，向来以悠闲惬意著称，但当它遇上猫娘，一切都变得调皮捣蛋——她用温柔的旋律引诱你放松，却在 rap 段落突然恶作剧般地捣乱，仿佛趴在键盘上的猫娘，故意藏起你的回车键，让你 debug 到怀疑人生。正如 I++ 的精神一样，编程不仅仅是理性的严谨逻辑，也可以充满游戏感与幽默，这首歌用音乐“整活”，让代码世界变得更加有趣，也让你心甘情愿地跳进猫娘设下的圈套！</p>
+<h3 id="3-大家闺秀的“浣溪沙”"><a href="#3-大家闺秀的“浣溪沙”" class="headerlink" title="3. 大家闺秀的“浣溪沙”"></a>3. 大家闺秀的“浣溪沙”</h3><ul>
+<li><strong>风格关键词</strong>：kawaii rap, funk, jazz, slow, glitch, west coast</li>
+</ul>
+<p>&emsp;&emsp;她的名字叫“浣溪沙”，这个名字的由来有点特别。当我们尝试用西洋的曲风搭配“浣溪沙”词牌填词来创作曲目时，发现她的声音有种清冷雅致的独特感，既能演绎西方的节奏，又能带点东方的韵味。她演绎的版本在调皮之余，带着一丝神秘感，像是一只优雅但也会无伤大雅地使小坏的猫。</p>
+<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=3&id=3073995495&auto=0&height=66"></iframe>
+
+<p>&emsp;&emsp;第三位歌姬的声音带着一丝清冷，却又在律动中透出慵懒的张扬，就像一位漫步于代码世界的猫娘诗人。<strong>West Coast</strong> 音乐源自美国西海岸，以宽松的节奏、自由的旋律和深沉的低音闻名，带有一种漫不经心却极具态度的魅力。而这位歌姬，则在这种西洋风格中融入了中式雅致——正如她的名字“浣溪沙”，来自一次尝试用西洋曲风填中式词牌的实验，最终碰撞出这种独特的氛围。她不像前两位猫娘那样直白地恶作剧，而是用沉稳又略带狡黠的语气，让捣蛋变得如同一场精心编织的布局，让你在悠然律动中，才后知后觉地发现自己已深陷猫娘的世界。就像 I++ 的精神一样，看似随性自由，实则暗藏巧思，每一步都在创造新的可能！</p>
+<h2 id="I-的猫娘，一起喧闹！"><a href="#I-的猫娘，一起喧闹！" class="headerlink" title="I++ 的猫娘，一起喧闹！"></a>I++ 的猫娘，一起喧闹！</h2><p>&emsp;&emsp;猫娘主题曲不仅是一场音乐创作，更是 I++ 俱乐部对编程世界的另一种表达。代码的世界本该是自由、创造力无限的，而我们希望用音乐与猫娘、用各种有趣的方式，让更多人感受到编程的乐趣。</p>
+<p>&emsp;&emsp;未来，我们还会有更多不同风格的音乐尝试，也许下一次，我们的猫娘会带来一个新的故事，一个新的“外挂”。</p>
+<p>&emsp;&emsp;<strong>你，准备好加入这场狂欢了吗？喵喵喵！</strong></p>
+<h3 id="Bonus："><a href="#Bonus：" class="headerlink" title="Bonus："></a>Bonus：</h3><p>&emsp;&emsp;我们就知道，真正的 I++ 玩家一定会 Debug 到最后，所以这个小彩蛋就当作给你的特别奖励啦！</p>
+<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=3&id=3073992444&auto=0&height=66"></iframe>
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E4%BF%B1%E4%B9%90%E9%83%A8%E6%96%87%E5%88%9B/" class="category-chain-item">俱乐部文创</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/IppClub/" class="print-no-link">#IppClub</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>I++ 猫娘主题曲——编程宇宙最强外挂！</div>
+      <div>http://ippclub.github.io/Ipp猫娘主题曲——编程世界的最强外挂！/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>李瑾</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2025年3月21日</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>更新于</div>
+          <div>2026年4月16日</div>
+        </div>
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="NC - 非商业性使用">
+                    <i class="iconfont icon-cc-nc"></i>
+                  </span>
+                </a>
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="SA - 相同方式共享">
+                    <i class="iconfont icon-cc-sa"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/Dora-SSR-x-Blockly%E2%80%94%E8%BF%99%E7%A7%8D%E6%84%9F%E8%A7%89%E6%88%91%E4%BB%8E%E6%9C%AA%E6%8B%A5%E6%9C%89/" title="Dora SSR x Blockly—这种感觉我从未拥有">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Dora SSR x Blockly—这种感觉我从未拥有</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/%E4%BB%8E%E2%80%9C%E6%AF%9B%E2%80%9D%E5%88%B0%E4%B8%83%E5%B7%A7%E6%9D%BF%E2%80%94%E2%80%94Ipp%E4%BF%B1%E4%B9%90%E9%83%A8Logo%E7%9A%84%E6%95%85%E4%BA%8B/" title="从“毛”到七巧板——I++ 俱乐部 Logo 的故事">
+                        <span class="hidden-mobile">从“毛”到七巧板——I++ 俱乐部 Logo 的故事</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+  <div id="waline"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#waline', function() {
+      Fluid.utils.createCssLink('https://registry.npmmirror.com/@waline/client/2.15.8/files/dist/waline.css')
+      Fluid.utils.createScript('https://registry.npmmirror.com/@waline/client/2.15.8/files/dist/waline.js', function() {
+        var options = Object.assign(
+          {"serverURL":"https://waline.harkerhand.cn/","path":"window.location.pathname","meta":["nick","mail","link"],"requiredMeta":["nick"],"lang":"zh-CN","emoji":["https://cdn.jsdelivr.net/gh/walinejs/emojis/weibo","https://cdn.jsdelivr.net/gh/walinejs/emojis/tieba","https://cdn.jsdelivr.net/gh/walinejs/emojis/bmoji","https://cdn.jsdelivr.net/gh/walinejs/emojis/bilibili"],"dark":"html[data-user-color-scheme=\"dark\"]","wordLimit":0,"pageSize":10,"search":false,"reaction":true},
+          {
+            el: '#waline',
+            path: window.location.pathname
+          }
+        )
+        Waline.init(options);
+        Fluid.utils.waitElementVisible('#waline .vcontent', () => {
+          var imgSelector = '#waline .vcontent img:not(.vemoji)';
+          Fluid.plugins.imageCaption(imgSelector);
+          Fluid.plugins.fancyBox(imgSelector);
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

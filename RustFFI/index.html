@@ -1,0 +1,973 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.ico">
+  <link rel="icon" href="/img/favicon.ico">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="什么是 FFIFFI (Foreign Function Interface，外部函数接口) 是一种编程机制，允许一种编程语言调用另一种编程语言编写的代码或与另一种语言进行交互。它打破了语言之间的壁垒，使得不同语言编写的模块能够相互协作。 引入：open() 系统调用 Rust: std::fs::File::open() → libc::open() → syscall(SYS_open) C:">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Rust&#x2F;C&#x2F;JS FFI">
+<meta property="og:url" content="http://ippclub.github.io/RustFFI/index.html">
+<meta property="og:site_name" content="I++ Club">
+<meta property="og:description" content="什么是 FFIFFI (Foreign Function Interface，外部函数接口) 是一种编程机制，允许一种编程语言调用另一种编程语言编写的代码或与另一种语言进行交互。它打破了语言之间的壁垒，使得不同语言编写的模块能够相互协作。 引入：open() 系统调用 Rust: std::fs::File::open() → libc::open() → syscall(SYS_open) C:">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://ippclub.github.io/RustFFI/rustjs.png">
+<meta property="article:published_time" content="2025-08-03T08:56:19.000Z">
+<meta property="article:modified_time" content="2026-04-16T03:07:22.220Z">
+<meta property="article:tag" content="Rust">
+<meta property="article:tag" content="FFI">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://ippclub.github.io/RustFFI/rustjs.png">
+  
+  
+  
+  <title>Rust/C/JS FFI - I++ Club</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"ippclub.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"always","icon":"#"},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>I++ Club</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/mainbg.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Rust/C/JS FFI"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2025-08-03 16:56" pubdate>
+          2025年8月3日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          2.9k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          36 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar category-bar" style="margin-right: -1rem">
+    
+
+
+
+
+
+<div class="category-list">
+  
+  
+    
+    
+    
+    <div class="category row nomargin-x">
+      <a class="category-item 
+          list-group-item category-item-action col-10 col-md-11 col-xm-11" title="经验分享"
+        id="heading-bf7d27592999fc66ab392836d5099014" role="tab" data-toggle="collapse" href="#collapse-bf7d27592999fc66ab392836d5099014"
+        aria-expanded="true"
+      >
+        经验分享
+        <span class="list-group-count">(2)</span>
+        <i class="iconfont icon-arrowright"></i>
+      </a>
+      
+      <div class="category-collapse collapse show" id="collapse-bf7d27592999fc66ab392836d5099014"
+           role="tabpanel" aria-labelledby="heading-bf7d27592999fc66ab392836d5099014">
+        
+        
+          
+  <div class="category-post-list">
+    
+    
+      
+      
+        <a href="/AI%E7%8C%AB%E5%A8%98%20%E5%90%AF%E5%8A%A8%EF%BC%81/" title="AI猫娘 启动！"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">AI猫娘 启动！</span>
+        </a>
+      
+    
+      
+      
+        <a href="/RustFFI/" title="Rust/C/JS FFI"
+           class="list-group-item list-group-item-action
+           active">
+          <span class="category-post">Rust/C/JS FFI</span>
+        </a>
+      
+    
+  </div>
+
+        
+      </div>
+    </div>
+  
+</div>
+
+
+  </aside>
+
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">Rust/C/JS FFI</h1>
+            
+              <p id="updated-time" class="note note-info" style="">
+                
+                  
+                    本文最后更新于 2026年4月16日 上午
+                  
+                
+              </p>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="什么是-FFI"><a href="#什么是-FFI" class="headerlink" title="什么是 FFI"></a>什么是 FFI</h1><p>FFI (Foreign Function Interface，外部函数接口) 是一种编程机制，允许一种编程语言调用另一种编程语言编写的代码或与另一种语言进行交互。它打破了语言之间的壁垒，使得不同语言编写的模块能够相互协作。</p>
+<h2 id="引入：open-系统调用"><a href="#引入：open-系统调用" class="headerlink" title="引入：open() 系统调用"></a>引入：open() 系统调用</h2><ol>
+<li><strong>Rust</strong>: <code>std::fs::File::open()</code> → <code>libc::open()</code> → <code>syscall(SYS_open)</code></li>
+<li><strong>C</strong>: <code>fopen()</code> → <code>open()</code> → <code>syscall(SYS_open)</code></li>
+<li><strong>C++</strong>: <code>std::fstream</code> → <code>libc::open()</code> → <code>syscall(SYS_open)</code></li>
+</ol>
+<p>open() 是 OS kernel 的编译产物，<br><img src="/./RustFFI/image-20250803165921713.png" srcset="/img/loading.gif" lazyload alt="image-20250803165921713"></p>
+<p>也就是说，只要将我们想要分享的代码也打包为类似的形式，就可以被其他程序所链接使用。</p>
+<h2 id="例子"><a href="#例子" class="headerlink" title="例子"></a>例子</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">// add.h</span><br><span class="hljs-type">int</span> <span class="hljs-title function_">add</span><span class="hljs-params">(<span class="hljs-type">int</span> a, <span class="hljs-type">int</span> b)</span>;<br><br><span class="hljs-comment">// add.c</span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;add.h&quot;</span></span><br><span class="hljs-type">int</span> <span class="hljs-title function_">add</span><span class="hljs-params">(<span class="hljs-type">int</span> a, <span class="hljs-type">int</span> b)</span><br>&#123;<br>    <span class="hljs-keyword">return</span> a + b;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>编译一下，shared表示共享库，fPIC表示位置无关</p>
+<p><img src="/./RustFFI/image-20250803170002994.png" srcset="/img/loading.gif" lazyload alt="image-20250803170002994"></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">// useadd.cpp</span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;iostream&gt;</span></span><br><span class="hljs-keyword">extern</span> <span class="hljs-string">&quot;C&quot;</span><br>&#123;<br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;add.h&quot;</span></span><br>&#125;<br><span class="hljs-type">int</span> <span class="hljs-title function_">main</span><span class="hljs-params">()</span><br>&#123;<br>    <span class="hljs-type">int</span> x = <span class="hljs-number">5</span>;<br>    <span class="hljs-type">int</span> y = <span class="hljs-number">10</span>;<br>    <span class="hljs-type">int</span> result = add(x, y);<br>    <span class="hljs-built_in">std</span>::<span class="hljs-built_in">cout</span> &lt;&lt; <span class="hljs-string">&quot;The sum of &quot;</span> &lt;&lt; x &lt;&lt; <span class="hljs-string">&quot; and &quot;</span> &lt;&lt; y &lt;&lt; <span class="hljs-string">&quot; is &quot;</span> &lt;&lt; result &lt;&lt; <span class="hljs-built_in">std</span>::<span class="hljs-built_in">endl</span>;<br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>-L表示库路径，-l表示链接add库（链接时检查）<br><img src="/./RustFFI/image-20250803170315725.png" srcset="/img/loading.gif" lazyload alt="image-20250803170315725"></p>
+<p>很好，成功了</p>
+<h1 id="Rust与C-C-的FFI"><a href="#Rust与C-C-的FFI" class="headerlink" title="Rust与C&#x2F;C++的FFI"></a>Rust与C&#x2F;C++的FFI</h1><h2 id="案例再现"><a href="#案例再现" class="headerlink" title="案例再现"></a>案例再现</h2><figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-meta">#[unsafe(no_mangle)]</span><br><span class="hljs-keyword">pub</span> <span class="hljs-keyword">extern</span> <span class="hljs-string">&quot;C&quot;</span> <span class="hljs-keyword">fn</span> <span class="hljs-title function_">add</span>(left: <span class="hljs-type">i32</span>, right: <span class="hljs-type">i32</span>) <span class="hljs-punctuation">-&gt;</span> <span class="hljs-type">i32</span> &#123;<br>    left + right<br>&#125;<br><br></code></pre></td></tr></table></figure>
+
+<p>在 <code>Cargo.toml</code> 中添加</p>
+<figure class="highlight toml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs toml"><span class="hljs-section">[lib]</span><br><span class="hljs-attr">crate-type</span> = [<span class="hljs-string">&quot;cdylib&quot;</span>]<br></code></pre></td></tr></table></figure>
+
+<p><img src="/./RustFFI/image-20250803170455641.png" srcset="/img/loading.gif" lazyload alt="image-20250803170455641"></p>
+<p>编译后得到库，链接这个库来编译刚刚的cpp文件</p>
+<p><img src="/./RustFFI/image-20250803170620781.png" srcset="/img/loading.gif" lazyload alt="image-20250803170620781"></p>
+<p>很好，依然是成功的。</p>
+<p>也就是说，无论是C&#x2F;C++&#x2F;Rust，只要按照C的规范对接口进行暴露，按照C的规范对库进行链接，就可以进行代码复用。</p>
+<h2 id="FFI-规范"><a href="#FFI-规范" class="headerlink" title="FFI 规范"></a>FFI 规范</h2><h3 id="内存布局"><a href="#内存布局" class="headerlink" title="内存布局"></a>内存布局</h3><p>编译器可能会对结构体数据成员进行重排，目的是在对齐的要求下更好的利用内存。</p>
+<p>对于如下的cpp结构体</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-keyword">struct</span> <span class="hljs-title class_">CppStruct</span> &#123;<br>    <span class="hljs-type">char</span> a;      <span class="hljs-comment">// 1字节</span><br>    <span class="hljs-type">int</span> b;       <span class="hljs-comment">// 4字节</span><br>    <span class="hljs-type">short</span> c;     <span class="hljs-comment">// 2字节</span><br>&#125;;<br></code></pre></td></tr></table></figure>
+
+<p>内存可能是12位</p>
+<table>
+<thead>
+<tr>
+<th>a</th>
+<th></th>
+<th></th>
+<th></th>
+<th>b</th>
+<th>b</th>
+<th>b</th>
+<th>b</th>
+<th>c</th>
+<th>c</th>
+<th></th>
+<th></th>
+</tr>
+</thead>
+</table>
+<p>Rust类似的结构体重排后可能是8位</p>
+<table>
+<thead>
+<tr>
+<th>b</th>
+<th>b</th>
+<th>b</th>
+<th>b</th>
+<th>c</th>
+<th>c</th>
+<th>a</th>
+<th></th>
+</tr>
+</thead>
+</table>
+<p>要求rust不要重排</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-meta">#[repr(C)]</span><br><span class="hljs-keyword">struct</span> <span class="hljs-title class_">RustStruct</span> &#123; ... &#125;;<br></code></pre></td></tr></table></figure>
+
+<h3 id="调用约定"><a href="#调用约定" class="headerlink" title="调用约定"></a>调用约定</h3><p>规则上，如何传递参数、返回值以及管理栈和寄存器等底层细节需要一致，实践上一般不用在意，使用<code>extern &quot;C&quot;</code>即可（Rust函数需要<code>#[unsafe(no_mangle)]</code>）。</p>
+<p>习惯上，栈区的小数据通过值传递，堆区的大数据通过指针传递。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-meta">#<span class="hljs-keyword">ifndef</span> CPPLIB_HPP</span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> CPPLIB_HPP</span><br><br><span class="hljs-meta">#<span class="hljs-keyword">ifdef</span> __cplusplus</span><br><span class="hljs-keyword">extern</span> <span class="hljs-string">&quot;C&quot;</span> &#123;<br><span class="hljs-meta">#<span class="hljs-keyword">endif</span></span><br><br><span class="hljs-comment">// 用 C 链接导出这些函数</span><br><span class="hljs-function"><span class="hljs-type">void</span>* <span class="hljs-title">create_person</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">char</span>* name, <span class="hljs-type">int</span> age)</span></span>;<br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">delete_person</span><span class="hljs-params">(<span class="hljs-type">void</span>* person)</span></span>;<br><span class="hljs-function"><span class="hljs-type">const</span> <span class="hljs-type">char</span>* <span class="hljs-title">get_person_name</span><span class="hljs-params">(<span class="hljs-type">void</span>* person)</span></span>;<br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">get_person_age</span><span class="hljs-params">(<span class="hljs-type">void</span>* person)</span></span>;<br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">set_person_age</span><span class="hljs-params">(<span class="hljs-type">void</span>* person, <span class="hljs-type">int</span> new_age)</span></span>;<br><br><span class="hljs-meta">#<span class="hljs-keyword">ifdef</span> __cplusplus</span><br>&#125;<br><span class="hljs-meta">#<span class="hljs-keyword">endif</span></span><br><br><span class="hljs-meta">#<span class="hljs-keyword">endif</span> <span class="hljs-comment">// CPPLIB_HPP</span></span><br></code></pre></td></tr></table></figure>
+
+<p>Person对象通过指针传递，名字字符串通过指针传递，年龄通过值传递</p>
+<h3 id="错误处理"><a href="#错误处理" class="headerlink" title="错误处理"></a>错误处理</h3><p>一般来说，一个语言的异常无法被另一个语言捕捉，所以一般要通过错误码传递错误信息，或者设置专门传递错误的结构体。</p>
+<h3 id="一些可能忽视的问题"><a href="#一些可能忽视的问题" class="headerlink" title="一些可能忽视的问题"></a>一些可能忽视的问题</h3><h4 id="内存泄漏"><a href="#内存泄漏" class="headerlink" title="内存泄漏"></a>内存泄漏</h4><p>上面提到的 Person 的例子，如果在执行 <code>create_person</code> 后没有对应的 <code>delete_person</code>，person则会成为内存垃圾。</p>
+<p>解决方案：</p>
+<ul>
+<li><p>记得delete！</p>
+</li>
+<li><p>C++调用时，可以使用智能指针自动销毁</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-keyword">struct</span> <span class="hljs-title class_">PersonDeleter</span> &#123;<br>     <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">operator</span><span class="hljs-params">()</span><span class="hljs-params">(<span class="hljs-type">void</span>* p)</span> <span class="hljs-type">const</span> </span>&#123; <span class="hljs-built_in">delete_person</span>(p); &#125;<br> &#125;;<br> <span class="hljs-keyword">using</span> PersonPtr = std::unique_ptr&lt;<span class="hljs-type">void</span>, PersonDeleter&gt;;<br><br> <span class="hljs-function">PersonPtr <span class="hljs-title">person</span><span class="hljs-params">(create_person(<span class="hljs-string">&quot;Alice&quot;</span>, <span class="hljs-number">30</span>))</span></span>;<br> <span class="hljs-comment">// 退出作用域时自动调用 delete_person</span><br></code></pre></td></tr></table></figure></li>
+<li><p>Rust调用时，为Person的包装实现Drop Trait</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">pub</span> <span class="hljs-keyword">struct</span> <span class="hljs-title class_">Person</span> &#123;<br>    ptr: *<span class="hljs-keyword">mut</span> c_void,<br>&#125;<br><span class="hljs-keyword">impl</span> <span class="hljs-title class_">Drop</span> <span class="hljs-keyword">for</span> <span class="hljs-title class_">Person</span> &#123;<br>    <span class="hljs-keyword">fn</span> <span class="hljs-title function_">drop</span>(&amp;<span class="hljs-keyword">mut</span> <span class="hljs-keyword">self</span>) &#123;<br>        <span class="hljs-keyword">unsafe</span> &#123; <span class="hljs-title function_ invoke__">delete_person</span>(<span class="hljs-keyword">self</span>.ptr) &#125;<br>    &#125;<br>&#125;<br><span class="hljs-comment">// Person生命周期结束时自动 drop</span><br></code></pre></td></tr></table></figure></li>
+</ul>
+<h4 id="二次销毁"><a href="#二次销毁" class="headerlink" title="二次销毁"></a>二次销毁</h4><p>上面提到的场景，如果手动调用了delete，那么在变量自动销毁时会出现二次销毁。<br>需要在销毁时增加一些额外的检查。</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">impl</span> <span class="hljs-title class_">Drop</span> <span class="hljs-keyword">for</span> <span class="hljs-title class_">Person</span> &#123;<br>    <span class="hljs-keyword">fn</span> <span class="hljs-title function_">drop</span>(&amp;<span class="hljs-keyword">mut</span> <span class="hljs-keyword">self</span>) &#123;<br>        <span class="hljs-keyword">if</span> !<span class="hljs-keyword">self</span>.ptr.<span class="hljs-title function_ invoke__">is_null</span>() &#123;<br>            <span class="hljs-keyword">unsafe</span> &#123; <span class="hljs-title function_ invoke__">delete_person</span>(<span class="hljs-keyword">self</span>.ptr) &#125;<br>            <span class="hljs-keyword">self</span>.ptr = std::ptr::<span class="hljs-title function_ invoke__">null_mut</span>(); <span class="hljs-comment">// 防止二次销毁</span><br>        &#125;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h4 id="悬垂指针"><a href="#悬垂指针" class="headerlink" title="悬垂指针"></a>悬垂指针</h4><p>假设存在场景，异步接口传递临时指针</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">call</span><span class="hljs-params">()</span> </span>&#123;<br>    Stream stream;<br>    std::string stage = <span class="hljs-string">&quot;initial&quot;</span>;<br>    stream.stage = <span class="hljs-built_in">const_cast</span>&lt;<span class="hljs-type">char</span> *&gt;(stage.<span class="hljs-built_in">c_str</span>());<br>    stream.node_id = <span class="hljs-number">1</span>;<br>    stream.session_id = <span class="hljs-number">1001</span>;<br>    stream.err_code = <span class="hljs-number">0</span>;<br>    std::string data = <span class="hljs-string">&quot;Hello, World!&quot;</span>;<br>    stream.data = <span class="hljs-built_in">const_cast</span>&lt;<span class="hljs-type">char</span> *&gt;(data.<span class="hljs-built_in">c_str</span>());<br>    stream.stream_end = <span class="hljs-literal">false</span>;<br>    <span class="hljs-built_in">sync_call</span>(stream);<br>    <span class="hljs-built_in">async_call</span>(stream);<br>&#125;<br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span><br><span class="hljs-function"></span>&#123;<br>    <span class="hljs-built_in">call</span>();<br>    std::this_thread::<span class="hljs-built_in">sleep_for</span>(std::chrono::<span class="hljs-built_in">seconds</span>(<span class="hljs-number">10</span>));<br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>这里的async_call在调用后立即返回，随后string析构，但传递的指针在一段时候后才被解引用。</p>
+<p>解决方法：</p>
+<ul>
+<li>使用Rust编写库函数，上面的例子中，<code>*mut c_char</code> 没有实现 <code>Send</code> Trait，所以需要先对传入的临时字符指针进行<strong>同步</strong>拷贝，再将拷贝值 move 到<strong>异步</strong>回调中。<br>为了实现上面的例子，不得不使用unsafe</li>
+</ul>
+<h2 id="Rust-C-FFI-的便捷实现"><a href="#Rust-C-FFI-的便捷实现" class="headerlink" title="Rust C FFI 的便捷实现"></a>Rust C FFI 的便捷实现</h2><p>使用bindgen自动生成绑定</p>
+<figure class="highlight toml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs toml"><span class="hljs-section">[build-dependencies]</span><br><span class="hljs-attr">bindgen</span> = <span class="hljs-string">&quot;0.72.0&quot;</span><br></code></pre></td></tr></table></figure>
+
+<p>在项目根目录下新建一个 <code>build.rs</code> 文件即可</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">use</span> std::path::PathBuf;<br><br><span class="hljs-keyword">fn</span> <span class="hljs-title function_">main</span>() &#123;<br>    <span class="hljs-comment">// 告诉 Cargo 在哪里找到链接库</span><br>    <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;cargo:rustc-link-search=native=/root/rust/rust-ffi/cpp/lib&quot;</span>);<br><br>    <span class="hljs-comment">// 链接需要的C++库</span><br>    <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;cargo:rustc-link-lib=dylib=person&quot;</span>);<br>    <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;cargo:rustc-link-lib=dylib=callback&quot;</span>);<br><br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">bindings</span> = bindgen::Builder::<span class="hljs-title function_ invoke__">default</span>()<br>        .<span class="hljs-title function_ invoke__">clang_arg</span>(<span class="hljs-string">&quot;-xc++&quot;</span>)<br>        .<span class="hljs-title function_ invoke__">header</span>(<span class="hljs-string">&quot;/root/rust/rust-ffi/cpp/include/person.h&quot;</span>)<br>        .<span class="hljs-title function_ invoke__">header</span>(<span class="hljs-string">&quot;/root/rust/rust-ffi/cpp/include/callback.h&quot;</span>)<br>        .<span class="hljs-title function_ invoke__">generate</span>()<br>        .<span class="hljs-title function_ invoke__">expect</span>(<span class="hljs-string">&quot;Failed to generate bindings&quot;</span>);<br><br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">_</span> = bindings.<span class="hljs-title function_ invoke__">write_to_file</span>(PathBuf::<span class="hljs-title function_ invoke__">from</span>(<span class="hljs-string">&quot;src/bindings.rs&quot;</span>));<br>&#125;<br><br></code></pre></td></tr></table></figure>
+
+<h1 id="Rust与JS的FFI"><a href="#Rust与JS的FFI" class="headerlink" title="Rust与JS的FFI"></a>Rust与JS的FFI</h1><h2 id="NodeJS运行时调用流程"><a href="#NodeJS运行时调用流程" class="headerlink" title="NodeJS运行时调用流程"></a><strong>NodeJS运行时调用流程</strong></h2><ol>
+<li><p><strong>JS 发起调用</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs javascript"><span class="hljs-keyword">const</span> tool= <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;libadd.node&#x27;</span>);<br>tool.<span class="hljs-title function_">add</span>(<span class="hljs-number">3</span>, <span class="hljs-number">5</span>);<br></code></pre></td></tr></table></figure>
+
+<p><em>对于常规的js模块，在require时会执行一次这个模块，返回一个exports对象</em><br>同样的，require引入Native库会自动执行库中的<code>napi_register_module_v1</code>，这个函数需要返回一个exports对象</p>
+</li>
+<li><p><strong>Node.js 引擎处理</strong></p>
+<ul>
+<li>Node.js 将 JS 参数转换为 N-API 可识别的数据结构。</li>
+<li>创建一个 <code>napi_callback_info</code> 对象，封装调用上下文（参数、this 值等）。</li>
+</ul>
+</li>
+<li><p><strong>C函数执行</strong></p>
+<ul>
+<li>N-API 的绑定函数被调用，接收 <code>napi_env</code> 和 <code>napi_callback_info</code>。</li>
+<li>从 <code>napi_callback_info</code> 中提取参数，转换为 C 类型。</li>
+<li>调用底层 C 函数。</li>
+</ul>
+</li>
+<li><p><strong>返回结果给 JS</strong></p>
+<ul>
+<li>C 将结果通过 <code>napi_env</code> 转换为 JS 类型。</li>
+<li>Node.js 将结果返回给 JS 调用方。</li>
+</ul>
+</li>
+</ol>
+<h2 id="初始化部分"><a href="#初始化部分" class="headerlink" title="初始化部分"></a>初始化部分</h2><figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-meta">#[unsafe(no_mangle)]</span><br><span class="hljs-keyword">unsafe</span> <span class="hljs-keyword">extern</span> <span class="hljs-string">&quot;C&quot;</span> <span class="hljs-keyword">fn</span> <span class="hljs-title function_">napi_register_module_v1</span>(env: napi_env, exports: napi_value) <span class="hljs-punctuation">-&gt;</span> napi_value &#123;<br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">register_name</span> = CString::<span class="hljs-title function_ invoke__">new</span>(<span class="hljs-string">&quot;rustAdd&quot;</span>).<span class="hljs-title function_ invoke__">unwrap</span>();<br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">register_desc</span> = [napi_property_descriptor &#123;<br>        utf8name: register_name.<span class="hljs-title function_ invoke__">as_ptr</span>(),<br>        name: <span class="hljs-title function_ invoke__">nullptr</span>(),<br>        method: <span class="hljs-title function_ invoke__">Some</span>(add::rust_add),<br>        getter: <span class="hljs-literal">None</span>,<br>        setter: <span class="hljs-literal">None</span>,<br>        value: <span class="hljs-title function_ invoke__">nullptr</span>(),<br>        attributes: napi_property_attributes::napi_default,<br>        data: <span class="hljs-title function_ invoke__">nullptr</span>(),<br>    &#125;];<br><br>    <span class="hljs-keyword">unsafe</span> &#123; <span class="hljs-title function_ invoke__">napi_define_properties</span>(env, exports, <span class="hljs-number">1</span>, register_desc.<span class="hljs-title function_ invoke__">as_ptr</span>()) &#125;;<br>    exports<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>做了很简单一件事，将一些 <code>napi_property_descriptor</code> 添加到exports对象中</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">pub</span> <span class="hljs-keyword">struct</span> <span class="hljs-title class_">napi_property_descriptor</span> &#123;<br>    <span class="hljs-keyword">pub</span> utf8name: *<span class="hljs-keyword">const</span> ::std::os::raw::c_char,<br>    <span class="hljs-keyword">pub</span> name: napi_value,<br>    <span class="hljs-keyword">pub</span> method: napi_callback,<br>    <span class="hljs-keyword">pub</span> getter: napi_callback,<br>    <span class="hljs-keyword">pub</span> setter: napi_callback,<br>    <span class="hljs-keyword">pub</span> value: napi_value,<br>    <span class="hljs-keyword">pub</span> attributes: napi_property_attributes,<br>    <span class="hljs-keyword">pub</span> data: *<span class="hljs-keyword">mut</span> ::std::os::raw::c_void,<br>&#125;<br><br><span class="hljs-keyword">pub</span> <span class="hljs-keyword">fn</span> <span class="hljs-title function_">napi_define_properties</span>(<br>    env: napi_env,<br>    object: napi_value,<br>    property_count: <span class="hljs-type">usize</span>,<br>    properties: *<span class="hljs-keyword">const</span> napi_property_descriptor,<br>) <span class="hljs-punctuation">-&gt;</span> napi_status;<br></code></pre></td></tr></table></figure>
+
+<p>相关的定义可以使用bindgen工具生成，<a target="_blank" rel="noopener" href="https://codehub-y.huawei.com/g50049197/napi-sys/home">napi-sys</a>，这个库中有详细的README；也可以直接使用 <a target="_blank" rel="noopener" href="https://crates.io/crates/napi">crates.io&#x2F;crates&#x2F;napi</a> 库。</p>
+<h2 id="参数转化与返回值处理"><a href="#参数转化与返回值处理" class="headerlink" title="参数转化与返回值处理"></a>参数转化与返回值处理</h2><p>上文提到的 <code>napi_property_descriptor</code> 中的成员<code>method</code>类型为<code>napi_callback</code>，</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">pub</span> <span class="hljs-keyword">type</span> <span class="hljs-title class_">napi_callback</span> = ::std::option::<span class="hljs-type">Option</span>&lt;<br>    <span class="hljs-keyword">unsafe</span> <span class="hljs-keyword">extern</span> <span class="hljs-string">&quot;C&quot;</span> <span class="hljs-title function_ invoke__">fn</span>(env: napi_env, info: napi_callback_info) <span class="hljs-punctuation">-&gt;</span> napi_value,<br></code></pre></td></tr></table></figure>
+
+<p>nodejs引擎会将函数调用转化为环境+上下文信息的形式，需要对信息进行解析</p>
+<ul>
+<li>获取入参</li>
+</ul>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">pub</span> <span class="hljs-keyword">fn</span> <span class="hljs-title function_">napi_get_cb_info</span>(<br>    env: napi_env,<br>    cbinfo: napi_callback_info,<br>    argc: *<span class="hljs-keyword">mut</span> <span class="hljs-type">usize</span>, <span class="hljs-comment">// 入参个数</span><br>    argv: *<span class="hljs-keyword">mut</span> napi_value, <span class="hljs-comment">// 预分配的入参数组</span><br>    this_arg: *<span class="hljs-keyword">mut</span> napi_value, <span class="hljs-comment">// 接收js调用者</span><br>    data: *<span class="hljs-keyword">mut</span> *<span class="hljs-keyword">mut</span> ::std::os::raw::c_void, <span class="hljs-comment">// 注册函数时附加的信息</span><br>) <span class="hljs-punctuation">-&gt;</span> napi_status;<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>napi值转化为rust值</li>
+</ul>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">let</span> <span class="hljs-keyword">mut </span><span class="hljs-variable">a</span>: <span class="hljs-type">i32</span> = <span class="hljs-number">0</span>;<br><span class="hljs-keyword">let</span> <span class="hljs-keyword">mut </span><span class="hljs-variable">b</span>: <span class="hljs-type">i32</span> = <span class="hljs-number">0</span>;<br><span class="hljs-keyword">unsafe</span> &#123;<br>    <span class="hljs-title function_ invoke__">napi_get_value_int32</span>(env, argv[<span class="hljs-number">0</span>], &amp;<span class="hljs-keyword">mut</span> a);<br>    <span class="hljs-title function_ invoke__">napi_get_value_int32</span>(env, argv[<span class="hljs-number">1</span>], &amp;<span class="hljs-keyword">mut</span> b);<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>具体Rust逻</li>
+<li>rust值转化为napi值</li>
+</ul>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">let</span> <span class="hljs-variable">sum</span> = a + b;<br><span class="hljs-keyword">let</span> <span class="hljs-keyword">mut </span><span class="hljs-variable">result</span> = <span class="hljs-title function_ invoke__">nullptr</span>();<br><span class="hljs-keyword">unsafe</span> &#123; <span class="hljs-title function_ invoke__">napi_create_int32</span>(env, sum, &amp;<span class="hljs-keyword">mut</span> result); &#125;<br>result<br></code></pre></td></tr></table></figure>
+
+<h2 id="编译并从JS侧使用"><a href="#编译并从JS侧使用" class="headerlink" title="编译并从JS侧使用"></a>编译并从JS侧使用</h2><p><code>Cargo.toml</code> 中需要标注</p>
+<figure class="highlight toml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs toml"><span class="hljs-section">[lib]</span><br><span class="hljs-attr">crate-type</span> = [<span class="hljs-string">&quot;cdylib&quot;</span>]<br></code></pre></td></tr></table></figure>
+
+<p>才会编译出动态链接库</p>
+<p>将编译的库重命名为 <code>*.node</code>，在js中通过require导入使用</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs js"><span class="hljs-keyword">const</span> &#123; rustAdd &#125; = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;./libtool.node&#x27;</span>);<br><span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">rustAdd</span>(<span class="hljs-number">1</span>, <span class="hljs-number">2</span>)); <span class="hljs-comment">// Should print 3</span><br></code></pre></td></tr></table></figure>
+
+<h2 id="Rust-JS-FFI-的便捷实现"><a href="#Rust-JS-FFI-的便捷实现" class="headerlink" title="Rust JS FFI 的便捷实现"></a>Rust JS FFI 的便捷实现</h2><p>假设一个场景，rust需要向js暴露一个类，提供构造函数和成员的getter setter，同时暴露一个函数，有一个入参是这个类。（只是举个例子，实际上不推荐这么做）</p>
+<p>上面的需求让AI生成，大概300行，可以使用现有的库来简化（前文提到的napi-rs），各种详细用法的文档位于 <a target="_blank" rel="noopener" href="https://napi.rs/">napi.rs</a></p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">use</span> napi::&#123;Error, <span class="hljs-type">Result</span>&#125;;<br><span class="hljs-keyword">use</span> napi_derive::napi;<br><span class="hljs-meta">#[napi]</span><br><span class="hljs-keyword">pub</span> <span class="hljs-keyword">struct</span> <span class="hljs-title class_">MyClass</span> &#123;<br>  value: <span class="hljs-type">i32</span>,<br>  name: <span class="hljs-type">String</span>,<br>&#125;<br><span class="hljs-meta">#[napi]</span><br><span class="hljs-keyword">impl</span> <span class="hljs-title class_">MyClass</span> &#123;<br>  <span class="hljs-meta">#[napi(constructor)]</span><br>  <span class="hljs-keyword">pub</span> <span class="hljs-keyword">fn</span> <span class="hljs-title function_">new</span>(value: <span class="hljs-type">i32</span>, name: <span class="hljs-type">String</span>) <span class="hljs-punctuation">-&gt;</span> <span class="hljs-type">Result</span>&lt;<span class="hljs-keyword">Self</span>&gt; &#123;<br>    <span class="hljs-keyword">if</span> name.<span class="hljs-title function_ invoke__">is_empty</span>() &#123;<br>      <span class="hljs-keyword">return</span> <span class="hljs-title function_ invoke__">Err</span>(Error::<span class="hljs-title function_ invoke__">new</span>(<br>        napi::Status::InvalidArg,<br>        <span class="hljs-string">&quot;Name cannot be empty&quot;</span>.<span class="hljs-title function_ invoke__">to_string</span>(),<br>      ));<br>    &#125;<br>    <span class="hljs-title function_ invoke__">Ok</span>(MyClass &#123; value, name &#125;)<br>  &#125;<br>  <span class="hljs-meta">#[napi(getter)]</span><br>  <span class="hljs-keyword">pub</span> <span class="hljs-keyword">fn</span> <span class="hljs-title function_">value</span>(&amp;<span class="hljs-keyword">self</span>) <span class="hljs-punctuation">-&gt;</span> <span class="hljs-type">i32</span> &#123;<br>    <span class="hljs-keyword">self</span>.value<br>  &#125;<br>  <span class="hljs-meta">#[napi(getter)]</span><br>  <span class="hljs-keyword">pub</span> <span class="hljs-keyword">fn</span> <span class="hljs-title function_">name</span>(&amp;<span class="hljs-keyword">self</span>) <span class="hljs-punctuation">-&gt;</span> &amp;<span class="hljs-type">str</span> &#123;<br>    &amp;<span class="hljs-keyword">self</span>.name<br>  &#125;<br>  <span class="hljs-meta">#[napi(setter)]</span><br>  <span class="hljs-keyword">pub</span> <span class="hljs-keyword">fn</span> <span class="hljs-title function_">set_value</span>(&amp;<span class="hljs-keyword">mut</span> <span class="hljs-keyword">self</span>, value: <span class="hljs-type">i32</span>) &#123;<br>    <span class="hljs-keyword">self</span>.value = value;<br>  &#125;<br>  <span class="hljs-meta">#[napi(setter)]</span><br>  <span class="hljs-keyword">pub</span> <span class="hljs-keyword">fn</span> <span class="hljs-title function_">set_name</span>(&amp;<span class="hljs-keyword">mut</span> <span class="hljs-keyword">self</span>, name: <span class="hljs-type">String</span>) <span class="hljs-punctuation">-&gt;</span> <span class="hljs-type">Result</span>&lt;()&gt; &#123;<br>    <span class="hljs-keyword">if</span> name.<span class="hljs-title function_ invoke__">is_empty</span>() &#123;<br>      <span class="hljs-keyword">return</span> <span class="hljs-title function_ invoke__">Err</span>(Error::<span class="hljs-title function_ invoke__">new</span>(<br>        napi::Status::InvalidArg,<br>        <span class="hljs-string">&quot;Name cannot be empty&quot;</span>.<span class="hljs-title function_ invoke__">to_string</span>(),<br>      ));<br>    &#125;<br>    <span class="hljs-keyword">self</span>.name = name;<br>    <span class="hljs-title function_ invoke__">Ok</span>(())<br>  &#125;<br>&#125;<br><span class="hljs-meta">#[napi]</span><br><span class="hljs-keyword">pub</span> <span class="hljs-keyword">fn</span> <span class="hljs-title function_">print_myclass</span>(obj: &amp;MyClass) &#123;<br>  <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;[Rust] MyClass: value=&#123;&#125;, name=&#x27;&#123;&#125;&#x27;&quot;</span>, obj.value, obj.name);<br>&#125;<br><br></code></pre></td></tr></table></figure>
+
+<h2 id="napi库的一些小问题"><a href="#napi库的一些小问题" class="headerlink" title="napi库的一些小问题"></a>napi库的一些小问题</h2><p>JS是单线程语言，通过事件循环处理异步</p>
+<ul>
+<li>普通函数，只能在主线程执行</li>
+<li>线程安全函数，可以在线程间移动，一般用于回调</li>
+</ul>
+<p>场景：JS可以使用number注册一个入参为string的回调，并使用number调用。</p>
+<p>这种情况，可以将传入的回调（普通函数）转为线程安全函数来存储</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-meta">#[napi]</span><br><span class="hljs-keyword">pub</span> <span class="hljs-keyword">fn</span> <span class="hljs-title function_">send_rust_callback</span>(<br>    id: <span class="hljs-type">i32</span>,<br>    callback: Function&lt;<span class="hljs-symbol">&#x27;static</span>, <span class="hljs-type">String</span>&gt;,<br>) <span class="hljs-punctuation">-&gt;</span> <span class="hljs-type">Result</span>&lt;()&gt; &#123;<br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">tsfn</span> = callback<br>        .<span class="hljs-title function_ invoke__">build_threadsafe_function</span>()<br>        .callee_handled::&lt;<span class="hljs-literal">true</span>&gt;()<br>        .<span class="hljs-title function_ invoke__">build</span>()<br>        .<span class="hljs-title function_ invoke__">unwrap</span>();<br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">map</span> = CALLBACK_MAP.<span class="hljs-title function_ invoke__">get_or_init</span>(|| Mutex::<span class="hljs-title function_ invoke__">new</span>(std::collections::HashMap::<span class="hljs-title function_ invoke__">new</span>()));<br>    <span class="hljs-keyword">let</span> <span class="hljs-keyword">mut </span><span class="hljs-variable">map</span> = map.<span class="hljs-title function_ invoke__">lock</span>().<span class="hljs-title function_ invoke__">unwrap</span>();<br>    map.<span class="hljs-title function_ invoke__">insert</span>(id, tsfn);<br>    <span class="hljs-title function_ invoke__">Ok</span>(())<br>&#125;<br><span class="hljs-meta">#[napi]</span><br><span class="hljs-keyword">pub</span> <span class="hljs-keyword">fn</span> <span class="hljs-title function_">call_rust_callback</span>(id: <span class="hljs-type">i32</span>, message: <span class="hljs-type">String</span>) <span class="hljs-punctuation">-&gt;</span> <span class="hljs-type">Result</span>&lt;()&gt; &#123;<br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">map</span> = CALLBACK_MAP.<span class="hljs-title function_ invoke__">get</span>().<span class="hljs-title function_ invoke__">unwrap</span>().<span class="hljs-title function_ invoke__">lock</span>().<span class="hljs-title function_ invoke__">unwrap</span>();<br>    <span class="hljs-keyword">if</span> <span class="hljs-keyword">let</span> <span class="hljs-variable">Some</span>(cb) = map.<span class="hljs-title function_ invoke__">get</span>(&amp;id) &#123;<br>        cb.<span class="hljs-title function_ invoke__">call</span>(<br>            <span class="hljs-title function_ invoke__">Ok</span>(message),<br>            napi::threadsafe_function::ThreadsafeFunctionCallMode::NonBlocking,<br>        );<br>    &#125; <span class="hljs-keyword">else</span> &#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-title function_ invoke__">Err</span>(Error::<span class="hljs-title function_ invoke__">new</span>(<br>            napi::Status::InvalidArg,<br>            <span class="hljs-built_in">format!</span>(<span class="hljs-string">&quot;No callback found for id: &#123;&#125;&quot;</span>, id),<br>        ));<br>    &#125;<br><br>    <span class="hljs-title function_ invoke__">Ok</span>(())<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>自动生成的 <code>d.ts</code> 文件会是</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs ts"><span class="hljs-keyword">export</span> <span class="hljs-keyword">declare</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">callRustCallback</span>(<span class="hljs-params"><span class="hljs-attr">id</span>: <span class="hljs-built_in">number</span>, <span class="hljs-attr">message</span>: <span class="hljs-built_in">string</span></span>): <span class="hljs-built_in">void</span><br><span class="hljs-keyword">export</span> <span class="hljs-keyword">declare</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">sendRustCallback</span>(<span class="hljs-params"><span class="hljs-attr">id</span>: <span class="hljs-built_in">number</span>, <span class="hljs-attr">callback</span>: <span class="hljs-built_in">any</span></span>): <span class="hljs-built_in">void</span><br></code></pre></td></tr></table></figure>
+
+<p>这样调用，看起来完全没问题</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs ts"><span class="hljs-title function_">sendRustCallback</span>(<span class="hljs-number">114</span>, <span class="hljs-function">(<span class="hljs-params"><span class="hljs-attr">message</span>: <span class="hljs-built_in">string</span></span>) =&gt;</span> &#123;<br>  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;Callback from Rust called!&#x27;</span>, message)<br>&#125;)<br><span class="hljs-title function_">callRustCallback</span>(<span class="hljs-number">114</span>, <span class="hljs-string">&#x27;Hello from TypeScript!&#x27;</span>)<br></code></pre></td></tr></table></figure>
+
+<p>但会输出</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">Callback from Rust called! null<br></code></pre></td></tr></table></figure>
+
+<p>因为回调的约定实际上是 <code>(err: Error | null, arg: string) =&gt; void</code></p>
+<ul>
+<li><code>Ok(value)</code> → <code>(null, value)</code></li>
+<li><code>Err(e)</code> → <code>(new Error(e), undefined)</code></li>
+</ul>
+<p>解决方案：</p>
+<ul>
+<li>手动修改<code>d.ts</code>文件的类型约束</li>
+<li>所有回调函数入参全部使用线程安全函数（这样自动生成的dts文件就是正确的）</li>
+</ul>
+<h1 id="Rust与OH的FFI"><a href="#Rust与OH的FFI" class="headerlink" title="Rust与OH的FFI"></a>Rust与OH的FFI</h1><h2 id="与常规JS的区别"><a href="#与常规JS的区别" class="headerlink" title="与常规JS的区别"></a>与常规JS的区别</h2><p>JSNAPI 通过 dlopen 打开 node 包，然后执行 <code>napi_register_module_v1</code>  来注册包</p>
+<p>OH通过将包的注册函数添加到 <code>.init_array</code> 段，当程序启动，这个库被链接时自动调用<br><img src="/./RustFFI/process_napi.png" srcset="/img/loading.gif" lazyload alt="process_napi"></p>
+<p>其余部分几乎完全一致</p>
+<h2 id="Rust-OH-FFI的便捷实现"><a href="#Rust-OH-FFI的便捷实现" class="headerlink" title="Rust OH FFI的便捷实现"></a>Rust OH FFI的便捷实现</h2><p>使用 <a target="_blank" rel="noopener" href="https://ohos.rs/">ohos.rs</a></p>
+<p>用法几乎与上文 napi-rs 类似的方式相同</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-meta">#[napi(object)]</span><br><span class="hljs-keyword">pub</span> <span class="hljs-keyword">struct</span> <span class="hljs-title class_">Person</span> &#123;<br>    <span class="hljs-keyword">pub</span> name: <span class="hljs-type">String</span>,<br>    <span class="hljs-keyword">pub</span> age: <span class="hljs-type">u32</span>,<br>&#125;<br><span class="hljs-meta">#[napi]</span><br><span class="hljs-keyword">pub</span> <span class="hljs-keyword">fn</span> <span class="hljs-title function_">say_hello</span>(person: Person) <span class="hljs-punctuation">-&gt;</span> <span class="hljs-type">String</span> &#123;<br>    <span class="hljs-built_in">format!</span>(<span class="hljs-string">&quot;Hello, &#123;&#125;! You are &#123;&#125; years old.&quot;</span>, person.name, person.age)<br>&#125;<br><span class="hljs-meta">#[napi]</span><br><span class="hljs-keyword">pub</span> <span class="hljs-keyword">fn</span> <span class="hljs-title function_">rust_call_function</span>(func: ThreadsafeFunction&lt;Person, ()&gt;) <span class="hljs-punctuation">-&gt;</span> <span class="hljs-type">bool</span> &#123;<br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">person</span> = Person &#123;<br>        name: <span class="hljs-string">&quot;Alice&quot;</span>.<span class="hljs-title function_ invoke__">to_string</span>(),<br>        age: <span class="hljs-number">30</span>,<br>    &#125;;<br>    func.<span class="hljs-title function_ invoke__">call_with_return_value</span>(<br>        <span class="hljs-title function_ invoke__">Ok</span>(person),<br>        ThreadsafeFunctionCallMode::NonBlocking,<br>        |ret, _env| &#123;<br>            <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;&#123;:?&#125;&quot;</span>, ret);<br>            <span class="hljs-title function_ invoke__">Ok</span>(())<br>        &#125;<br>    ) == Status::<span class="hljs-literal">Ok</span><br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p><code>ohrs build</code>  编译后即可得到 <code>index.d.ts</code> 与 <code>libxxx.so</code>（也可以使用GN + Ninja编译，文档位于<a target="_blank" rel="noopener" href="https://docs.openharmony.cn/pages/v5.1/zh-cn/device-dev/subsystems/subsys-build-rust-compilation.md">Rust模块配置规则和指导</a> ）</p>
+<h2 id="在鸿蒙项目中使用-so"><a href="#在鸿蒙项目中使用-so" class="headerlink" title="在鸿蒙项目中使用 so"></a>在鸿蒙项目中使用 so</h2><p>新建一个NativeC++项目后，有关cpp的目录中</p>
+<p><code>types</code>文件夹中的每一个子文件夹声明一个模块的类型，在 <code>entry/oh-package.json5</code> 中引入。CMakeLists用于编译 <code>napi_init.cpp</code>，在 <code>entry/build-profile.json5</code> 中引入，对于Rust自行编译so来说意义不大。</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs json"><span class="hljs-punctuation">&#123;</span><br>  ...<br>  <span class="hljs-attr">&quot;dependencies&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>    <span class="hljs-attr">&quot;libentry.so&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;file:./src/main/cpp/types/libentry&quot;</span><br>  <span class="hljs-punctuation">&#125;</span><br><span class="hljs-punctuation">&#125;</span><br></code></pre></td></tr></table></figure>
+
+<p>对于刚刚编译的 <code>libdemo.so</code>，项目路径应该是这样的，在<code>types</code>文件夹中声明类型，在在 <code>entry/oh-package.json5</code> 中引入，将so放入libs下对应平台的文件夹，就可以直接在app中使用了</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs ts"><span class="hljs-keyword">import</span> &#123; add, <span class="hljs-title class_">Person</span>, rustCallFunction, sayHello &#125; <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;libdemo.so&#x27;</span>;<br>hilog.<span class="hljs-title function_">info</span>(<span class="hljs-variable constant_">DOMAIN</span>, <span class="hljs-variable constant_">TAG</span>, <span class="hljs-string">&#x27;Message changed to %&#123;public&#125;s&#x27;</span>, <span class="hljs-variable language_">this</span>.<span class="hljs-property">message</span>);<br>hilog.<span class="hljs-title function_">info</span>(<span class="hljs-variable constant_">DOMAIN</span>, <span class="hljs-variable constant_">TAG</span>, <span class="hljs-string">&#x27;Test Hello 2 + 3 = %&#123;public&#125;d&#x27;</span>, <span class="hljs-title function_">add</span>(<span class="hljs-number">2</span>, <span class="hljs-number">3</span>));<br><span class="hljs-title function_">rustCallFunction</span>(<span class="hljs-function">(<span class="hljs-params"><span class="hljs-attr">err</span>: <span class="hljs-title class_">Error</span> | <span class="hljs-literal">null</span>, <span class="hljs-attr">person</span>: <span class="hljs-title class_">Person</span></span>) =&gt;</span> &#123;<br>	<span class="hljs-keyword">if</span> (err) hilog.<span class="hljs-title function_">error</span>(<span class="hljs-variable constant_">DOMAIN</span>, <span class="hljs-variable constant_">TAG</span>, <span class="hljs-string">&#x27;Error calling Rust function: %&#123;public&#125;s&#x27;</span>, err.<span class="hljs-property">message</span>);<br>    hilog.<span class="hljs-title function_">info</span>(<span class="hljs-variable constant_">DOMAIN</span>, <span class="hljs-variable constant_">TAG</span>, <span class="hljs-string">&#x27;Say Hello from Rust %&#123;public&#125;s&#x27;</span>, <span class="hljs-title function_">sayHello</span>(person));<br>    hilog.<span class="hljs-title function_">info</span>(<span class="hljs-variable constant_">DOMAIN</span>, <span class="hljs-variable constant_">TAG</span>, <span class="hljs-string">&#x27;Rust function returned: %&#123;public&#125;s, %&#123;public&#125;d&#x27;</span>, person.<span class="hljs-property">name</span>, person.<span class="hljs-property">age</span>);<br>&#125;);<br></code></pre></td></tr></table></figure>
+
+<h2 id="鸿蒙系统库"><a href="#鸿蒙系统库" class="headerlink" title="鸿蒙系统库"></a>鸿蒙系统库</h2><p><code>d.ts</code> 文件位于SDK目录中，接口库位于 <code>/sys/lib64/module</code></p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E7%BB%8F%E9%AA%8C%E5%88%86%E4%BA%AB/" class="category-chain-item">经验分享</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/Rust/" class="print-no-link">#Rust</a>
+      
+        <a href="/tags/FFI/" class="print-no-link">#FFI</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Rust/C/JS FFI</div>
+      <div>http://ippclub.github.io/RustFFI/</div>
+    </div>
+    <div class="license-meta">
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2025年8月3日</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>更新于</div>
+          <div>2026年4月16日</div>
+        </div>
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="NC - 非商业性使用">
+                    <i class="iconfont icon-cc-nc"></i>
+                  </span>
+                </a>
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="SA - 相同方式共享">
+                    <i class="iconfont icon-cc-sa"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/DoraSSR%E5%BC%95%E6%93%8E%E5%8E%9F%E7%94%9F%E9%80%82%E9%85%8D%E9%B8%BF%E8%92%99%E7%9A%84%E6%95%85%E4%BA%8B/" title="Dora SSR 引擎原生适配鸿蒙的故事">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Dora SSR 引擎原生适配鸿蒙的故事</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/%E5%BC%80%E6%BA%90%E5%85%B1%E5%88%9B%EF%BC%8C%E6%B8%B8%E6%88%8F%E6%B8%A9%E5%B7%9E%E2%80%94%E2%80%9415%E5%A4%A9%E5%88%9B%E6%84%8F%E7%8B%82%E6%AC%A2/" title="开源共创，游戏温州——15 天创意狂欢">
+                        <span class="hidden-mobile">开源共创，游戏温州——15 天创意狂欢</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+  <div id="waline"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#waline', function() {
+      Fluid.utils.createCssLink('https://registry.npmmirror.com/@waline/client/2.15.8/files/dist/waline.css')
+      Fluid.utils.createScript('https://registry.npmmirror.com/@waline/client/2.15.8/files/dist/waline.js', function() {
+        var options = Object.assign(
+          {"serverURL":"https://waline.harkerhand.cn/","path":"window.location.pathname","meta":["nick","mail","link"],"requiredMeta":["nick"],"lang":"zh-CN","emoji":["https://cdn.jsdelivr.net/gh/walinejs/emojis/weibo","https://cdn.jsdelivr.net/gh/walinejs/emojis/tieba","https://cdn.jsdelivr.net/gh/walinejs/emojis/bmoji","https://cdn.jsdelivr.net/gh/walinejs/emojis/bilibili"],"dark":"html[data-user-color-scheme=\"dark\"]","wordLimit":0,"pageSize":10,"search":false,"reaction":true},
+          {
+            el: '#waline',
+            path: window.location.pathname
+          }
+        )
+        Waline.init(options);
+        Fluid.utils.waitElementVisible('#waline .vcontent', () => {
+          var imgSelector = '#waline .vcontent img:not(.vemoji)';
+          Fluid.plugins.imageCaption(imgSelector);
+          Fluid.plugins.fancyBox(imgSelector);
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

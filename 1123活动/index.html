@@ -1,0 +1,1336 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.ico">
+  <link rel="icon" href="/img/favicon.ico">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="何山">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="11.23活动Git 工具的使用【Git工作流和核心原理 | GitHub基本操作 | VS Code里使用Git和关联GitHub】https:&#x2F;&#x2F;www.bilibili.com&#x2F;video&#x2F;BV1r3411F7kn?vd_source&#x3D;6ad092c4c097102be92aa2d50a2c519e 为什么需要用 Git？ 版本控制：  Git 是一种分布式版本控制工具，可以记录代">
+<meta property="og:type" content="article">
+<meta property="og:title" content="1123活动">
+<meta property="og:url" content="http://ippclub.github.io/1123%E6%B4%BB%E5%8A%A8/index.html">
+<meta property="og:site_name" content="I++ Club">
+<meta property="og:description" content="11.23活动Git 工具的使用【Git工作流和核心原理 | GitHub基本操作 | VS Code里使用Git和关联GitHub】https:&#x2F;&#x2F;www.bilibili.com&#x2F;video&#x2F;BV1r3411F7kn?vd_source&#x3D;6ad092c4c097102be92aa2d50a2c519e 为什么需要用 Git？ 版本控制：  Git 是一种分布式版本控制工具，可以记录代">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2024-11-23T06:00:00.000Z">
+<meta property="article:modified_time" content="2026-04-16T03:07:22.136Z">
+<meta property="article:tag" content="C++">
+<meta property="article:tag" content="I++Club">
+<meta property="article:tag" content="Git">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>1123活动 - I++ Club</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"ippclub.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"always","icon":"#"},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>I++ Club</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/mainbg.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="1123活动"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-author" aria-hidden="true"></i>
+        何山
+      </span>
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-11-23 14:00" pubdate>
+          2024年11月23日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          2.7k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          34 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar category-bar" style="margin-right: -1rem">
+    
+
+
+
+
+
+<div class="category-list">
+  
+  
+    
+    
+    
+    <div class="category row nomargin-x">
+      <a class="category-item 
+          list-group-item category-item-action col-10 col-md-11 col-xm-11" title="科普"
+        id="heading-cb5909f2fd6a1fab81c85d60b5ef82a5" role="tab" data-toggle="collapse" href="#collapse-cb5909f2fd6a1fab81c85d60b5ef82a5"
+        aria-expanded="true"
+      >
+        科普
+        <span class="list-group-count">(8)</span>
+        <i class="iconfont icon-arrowright"></i>
+      </a>
+      
+      <div class="category-collapse collapse show" id="collapse-cb5909f2fd6a1fab81c85d60b5ef82a5"
+           role="tabpanel" aria-labelledby="heading-cb5909f2fd6a1fab81c85d60b5ef82a5">
+        
+        
+          
+  <div class="category-post-list">
+    
+    
+      
+      
+        <a href="/1123%E6%B4%BB%E5%8A%A8/" title="1123活动"
+           class="list-group-item list-group-item-action
+           active">
+          <span class="category-post">1123活动</span>
+        </a>
+      
+    
+      
+      
+        <a href="/Makefile%E7%9A%84%E4%BD%BF%E7%94%A8%E6%96%B9%E6%B3%95/" title="Makefile 的食用方法"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">Makefile 的食用方法</span>
+        </a>
+      
+    
+      
+      
+        <a href="/xv6%E4%BB%A3%E7%A0%81%E9%98%85%E8%AF%BB/" title="xv6 代码阅读"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">xv6 代码阅读</span>
+        </a>
+      
+    
+      
+      
+        <a href="/%E4%B8%80%E4%BA%9B%E6%97%A5%E5%B8%B8%E5%8F%AF%E8%83%BD%E4%BC%9A%E7%94%A8%E5%BE%97%E4%B8%8A%E7%9A%84%E6%8A%80%E6%9C%AF%EF%BC%88%E4%BA%8C%EF%BC%89/" title="一些日常可能会用得上的技术（二）"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">一些日常可能会用得上的技术（二）</span>
+        </a>
+      
+    
+      
+      
+        <a href="/%E4%B8%80%E4%BA%9B%E6%97%A5%E5%B8%B8%E7%94%A8%E7%9A%84%E4%B8%8A%E7%9A%84%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%8A%80%E6%9C%AF%EF%BC%88%E4%B8%80%EF%BC%89/" title="一些日常用的上的计算机技术（一）"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">一些日常用的上的计算机技术（一）</span>
+        </a>
+      
+    
+      
+      
+        <a href="/%E7%88%B1%E4%B8%8E%E9%AD%94%E6%B3%95/" title="爱与魔法"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">爱与魔法</span>
+        </a>
+      
+    
+      
+      
+        <a href="/%E8%BD%AF%E4%BB%B6%E7%BA%A7%E7%A8%8B%E5%BA%8F%E7%9A%84%E7%BC%96%E8%AF%91/" title="软件级应用的编译"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">软件级应用的编译</span>
+        </a>
+      
+    
+      
+      
+        <a href="/%E9%9D%A2%E5%90%91%E6%96%B0%E6%8E%A5%E8%A7%A6%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%9A%84%E5%90%8C%E5%AD%A6%E7%9A%84%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E7%A7%91%E6%99%AE%EF%BC%88%E4%B8%80%EF%BC%89/" title="面向新接触计算机的同学的计算机基础知识科普（一）"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">面向新接触计算机的同学的计算机基础知识科普（一）</span>
+        </a>
+      
+    
+  </div>
+
+        
+      </div>
+    </div>
+  
+</div>
+
+
+  </aside>
+
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">1123活动</h1>
+            
+              <p id="updated-time" class="note note-info" style="">
+                
+                  
+                    本文最后更新于 2026年4月16日 上午
+                  
+                
+              </p>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="11-23活动"><a href="#11-23活动" class="headerlink" title="11.23活动"></a>11.23活动</h1><h2 id="Git-工具的使用"><a href="#Git-工具的使用" class="headerlink" title="Git 工具的使用"></a>Git 工具的使用</h2><p>【Git工作流和核心原理 | GitHub基本操作 | VS Code里使用Git和关联GitHub】<a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1r3411F7kn?vd_source=6ad092c4c097102be92aa2d50a2c519e">https://www.bilibili.com/video/BV1r3411F7kn?vd_source&#x3D;6ad092c4c097102be92aa2d50a2c519e</a></p>
+<h3 id="为什么需要用-Git？"><a href="#为什么需要用-Git？" class="headerlink" title="为什么需要用 Git？"></a>为什么需要用 Git？</h3><ul>
+<li><p><strong>版本控制</strong>：</p>
+<ul>
+<li><p>Git 是一种分布式版本控制工具，可以记录代码的历史修改，方便回溯到任意历史版本。</p>
+</li>
+<li><p>支持分支与合并，便于多人协作和功能开发。</p>
+</li>
+</ul>
+</li>
+<li><p><strong>协作开发</strong>：</p>
+<ul>
+<li><p>通过 Git 和远程仓库（如 GitHub、GitLab），团队成员可以共享代码。</p>
+</li>
+<li><p>提供强大的冲突解决机制，避免覆盖他人代码。</p>
+</li>
+</ul>
+</li>
+<li><p><strong>代码备份</strong>：</p>
+<ul>
+<li>通过远程仓库，代码有了可靠的备份，减少因硬盘损坏或意外删除造成的损失。</li>
+</ul>
+</li>
+</ul>
+<h3 id="怎么用？"><a href="#怎么用？" class="headerlink" title="怎么用？"></a>怎么用？</h3><ol>
+<li><strong>基础命令</strong>：<ul>
+<li><strong>初始化项目</strong>：<code>git init</code></li>
+<li><strong>克隆远程仓库</strong>：<code>git clone &lt;仓库地址&gt;</code></li>
+<li><strong>添加修改到暂存区</strong>：<code>git add &lt;文件&gt;</code> 或 <code>git add .</code></li>
+<li><strong>提交更改</strong>：<code>git commit -m &quot;提交信息&quot;</code></li>
+<li><strong>查看历史记录</strong>：<code>git log</code></li>
+<li><strong>创建分支</strong>：<code>git branch &lt;分支名&gt;</code></li>
+<li><strong>切换分支</strong>：<code>git checkout &lt;分支名&gt;</code></li>
+<li><strong>合并分支</strong>：<code>git merge &lt;分支名&gt;</code></li>
+</ul>
+</li>
+<li><strong>工作流</strong>：<ul>
+<li><strong>Feature 分支开发</strong>：<ol>
+<li>从主分支创建功能分支：<code>git checkout -b feature-xxx</code></li>
+<li>在分支上开发功能并提交更改。</li>
+<li>合并分支到主分支：<code>git checkout main</code>，然后 <code>git merge feature-xxx</code>。</li>
+</ol>
+</li>
+<li><strong>多人协作</strong>：<ol>
+<li>每个开发者拉取最新代码：<code>git pull origin main</code></li>
+<li>提交自己的改动到远程：<code>git push origin feature-xxx</code></li>
+<li>使用 Pull Request 或 Merge Request 进行代码审查。</li>
+</ol>
+</li>
+</ul>
+</li>
+</ol>
+<h3 id="怎么和远程仓库协作？"><a href="#怎么和远程仓库协作？" class="headerlink" title="怎么和远程仓库协作？"></a>怎么和远程仓库协作？</h3><ol>
+<li><strong>SSH 配置</strong>：<ul>
+<li>生成 SSH 密钥：<code>ssh-keygen -t rsa -C &quot;你的邮箱&quot;</code></li>
+<li>添加公钥到远程仓库账户设置中。</li>
+<li>验证连接：<code>ssh -T git@github.com</code>。</li>
+</ul>
+</li>
+<li><strong>Git 设置代理</strong>：<ul>
+<li>设置 HTTP 代理：<code>git config --global http.proxy http://&lt;代理地址&gt;:&lt;端口&gt;</code></li>
+<li>设置 Socks 代理：<code>git config --global http.proxy socks5://&lt;代理地址&gt;:&lt;端口&gt;</code></li>
+</ul>
+</li>
+<li><strong>同步操作</strong>：<ul>
+<li>拉取代码：<code>git pull</code></li>
+<li>推送代码：<code>git push</code></li>
+<li>查看远程仓库：<code>git remote -v</code></li>
+</ul>
+</li>
+</ol>
+<h3 id="开源社区的参与方式"><a href="#开源社区的参与方式" class="headerlink" title="开源社区的参与方式"></a>开源社区的参与方式</h3><ul>
+<li><p>一个可以上手的Demo</p>
+<p>  <a target="_blank" rel="noopener" href="https://github.com/huan-yp/DocxGenerator">https://github.com/huan-yp/DocxGenerator</a></p>
+</li>
+</ul>
+<ol>
+<li><strong>寻找感兴趣的项目</strong>：<ul>
+<li>在 GitHub 或 GitLab 上搜索感兴趣的开源项目。</li>
+<li>查看 <code>README.md</code> 和 <code>CONTRIBUTING.md</code> 了解项目的目标和贡献方式。</li>
+</ul>
+</li>
+<li><strong>贡献代码</strong>：<ul>
+<li><strong>Fork 仓库</strong>：创建项目的个人副本。</li>
+<li><strong>修改代码</strong>：在本地完成修改并提交。</li>
+<li><strong>提交 PR</strong>：将修改提交到原始仓库，等待项目维护者审核。</li>
+</ul>
+</li>
+<li><strong>其他贡献形式</strong>：<ul>
+<li>提交 issue 反馈问题。</li>
+<li>编写或优化文档。</li>
+<li>提供测试案例。</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h2 id="留一个作业"><a href="#留一个作业" class="headerlink" title="留一个作业"></a>留一个作业</h2><ul>
+<li>创建 GitHub 账号，在群里&#x2F;私信你的id&#x2F;个人主页地址（我需要拉你进俱乐部仓库）</li>
+<li>为<a target="_blank" rel="noopener" href="https://github.com/IppClub/legend-of-ipp%E8%BF%99%E4%B8%AA%E5%BA%93%E4%B8%AD%E7%9A%84">https://github.com/IppClub/legend-of-ipp这个库中的</a> <code>/practice/practice24</code> 路径下贡献一个任意的文件（体积不要太大）<ul>
+<li>fork</li>
+<li>new branch</li>
+<li>pull request</li>
+</ul>
+</li>
+</ul>
+<h2 id="C-速通"><a href="#C-速通" class="headerlink" title="C++速通"></a>C++速通</h2><p><strong>略</strong></p>
+<h2 id="各种语言的区别"><a href="#各种语言的区别" class="headerlink" title="各种语言的区别"></a>各种语言的区别</h2><table>
+<thead>
+<tr>
+<th><strong>特性</strong></th>
+<th><strong>C</strong></th>
+<th><strong>C++</strong></th>
+<th><strong>Java</strong></th>
+<th><strong>Python</strong></th>
+<th><strong>JavaScript</strong></th>
+<th><strong>Go</strong></th>
+<th><strong>Rust</strong></th>
+<th><strong>Ruby</strong></th>
+<th><strong>PHP</strong></th>
+<th><strong>Swift</strong></th>
+<th><strong>Kotlin</strong></th>
+<th><strong>R</strong></th>
+<th><strong>MATLAB</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>语言类型</strong></td>
+<td>编译型</td>
+<td>编译型</td>
+<td>编译型 + 虚拟机</td>
+<td>解释型</td>
+<td>解释型</td>
+<td>编译型</td>
+<td>编译型</td>
+<td>解释型</td>
+<td>解释型</td>
+<td>编译型 + 解释型</td>
+<td>编译型 + 解释型</td>
+<td>解释型</td>
+<td>解释型</td>
+</tr>
+<tr>
+<td><strong>用途</strong></td>
+<td>系统编程</td>
+<td>系统编程、高性能开发</td>
+<td>企业级开发</td>
+<td>脚本语言、AI、数据分析</td>
+<td>Web 前端开发</td>
+<td>后端服务开发</td>
+<td>系统编程、安全开发</td>
+<td>脚本语言、Web 开发</td>
+<td>Web 后端开发</td>
+<td>iOS 开发</td>
+<td>Android、多平台开发</td>
+<td>数据分析、统计</td>
+<td>科学计算、工程建模</td>
+</tr>
+<tr>
+<td><strong>运行性能</strong></td>
+<td>高</td>
+<td>高</td>
+<td>较高</td>
+<td>较低</td>
+<td>较低</td>
+<td>高</td>
+<td>高</td>
+<td>较低</td>
+<td>较低</td>
+<td>较高</td>
+<td>较高</td>
+<td>较低</td>
+<td>较低</td>
+</tr>
+<tr>
+<td><strong>学习曲线</strong></td>
+<td>陡峭</td>
+<td>陡峭</td>
+<td>平缓</td>
+<td>平缓</td>
+<td>平缓</td>
+<td>平缓</td>
+<td>陡峭</td>
+<td>平缓</td>
+<td>平缓</td>
+<td>中等</td>
+<td>中等</td>
+<td>平缓</td>
+<td>中等</td>
+</tr>
+<tr>
+<td><strong>静&#x2F;动态类型</strong></td>
+<td>静态</td>
+<td>静态</td>
+<td>静态</td>
+<td>动态</td>
+<td>动态</td>
+<td>静态</td>
+<td>静态</td>
+<td>动态</td>
+<td>动态</td>
+<td>静态</td>
+<td>静态</td>
+<td>动态</td>
+<td>动态</td>
+</tr>
+<tr>
+<td><strong>垃圾回收机制</strong></td>
+<td>无</td>
+<td>有（可选智能指针）</td>
+<td>有</td>
+<td>有</td>
+<td>有</td>
+<td>有</td>
+<td>无</td>
+<td>有</td>
+<td>有</td>
+<td>有</td>
+<td>有</td>
+<td>有</td>
+<td>有</td>
+</tr>
+<tr>
+<td><strong>跨平台性</strong></td>
+<td>高（依赖编译器）</td>
+<td>高（依赖编译器）</td>
+<td>高</td>
+<td>高</td>
+<td>高</td>
+<td>高</td>
+<td>高</td>
+<td>高</td>
+<td>高</td>
+<td>高</td>
+<td>高</td>
+<td>高</td>
+<td>中等</td>
+</tr>
+<tr>
+<td><strong>并发支持</strong></td>
+<td>低（通过库支持）</td>
+<td>高</td>
+<td>中</td>
+<td>中</td>
+<td>中</td>
+<td>高</td>
+<td>高</td>
+<td>中</td>
+<td>低</td>
+<td>中</td>
+<td>中</td>
+<td>低</td>
+<td>低</td>
+</tr>
+<tr>
+<td><strong>典型应用场景</strong></td>
+<td>嵌入式、操作系统开发</td>
+<td>游戏开发、图形渲染</td>
+<td>Web 服务、企业级开发</td>
+<td>AI、自动化脚本、科学计算</td>
+<td>Web 前端交互</td>
+<td>微服务、云计算</td>
+<td>高性能计算、安全开发</td>
+<td>Web 开发、自动化脚本</td>
+<td>Web 后端服务</td>
+<td>iOS 应用开发</td>
+<td>Android 应用开发</td>
+<td>数据统计、可视化</td>
+<td>工程仿真与建模</td>
+</tr>
+</tbody></table>
+<hr>
+<h3 id="扩展语言补充"><a href="#扩展语言补充" class="headerlink" title="扩展语言补充"></a><strong>扩展语言补充</strong></h3><table>
+<thead>
+<tr>
+<th><strong>特性</strong></th>
+<th><strong>HTML</strong></th>
+<th><strong>CSS</strong></th>
+<th><strong>SQL</strong></th>
+<th><strong>Perl</strong></th>
+<th><strong>Lua</strong></th>
+<th><strong>Shell</strong></th>
+<th><strong>Haskell</strong></th>
+<th><strong>Scala</strong></th>
+<th><strong>Dart</strong></th>
+<th><strong>TypeScript</strong></th>
+<th><strong>C#</strong></th>
+<th><strong>Assembly</strong></th>
+<th><strong>Elixir</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>语言类型</strong></td>
+<td>标记语言</td>
+<td>样式语言</td>
+<td>描述语言</td>
+<td>脚本语言</td>
+<td>脚本语言</td>
+<td>脚本语言</td>
+<td>函数式编程</td>
+<td>编译型 + JVM</td>
+<td>编译型 + 解释型</td>
+<td>编译型 + 解释型</td>
+<td>编译型 + 解释型</td>
+<td>汇编语言</td>
+<td>编译型 + BEAM VM</td>
+</tr>
+<tr>
+<td><strong>用途</strong></td>
+<td>Web 页面结构</td>
+<td>Web 页面样式</td>
+<td>数据库查询</td>
+<td>数据处理、文本操作</td>
+<td>游戏嵌入脚本</td>
+<td>自动化脚本</td>
+<td>高阶数学与函数式开发</td>
+<td>大数据、分布式计算</td>
+<td>Web 前端、移动开发</td>
+<td>强类型 Web 开发</td>
+<td>企业级开发</td>
+<td>系统级编程</td>
+<td>并发应用开发</td>
+</tr>
+<tr>
+<td><strong>运行性能</strong></td>
+<td>N&#x2F;A</td>
+<td>N&#x2F;A</td>
+<td>高</td>
+<td>较低</td>
+<td>较低</td>
+<td>较低</td>
+<td>较高</td>
+<td>较高</td>
+<td>较高</td>
+<td>中</td>
+<td>较高</td>
+<td>极高（接近机器码）</td>
+<td>高</td>
+</tr>
+<tr>
+<td><strong>学习曲线</strong></td>
+<td>平缓</td>
+<td>平缓</td>
+<td>平缓</td>
+<td>中等</td>
+<td>中等</td>
+<td>平缓</td>
+<td>陡峭</td>
+<td>中等</td>
+<td>平缓</td>
+<td>中等</td>
+<td>中等</td>
+<td>陡峭</td>
+<td>中等</td>
+</tr>
+<tr>
+<td><strong>静&#x2F;动态类型</strong></td>
+<td>无</td>
+<td>无</td>
+<td>无</td>
+<td>动态</td>
+<td>动态</td>
+<td>动态</td>
+<td>静态</td>
+<td>静态</td>
+<td>静态</td>
+<td>静态</td>
+<td>静态</td>
+<td>N&#x2F;A</td>
+<td>静态</td>
+</tr>
+<tr>
+<td><strong>垃圾回收机制</strong></td>
+<td>无</td>
+<td>无</td>
+<td>无</td>
+<td>有</td>
+<td>有</td>
+<td>无</td>
+<td>有</td>
+<td>有</td>
+<td>有</td>
+<td>有</td>
+<td>有</td>
+<td>无</td>
+<td>有</td>
+</tr>
+<tr>
+<td><strong>跨平台性</strong></td>
+<td>高</td>
+<td>高</td>
+<td>高</td>
+<td>高</td>
+<td>高</td>
+<td>高</td>
+<td>高</td>
+<td>高</td>
+<td>高</td>
+<td>高</td>
+<td>高</td>
+<td>低</td>
+<td>高</td>
+</tr>
+<tr>
+<td><strong>并发支持</strong></td>
+<td>N&#x2F;A</td>
+<td>N&#x2F;A</td>
+<td>无</td>
+<td>中</td>
+<td>中</td>
+<td>无</td>
+<td>高</td>
+<td>高</td>
+<td>高</td>
+<td>中</td>
+<td>中</td>
+<td>低</td>
+<td>高</td>
+</tr>
+<tr>
+<td><strong>典型应用场景</strong></td>
+<td>Web 页面结构定义</td>
+<td>Web 页面样式设计</td>
+<td>数据库操作</td>
+<td>文本处理、快速脚本</td>
+<td>游戏逻辑嵌入</td>
+<td>系统运维、脚本编写</td>
+<td>数学模型、高阶函数式</td>
+<td>数据流处理、Web 开发</td>
+<td>Web、Flutter 开发</td>
+<td>Web 全栈开发</td>
+<td>游戏、桌面开发</td>
+<td>内核开发</td>
+<td>分布式与高并发服务</td>
+</tr>
+</tbody></table>
+<hr>
+<h3 id="一些举例"><a href="#一些举例" class="headerlink" title="一些举例"></a>一些举例</h3><h3 id="1-C-C-静态类型语言"><a href="#1-C-C-静态类型语言" class="headerlink" title="1. C&#x2F;C++: 静态类型语言"></a><strong>1. C&#x2F;C++</strong>: 静态类型语言</h3><p>C 和 C++ 是静态类型语言，变量的类型在编译时确定，且需要显式声明。</p>
+<h3 id="特点："><a href="#特点：" class="headerlink" title="特点："></a>特点：</h3><ul>
+<li><strong>强类型检查</strong>：类型必须严格匹配，否则会导致编译错误。</li>
+<li><strong>高性能</strong>：由于类型在编译时固定，运行时没有额外的类型检查开销。</li>
+</ul>
+<h3 id="示例代码："><a href="#示例代码：" class="headerlink" title="示例代码："></a>示例代码：</h3><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;iostream&gt;</span></span><br><span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;<br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>&#123;<br>    <span class="hljs-type">int</span> a = <span class="hljs-number">10</span>;        <span class="hljs-comment">// 整型变量</span><br>    <span class="hljs-type">double</span> b = <span class="hljs-number">3.14</span>;   <span class="hljs-comment">// 浮点型变量</span><br>    <span class="hljs-type">char</span> c = <span class="hljs-string">&#x27;A&#x27;</span>;      <span class="hljs-comment">// 字符型变量</span><br><br>    <span class="hljs-comment">// 类型错误示例</span><br>    <span class="hljs-comment">// int d = &quot;Hello&quot;;  // 编译错误：无法将字符串赋值给整型变量</span><br><br>    cout &lt;&lt; <span class="hljs-string">&quot;a: &quot;</span> &lt;&lt; a &lt;&lt; <span class="hljs-string">&quot;, b: &quot;</span> &lt;&lt; b &lt;&lt; <span class="hljs-string">&quot;, c: &quot;</span> &lt;&lt; c &lt;&lt; endl;<br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<hr>
+<h3 id="2-Java-Python-强类型语言，但类型系统不同"><a href="#2-Java-Python-强类型语言，但类型系统不同" class="headerlink" title="2. Java&#x2F;Python: 强类型语言，但类型系统不同"></a><strong>2. Java&#x2F;Python</strong>: 强类型语言，但类型系统不同</h3><ul>
+<li><strong>Java</strong>: 静态强类型语言，变量类型在编译时确定。</li>
+<li><strong>Python</strong>: 动态强类型语言，变量类型在运行时确定，但不同类型间的操作依然有严格的限制。</li>
+</ul>
+<h3 id="Java-示例代码："><a href="#Java-示例代码：" class="headerlink" title="Java 示例代码："></a>Java 示例代码：</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">Main</span> &#123;<br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">main</span><span class="hljs-params">(String[] args)</span> &#123;<br>        <span class="hljs-type">int</span> <span class="hljs-variable">a</span> <span class="hljs-operator">=</span> <span class="hljs-number">42</span>;               <span class="hljs-comment">// 整型变量</span><br>        <span class="hljs-type">String</span> <span class="hljs-variable">b</span> <span class="hljs-operator">=</span> <span class="hljs-string">&quot;Hello&quot;</span>;       <span class="hljs-comment">// 字符串变量</span><br><br>        <span class="hljs-comment">// 类型错误示例</span><br>        <span class="hljs-comment">// int c = b;             // 编译错误：不能将字符串赋值给整型变量</span><br><br>        System.out.println(<span class="hljs-string">&quot;a: &quot;</span> + a + <span class="hljs-string">&quot;, b: &quot;</span> + b);<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h3 id="Python-示例代码："><a href="#Python-示例代码：" class="headerlink" title="Python 示例代码："></a>Python 示例代码：</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs python">a = <span class="hljs-number">42</span>               <span class="hljs-comment"># 整型变量</span><br>b = <span class="hljs-string">&quot;Hello&quot;</span>          <span class="hljs-comment"># 字符串变量</span><br><br><span class="hljs-comment"># 类型错误示例</span><br><span class="hljs-comment"># c = a + b          # 运行时错误：不能将整型和字符串相加</span><br><br><span class="hljs-built_in">print</span>(<span class="hljs-string">f&quot;a: <span class="hljs-subst">&#123;a&#125;</span>, b: <span class="hljs-subst">&#123;b&#125;</span>&quot;</span>)<br></code></pre></td></tr></table></figure>
+
+<h3 id="区别："><a href="#区别：" class="headerlink" title="区别："></a>区别：</h3><ul>
+<li><strong>Java</strong> 需要在代码中明确指定类型，类型错误在编译阶段发现。</li>
+<li><strong>Python</strong> 的类型是动态的，可以在运行时绑定不同类型的值，但不允许不合法的操作（如整型和字符串相加）。</li>
+</ul>
+<hr>
+<h3 id="插入"><a href="#插入" class="headerlink" title="插入"></a>插入</h3><ul>
+<li><strong>Java 的编译机制</strong></li>
+</ul>
+<ol>
+<li><strong>源代码 (.java)</strong> 会被编译器（<code>javac</code>）编译成字节码（<code>.class</code> 文件），这种字节码是与平台无关的。</li>
+<li>字节码通过 <strong>Java 虚拟机（JVM）</strong> 在运行时解释执行，或者由 JVM 的 <strong>即时编译器（JIT Compiler）</strong> 转换为机器码运行。</li>
+<li>因此，Java 是一种 <strong>编译型 + 解释型</strong> 的混合语言。</li>
+</ol>
+<h3 id="Java-编译与运行流程："><a href="#Java-编译与运行流程：" class="headerlink" title="Java 编译与运行流程："></a>Java 编译与运行流程：</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">// 示例代码 (HelloWorld.java)</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">HelloWorld</span> &#123;<br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">main</span><span class="hljs-params">(String[] args)</span> &#123;<br>        System.out.println(<span class="hljs-string">&quot;Hello, Java!&quot;</span>);<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>编译过程：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">javac HelloWorld.java    <span class="hljs-comment"># 编译为字节码 (HelloWorld.class)</span><br>java HelloWorld          <span class="hljs-comment"># 由 JVM 运行字节码</span><br></code></pre></td></tr></table></figure>
+
+<hr>
+<h3 id="Python-的编译机制"><a href="#Python-的编译机制" class="headerlink" title="Python 的编译机制"></a><strong>Python 的编译机制</strong></h3><ul>
+<li><strong>Python 不需要显式编译</strong>，但实际上也会经历一个编译步骤。</li>
+</ul>
+<ol>
+<li><strong>Python 源代码 (.py)</strong> 会在运行时由 <strong>解释器</strong> 编译为字节码（<code>.pyc</code> 文件），这种字节码是解释器能直接执行的中间代码。</li>
+<li>Python 的字节码由 <strong>Python 虚拟机（PVM）</strong> 执行，完成实际的程序运行。</li>
+<li>这种编译过程是透明的，用户不需要手动执行，因此 Python 通常被称为 <strong>解释型语言</strong>。</li>
+</ol>
+<h3 id="Python-运行示例："><a href="#Python-运行示例：" class="headerlink" title="Python 运行示例："></a>Python 运行示例：</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># 示例代码 (hello.py)</span><br><span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;Hello, Python!&quot;</span>)<br></code></pre></td></tr></table></figure>
+
+<p>运行过程：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">python hello.py    <span class="hljs-comment"># 自动编译为字节码并执行</span><br></code></pre></td></tr></table></figure>
+
+<hr>
+<h3 id="3-JSON-数据交换格式，弱类型"><a href="#3-JSON-数据交换格式，弱类型" class="headerlink" title="3. JSON: 数据交换格式，弱类型"></a><strong>3. JSON</strong>: 数据交换格式，弱类型</h3><p>JSON 是一种轻量级的数据交换格式，用于存储和传输键值对数据。它不支持复杂的类型系统，通常被视为弱类型语言。</p>
+<h3 id="特点：-1"><a href="#特点：-1" class="headerlink" title="特点："></a>特点：</h3><ul>
+<li>支持基本类型：数字、字符串、布尔值、数组、对象和 <code>null</code>。</li>
+<li>没有严格的类型约束，常用于数据序列化和传输。</li>
+</ul>
+<h3 id="示例-JSON-数据："><a href="#示例-JSON-数据：" class="headerlink" title="示例 JSON 数据："></a>示例 JSON 数据：</h3><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs json"><span class="hljs-punctuation">&#123;</span><br>    <span class="hljs-attr">&quot;name&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;Alice&quot;</span><span class="hljs-punctuation">,</span>      <span class="hljs-comment">// 字符串</span><br>    <span class="hljs-attr">&quot;age&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">25</span><span class="hljs-punctuation">,</span>            <span class="hljs-comment">// 数字</span><br>    <span class="hljs-attr">&quot;is_student&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-literal"><span class="hljs-keyword">false</span></span><span class="hljs-punctuation">,</span>  <span class="hljs-comment">// 布尔值</span><br>    <span class="hljs-attr">&quot;grades&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><span class="hljs-number">85</span><span class="hljs-punctuation">,</span> <span class="hljs-number">90</span><span class="hljs-punctuation">,</span> <span class="hljs-number">92</span><span class="hljs-punctuation">]</span><span class="hljs-punctuation">,</span> <span class="hljs-comment">// 数组</span><br>    <span class="hljs-attr">&quot;address&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span>          <span class="hljs-comment">// 嵌套对象</span><br>        <span class="hljs-attr">&quot;city&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;New York&quot;</span><span class="hljs-punctuation">,</span><br>        <span class="hljs-attr">&quot;zip&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;10001&quot;</span><br>    <span class="hljs-punctuation">&#125;</span><br><span class="hljs-punctuation">&#125;</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="使用-JSON-的代码（Python）："><a href="#使用-JSON-的代码（Python）：" class="headerlink" title="使用 JSON 的代码（Python）："></a>使用 JSON 的代码（Python）：</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> json<br><br><span class="hljs-comment"># JSON 字符串</span><br>data = <span class="hljs-string">&#x27;&#x27;&#x27;</span><br><span class="hljs-string">&#123;</span><br><span class="hljs-string">    &quot;name&quot;: &quot;Alice&quot;,</span><br><span class="hljs-string">    &quot;age&quot;: 25,</span><br><span class="hljs-string">    &quot;is_student&quot;: false,</span><br><span class="hljs-string">    &quot;grades&quot;: [85, 90, 92],</span><br><span class="hljs-string">    &quot;address&quot;: &#123;</span><br><span class="hljs-string">        &quot;city&quot;: &quot;New York&quot;,</span><br><span class="hljs-string">        &quot;zip&quot;: &quot;10001&quot;</span><br><span class="hljs-string">    &#125;</span><br><span class="hljs-string">&#125;</span><br><span class="hljs-string">&#x27;&#x27;&#x27;</span><br><br><span class="hljs-comment"># 解析 JSON 数据</span><br>parsed_data = json.loads(data)<br><br><span class="hljs-built_in">print</span>(parsed_data[<span class="hljs-string">&quot;name&quot;</span>])       <span class="hljs-comment"># 输出: Alice</span><br><span class="hljs-built_in">print</span>(parsed_data[<span class="hljs-string">&quot;grades&quot;</span>][<span class="hljs-number">0</span>])  <span class="hljs-comment"># 输出: 85</span><br></code></pre></td></tr></table></figure>
+
+<hr>
+<h3 id="4-HTML-标记语言，无类型系统"><a href="#4-HTML-标记语言，无类型系统" class="headerlink" title="4. HTML: 标记语言，无类型系统"></a><strong>4. HTML</strong>: 标记语言，无类型系统</h3><p>HTML 是一种标记语言，用于定义 Web 页面结构。它不支持编程语言的类型系统，所有数据内容均以字符串形式存储。</p>
+<h3 id="特点：-2"><a href="#特点：-2" class="headerlink" title="特点："></a>特点：</h3><ul>
+<li>定义页面的内容和结构。</li>
+<li>数据类型在解析时由其他技术（如 JavaScript）或用户代理决定。</li>
+</ul>
+<h3 id="示例-HTML-代码："><a href="#示例-HTML-代码：" class="headerlink" title="示例 HTML 代码："></a>示例 HTML 代码：</h3><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs html"><span class="hljs-meta">&lt;!DOCTYPE <span class="hljs-keyword">html</span>&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">html</span>&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">head</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">title</span>&gt;</span>HTML 示例<span class="hljs-tag">&lt;/<span class="hljs-name">title</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">head</span>&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">body</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">h1</span>&gt;</span>Hello, World!<span class="hljs-tag">&lt;/<span class="hljs-name">h1</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>Age: 25<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span> <span class="hljs-comment">&lt;!-- 数字以文本形式存储 --&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>Is Student: false<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span> <span class="hljs-comment">&lt;!-- 布尔值以文本形式存储 --&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">body</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">html</span>&gt;</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="使用-HTML-的数据（JavaScript）："><a href="#使用-HTML-的数据（JavaScript）：" class="headerlink" title="使用 HTML 的数据（JavaScript）："></a>使用 HTML 的数据（JavaScript）：</h3><figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs jsx"><span class="hljs-comment">// 获取 HTML 中的数据</span><br><span class="hljs-keyword">const</span> ageText = <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">querySelector</span>(<span class="hljs-string">&#x27;p:nth-child(2)&#x27;</span>).<span class="hljs-property">textContent</span>;<br><span class="hljs-keyword">const</span> isStudentText = <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">querySelector</span>(<span class="hljs-string">&#x27;p:nth-child(3)&#x27;</span>).<span class="hljs-property">textContent</span>;<br><br><span class="hljs-comment">// 转换为对应类型</span><br><span class="hljs-keyword">const</span> age = <span class="hljs-built_in">parseInt</span>(ageText.<span class="hljs-title function_">split</span>(<span class="hljs-string">&#x27;: &#x27;</span>)[<span class="hljs-number">1</span>]);<br><span class="hljs-keyword">const</span> isStudent = isStudentText.<span class="hljs-title function_">split</span>(<span class="hljs-string">&#x27;: &#x27;</span>)[<span class="hljs-number">1</span>] === <span class="hljs-string">&#x27;true&#x27;</span>;<br><br><span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">`Age: <span class="hljs-subst">$&#123;age&#125;</span>, Is Student: <span class="hljs-subst">$&#123;isStudent&#125;</span>`</span>);<br></code></pre></td></tr></table></figure>
+
+<hr>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E7%A7%91%E6%99%AE/" class="category-chain-item">科普</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/C/" class="print-no-link">#C++</a>
+      
+        <a href="/tags/I-Club/" class="print-no-link">#I++Club</a>
+      
+        <a href="/tags/Git/" class="print-no-link">#Git</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>1123活动</div>
+      <div>http://ippclub.github.io/1123活动/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>何山</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2024年11月23日</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>更新于</div>
+          <div>2026年4月16日</div>
+        </div>
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="NC - 非商业性使用">
+                    <i class="iconfont icon-cc-nc"></i>
+                  </span>
+                </a>
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="SA - 相同方式共享">
+                    <i class="iconfont icon-cc-sa"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/%E4%B8%80%E4%BA%9B%E6%97%A5%E5%B8%B8%E7%94%A8%E7%9A%84%E4%B8%8A%E7%9A%84%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%8A%80%E6%9C%AF%EF%BC%88%E4%B8%80%EF%BC%89/" title="一些日常用的上的计算机技术（一）">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">一些日常用的上的计算机技术（一）</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/%E7%88%B1%E4%B8%8E%E9%AD%94%E6%B3%95/" title="爱与魔法">
+                        <span class="hidden-mobile">爱与魔法</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+  <div id="waline"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#waline', function() {
+      Fluid.utils.createCssLink('https://registry.npmmirror.com/@waline/client/2.15.8/files/dist/waline.css')
+      Fluid.utils.createScript('https://registry.npmmirror.com/@waline/client/2.15.8/files/dist/waline.js', function() {
+        var options = Object.assign(
+          {"serverURL":"https://waline.harkerhand.cn/","path":"window.location.pathname","meta":["nick","mail","link"],"requiredMeta":["nick"],"lang":"zh-CN","emoji":["https://cdn.jsdelivr.net/gh/walinejs/emojis/weibo","https://cdn.jsdelivr.net/gh/walinejs/emojis/tieba","https://cdn.jsdelivr.net/gh/walinejs/emojis/bmoji","https://cdn.jsdelivr.net/gh/walinejs/emojis/bilibili"],"dark":"html[data-user-color-scheme=\"dark\"]","wordLimit":0,"pageSize":10,"search":false,"reaction":true},
+          {
+            el: '#waline',
+            path: window.location.pathname
+          }
+        )
+        Waline.init(options);
+        Fluid.utils.waitElementVisible('#waline .vcontent', () => {
+          var imgSelector = '#waline .vcontent img:not(.vemoji)';
+          Fluid.plugins.imageCaption(imgSelector);
+          Fluid.plugins.fancyBox(imgSelector);
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

@@ -1,0 +1,800 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.ico">
+  <link rel="icon" href="/img/favicon.ico">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="李瑾">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="&emsp;&emsp;上古时期的互联网，是没有推荐算法的。 &emsp;&emsp;那时候我们怎么找内容？去论坛看精华帖，去博客圈看友链，去 RSS 订阅自己信任的作者。信息是靠人的主观能动性筛选出来的——你觉得谁写得好，你就订阅谁；你觉得哪个论坛氛围对，你就泡在那里。内容的质量，取决于你的品味和判断力。 &emsp;&emsp;那是一个”主动发现”的时代。 &emsp;&emsp;后来事情起了">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SimpleBili：在算法时代，给自己造一个正向的信息茧房">
+<meta property="og:url" content="http://ippclub.github.io/SimpleBili%EF%BC%9A%E5%9C%A8%E7%AE%97%E6%B3%95%E6%97%B6%E4%BB%A3%EF%BC%8C%E7%BB%99%E8%87%AA%E5%B7%B1%E9%80%A0%E4%B8%80%E4%B8%AA%E6%AD%A3%E5%90%91%E7%9A%84%E4%BF%A1%E6%81%AF%E8%8C%A7%E6%88%BF/index.html">
+<meta property="og:site_name" content="I++ Club">
+<meta property="og:description" content="&emsp;&emsp;上古时期的互联网，是没有推荐算法的。 &emsp;&emsp;那时候我们怎么找内容？去论坛看精华帖，去博客圈看友链，去 RSS 订阅自己信任的作者。信息是靠人的主观能动性筛选出来的——你觉得谁写得好，你就订阅谁；你觉得哪个论坛氛围对，你就泡在那里。内容的质量，取决于你的品味和判断力。 &emsp;&emsp;那是一个”主动发现”的时代。 &emsp;&emsp;后来事情起了">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://ippclub.github.io/SimpleBili%EF%BC%9A%E5%9C%A8%E7%AE%97%E6%B3%95%E6%97%B6%E4%BB%A3%EF%BC%8C%E7%BB%99%E8%87%AA%E5%B7%B1%E9%80%A0%E4%B8%80%E4%B8%AA%E6%AD%A3%E5%90%91%E7%9A%84%E4%BF%A1%E6%81%AF%E8%8C%A7%E6%88%BF/%E5%B0%81%E9%9D%A2.jpg">
+<meta property="article:published_time" content="2026-04-15T10:00:00.000Z">
+<meta property="article:modified_time" content="2026-04-16T03:07:22.224Z">
+<meta property="article:tag" content="Flutter">
+<meta property="article:tag" content="media_kit">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://ippclub.github.io/SimpleBili%EF%BC%9A%E5%9C%A8%E7%AE%97%E6%B3%95%E6%97%B6%E4%BB%A3%EF%BC%8C%E7%BB%99%E8%87%AA%E5%B7%B1%E9%80%A0%E4%B8%80%E4%B8%AA%E6%AD%A3%E5%90%91%E7%9A%84%E4%BF%A1%E6%81%AF%E8%8C%A7%E6%88%BF/%E5%B0%81%E9%9D%A2.jpg">
+  
+  
+  
+  <title>SimpleBili：在算法时代，给自己造一个正向的信息茧房 - I++ Club</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"ippclub.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"always","icon":"#"},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>I++ Club</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/SimpleBili%EF%BC%9A%E5%9C%A8%E7%AE%97%E6%B3%95%E6%97%B6%E4%BB%A3%EF%BC%8C%E7%BB%99%E8%87%AA%E5%B7%B1%E9%80%A0%E4%B8%80%E4%B8%AA%E6%AD%A3%E5%90%91%E7%9A%84%E4%BF%A1%E6%81%AF%E8%8C%A7%E6%88%BF/%E5%B0%81%E9%9D%A2.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="SimpleBili：在算法时代，给自己造一个正向的信息茧房"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-author" aria-hidden="true"></i>
+        李瑾
+      </span>
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2026-04-15 18:00" pubdate>
+          2026年4月15日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          2k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          25 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar category-bar" style="margin-right: -1rem">
+    
+
+
+
+
+
+<div class="category-list">
+  
+  
+    
+    
+    
+    <div class="category row nomargin-x">
+      <a class="category-item 
+          list-group-item category-item-action col-10 col-md-11 col-xm-11" title="App"
+        id="heading-ac863f346e618f9a959b5c95d5d28941" role="tab" data-toggle="collapse" href="#collapse-ac863f346e618f9a959b5c95d5d28941"
+        aria-expanded="true"
+      >
+        App
+        <span class="list-group-count">(1)</span>
+        <i class="iconfont icon-arrowright"></i>
+      </a>
+      
+      <div class="category-collapse collapse show" id="collapse-ac863f346e618f9a959b5c95d5d28941"
+           role="tabpanel" aria-labelledby="heading-ac863f346e618f9a959b5c95d5d28941">
+        
+        
+          
+  <div class="category-post-list">
+    
+    
+      
+      
+        <a href="/SimpleBili%EF%BC%9A%E5%9C%A8%E7%AE%97%E6%B3%95%E6%97%B6%E4%BB%A3%EF%BC%8C%E7%BB%99%E8%87%AA%E5%B7%B1%E9%80%A0%E4%B8%80%E4%B8%AA%E6%AD%A3%E5%90%91%E7%9A%84%E4%BF%A1%E6%81%AF%E8%8C%A7%E6%88%BF/" title="SimpleBili：在算法时代，给自己造一个正向的信息茧房"
+           class="list-group-item list-group-item-action
+           active">
+          <span class="category-post">SimpleBili：在算法时代，给自己造一个正向的信息茧房</span>
+        </a>
+      
+    
+  </div>
+
+        
+      </div>
+    </div>
+  
+</div>
+
+
+  </aside>
+
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">SimpleBili：在算法时代，给自己造一个正向的信息茧房</h1>
+            
+              <p id="updated-time" class="note note-info" style="">
+                
+                  
+                    本文最后更新于 2026年4月16日 上午
+                  
+                
+              </p>
+            
+            
+              <div class="markdown-body">
+                
+                <p>&emsp;&emsp;上古时期的互联网，是没有推荐算法的。</p>
+<p>&emsp;&emsp;那时候我们怎么找内容？去论坛看精华帖，去博客圈看友链，去 RSS 订阅自己信任的作者。信息是靠人的主观能动性筛选出来的——你觉得谁写得好，你就订阅谁；你觉得哪个论坛氛围对，你就泡在那里。内容的质量，取决于你的品味和判断力。</p>
+<p>&emsp;&emsp;那是一个”主动发现”的时代。</p>
+<p>&emsp;&emsp;后来事情起了变化。推荐算法接管了一切。各大平台的核心逻辑变成了同一个：系统替你决定你应该看什么。它的目标不是帮你找到最好的内容，而是让你在平台上停留更长时间。为此它不惜使用一切手段——制造信息茧房、放大情绪冲突、无限下拉刷新、精准推送你无法抗拒的诱惑。</p>
+<p>&emsp;&emsp;你打开一个视频 APP，本意只是看看关注的 UP 主有没有更新。结果首页弹出一个标题很炸的视频，你点进去看了一个，系统立刻推了五个类似的，等你意识到的时候，半小时已经过去了。你得到了短暂的刺激，但什么也没记住。</p>
+<p>&emsp;&emsp;这不是你的问题。这是系统的设计目的。</p>
+<p>&emsp;&emsp;算法的茧房是被动的——它根据你的弱点把你包裹起来，让你越来越窄，却浑然不觉。但我们其实可以反其道而行之：<strong>主动给自己造一个正向的茧房。</strong></p>
+<p>&emsp;&emsp;什么是正向的茧房？就是你根据自己的判断，有意识地选择信息来源，主动过滤掉噪声和干扰，构建一个对自己有益的信息环境。和算法的被动投喂不同，这种筛选是有意识的、可控的、可修正的。你决定自己看什么，而不是让系统替你决定。</p>
+<p>&emsp;&emsp;<strong>SimpleBili</strong> 就是基于这个理念做出来的工具。</p>
+<p>&emsp;&emsp;它是一个开源的第三方 Bilibili 客户端，目前支持 Windows 桌面和 Android 手机。它去掉了一切可能让你分心的东西——没有推荐流，没有广告，没有热搜榜单，没有运营弹窗。你登录后看到的，只有你主动关注的 UP 主的最新动态。</p>
+<p>&emsp;&emsp;这不是在做减法，而是在做选择。你选择让自己只接触经过你判断、被你认可的内容来源。这是对抗算法时代信息过载的一种方式，也是上古互联网精神的延续——优质内容，由人去发现。</p>
+<h2 id="功能介绍"><a href="#功能介绍" class="headerlink" title="功能介绍"></a>功能介绍</h2><img src="/SimpleBili%EF%BC%9A%E5%9C%A8%E7%AE%97%E6%B3%95%E6%97%B6%E4%BB%A3%EF%BC%8C%E7%BB%99%E8%87%AA%E5%B7%B1%E9%80%A0%E4%B8%80%E4%B8%AA%E6%AD%A3%E5%90%91%E7%9A%84%E4%BF%A1%E6%81%AF%E8%8C%A7%E6%88%BF/%E6%BC%94%E7%A4%BA.jpg" srcset="/img/loading.gif" lazyload class="" title="演示">
+
+<h3 id="关注动态，干净利落"><a href="#关注动态，干净利落" class="headerlink" title="关注动态，干净利落"></a>关注动态，干净利落</h3><p>&emsp;&emsp;登录后的首页只有一个内容——你关注的 UP 主的最新投稿动态。没有推荐视频，没有热搜榜单，没有广告横幅。每个视频卡片只展示封面、标题、UP 主名称和播放量，信息刚刚好。支持下拉刷新和滚动加载更多。</p>
+<p>&emsp;&emsp;这就是你自己的信息茧房。里面装什么，完全由你决定。</p>
+<h3 id="高质量视频播放"><a href="#高质量视频播放" class="headerlink" title="高质量视频播放"></a>高质量视频播放</h3><p>&emsp;&emsp;播放器基于 media_kit（mpv 内核），这是一个以高性能和高兼容性著称的开源播放引擎。SimpleBili 支持 B 站的 DASH 格式，会自动为你选择最高画质的视频流和最高音质的音频流，播放效果媲美官方客户端。</p>
+<p>&emsp;&emsp;清晰度方面，从 360P 到 4K 超清、HDR、杜比视界都有支持（取决于你的账号会员等级）。播放过程中可以随时切换清晰度，也支持倍速播放，从 0.5 倍到 3.0 倍自由调节。</p>
+<p>&emsp;&emsp;在手机端，长按屏幕右半区域可以快速切换到 3 倍速；在桌面端，空格键暂停&#x2F;播放，左右方向键前进后退，长按右方向键也能触发 3 倍速，操作逻辑和主流播放器一致。</p>
+<p>&emsp;&emsp;全屏播放时，手机端会自动切换为横屏沉浸模式，退出全屏后恢复竖屏。播放器还配备了 32MB 的播放缓冲和 64MB 的 demuxer 缓冲，即使在高倍速播放下也能保持流畅。</p>
+<h3 id="灵活的登录方式"><a href="#灵活的登录方式" class="headerlink" title="灵活的登录方式"></a>灵活的登录方式</h3><p>&emsp;&emsp;SimpleBili 提供两种登录方式。推荐使用扫码登录，打开手机 B 站 APP 扫一下二维码就行。如果你习惯在浏览器上操作，也可以手动从浏览器中复制 Cookie 粘贴登录。</p>
+<p>&emsp;&emsp;Cookie 管理方面做了自动化处理——客户端会自动捕获服务端的 Set-Cookie 响应并更新本地存储，保持登录状态不过期。退出登录时会有确认弹窗，防止误操作。</p>
+<h3 id="搜索与收藏"><a href="#搜索与收藏" class="headerlink" title="搜索与收藏"></a>搜索与收藏</h3><p>&emsp;&emsp;搜索功能支持关键词搜索，结果展示视频封面、标题、播放量、弹幕数和发布日期（含年份），点击直接进入播放页。当你明确知道自己想看什么的时候，搜索是最直接的方式。</p>
+<p>&emsp;&emsp;收藏夹功能也很完整：可以查看账号下的所有收藏夹，浏览收藏夹内的视频列表（支持分页加载），在播放页一键收藏到指定的收藏夹。这是你对好内容的另一种主动筛选——你觉得值得反复看的东西，收进来。</p>
+<h3 id="UP-主主页"><a href="#UP-主主页" class="headerlink" title="UP 主主页"></a>UP 主主页</h3><p>&emsp;&emsp;从动态卡片、搜索结果或播放页都可以跳转到 UP 主主页，查看该 UP 主的全部投稿视频。当你通过某个好视频发现了一个对味的创作者，你可以顺着他的主页把更多好内容挖出来。这也是一种主动发现，和算法推送有本质区别。</p>
+<h2 id="技术实现"><a href="#技术实现" class="headerlink" title="技术实现"></a>技术实现</h2><p>&emsp;&emsp;作为一个开源项目，SimpleBili 的技术选型值得一看。</p>
+<p>&emsp;&emsp;项目使用 Flutter 框架开发，实现了 Windows 和 Android 的跨平台支持。状态管理采用 Riverpod，网络层使用 Dio 并集成了 Cookie 自动管理和 B 站 WBI 接口签名算法。视频播放基于 media_kit，底层是 mpv 引擎。路由使用 GoRouter 实现声明式导航，本地存储通过 shared_preferences 完成持久化。</p>
+<p>&emsp;&emsp;代码结构按功能模块清晰组织：</p>
+<figure class="highlight nix"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs nix">lib<span class="hljs-symbol">/</span><br>├── core<span class="hljs-symbol">/</span>           <span class="hljs-comment"># 核心模块：HTTP 客户端、路由、WBI 签名、RSA 加密</span><br>├── features<span class="hljs-symbol">/</span>       <span class="hljs-comment"># 功能模块</span><br>│   ├── auth<span class="hljs-symbol">/</span>       <span class="hljs-comment">#   登录认证</span><br>│   ├── feed<span class="hljs-symbol">/</span>       <span class="hljs-comment">#   动态流</span><br>│   ├── player<span class="hljs-symbol">/</span>     <span class="hljs-comment">#   视频播放器</span><br>│   ├── search<span class="hljs-symbol">/</span>     <span class="hljs-comment">#   搜索</span><br>│   ├── favorite<span class="hljs-symbol">/</span>   <span class="hljs-comment">#   收藏夹</span><br>│   └── up<span class="hljs-symbol">/</span>         <span class="hljs-comment">#   UP 主主页</span><br>└── shared<span class="hljs-symbol">/</span>         <span class="hljs-comment"># 共享组件：主题、视频卡片、动态卡片</span><br></code></pre></td></tr></table></figure>
+
+<p>&emsp;&emsp;整体架构分层明确，功能边界清晰，代码可读性很好。如果你正在学习 Flutter 应用开发，这个项目是一个不错的参考。</p>
+<h2 id="如何使用"><a href="#如何使用" class="headerlink" title="如何使用"></a>如何使用</h2><p>&emsp;&emsp;Android 用户：从 GitHub Releases 页面下载最新的 APK 文件，传输到手机安装即可。安装前需要在手机设置中开启「允许安装未知来源应用」。</p>
+<p>&emsp;&emsp;Windows 用户：从 Releases 页面下载 Windows 版本，解压后直接运行。</p>
+<p>&emsp;&emsp;项目自 2026 年 3 月首次发布以来，已经迭代到 v0.3.0 版本，陆续加入了验证码登录支持、视频播放优化、缓存和进度条改进、分集视频显示等功能。</p>
+<h2 id="开源信息"><a href="#开源信息" class="headerlink" title="开源信息"></a>开源信息</h2><p>&emsp;&emsp;SimpleBili 由 IppClub 社区维护，代码完全开源。</p>
+<p>&emsp;&emsp;项目地址：github.com&#x2F;IppClub&#x2F;SimpleBili</p>
+<p>&emsp;&emsp;欢迎大家 Star、提 Issue 和 PR。</p>
+<p>&emsp;&emsp;算法可以替你选择，但你永远有权利自己选。</p>
+<hr>
+<p>本项目仅供个人学习和技术交流使用，不存储任何视频内容，所有数据来自 B 站公开接口，与 Bilibili 官方无关。</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/App/" class="category-chain-item">App</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/Flutter/" class="print-no-link">#Flutter</a>
+      
+        <a href="/tags/media-kit/" class="print-no-link">#media_kit</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>SimpleBili：在算法时代，给自己造一个正向的信息茧房</div>
+      <div>http://ippclub.github.io/SimpleBili：在算法时代，给自己造一个正向的信息茧房/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>李瑾</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2026年4月15日</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>更新于</div>
+          <div>2026年4月16日</div>
+        </div>
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="NC - 非商业性使用">
+                    <i class="iconfont icon-cc-nc"></i>
+                  </span>
+                </a>
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="SA - 相同方式共享">
+                    <i class="iconfont icon-cc-sa"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/Dora%E6%B8%B8%E6%88%8F%E5%BC%95%E6%93%8E%E7%9A%84%E5%86%85%E7%BD%AEAI%E7%BC%96%E7%A0%81%E5%8A%A9%E6%89%8B%EF%BC%8C%E5%86%99%E5%95%A6/" title="Dora 游戏引擎的内置 AI 编码助手，写啦">
+                        <span class="hidden-mobile">Dora 游戏引擎的内置 AI 编码助手，写啦</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+  <div id="waline"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#waline', function() {
+      Fluid.utils.createCssLink('https://registry.npmmirror.com/@waline/client/2.15.8/files/dist/waline.css')
+      Fluid.utils.createScript('https://registry.npmmirror.com/@waline/client/2.15.8/files/dist/waline.js', function() {
+        var options = Object.assign(
+          {"serverURL":"https://waline.harkerhand.cn/","path":"window.location.pathname","meta":["nick","mail","link"],"requiredMeta":["nick"],"lang":"zh-CN","emoji":["https://cdn.jsdelivr.net/gh/walinejs/emojis/weibo","https://cdn.jsdelivr.net/gh/walinejs/emojis/tieba","https://cdn.jsdelivr.net/gh/walinejs/emojis/bmoji","https://cdn.jsdelivr.net/gh/walinejs/emojis/bilibili"],"dark":"html[data-user-color-scheme=\"dark\"]","wordLimit":0,"pageSize":10,"search":false,"reaction":true},
+          {
+            el: '#waline',
+            path: window.location.pathname
+          }
+        )
+        Waline.init(options);
+        Fluid.utils.waitElementVisible('#waline .vcontent', () => {
+          var imgSelector = '#waline .vcontent img:not(.vemoji)';
+          Fluid.plugins.imageCaption(imgSelector);
+          Fluid.plugins.fancyBox(imgSelector);
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

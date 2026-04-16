@@ -1,0 +1,947 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.ico">
+  <link rel="icon" href="/img/favicon.ico">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="我最近想要这样一个分享平台：它既可以作为我的笔记工具，记录一些文字不太多又不太少的技术知识，又可以作为一个社交平台让别人认识我，让我可以装逼。微博限制字数，朋友圈也不太合适，于是我还是在博客里开一个以后可能会继续更新的文章。现在 I++ 里的博文只有我在做 C++ 的分享，以后如果有人做同样的事情，甚至写了同名的文章，那就可能要给这整个博客做点修改了，比如在博客的 timeline 上加上作者头像">
+<meta property="og:type" content="article">
+<meta property="og:title" content="我对C++的编程思考">
+<meta property="og:url" content="http://ippclub.github.io/%E6%88%91%E5%AF%B9C-%E7%9A%84%E7%BC%96%E7%A8%8B%E6%80%9D%E8%80%83/index.html">
+<meta property="og:site_name" content="I++ Club">
+<meta property="og:description" content="我最近想要这样一个分享平台：它既可以作为我的笔记工具，记录一些文字不太多又不太少的技术知识，又可以作为一个社交平台让别人认识我，让我可以装逼。微博限制字数，朋友圈也不太合适，于是我还是在博客里开一个以后可能会继续更新的文章。现在 I++ 里的博文只有我在做 C++ 的分享，以后如果有人做同样的事情，甚至写了同名的文章，那就可能要给这整个博客做点修改了，比如在博客的 timeline 上加上作者头像">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2015-12-23T13:38:41.000Z">
+<meta property="article:modified_time" content="2026-04-16T03:07:22.300Z">
+<meta property="article:tag" content="C++">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>我对C++的编程思考 - I++ Club</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"ippclub.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"always","icon":"#"},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>I++ Club</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/mainbg.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="我对C++的编程思考"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2015-12-23 21:38" pubdate>
+          2015年12月23日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          3k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          37 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar category-bar" style="margin-right: -1rem">
+    
+
+
+
+
+
+<div class="category-list">
+  
+  
+    
+    
+    
+    <div class="category row nomargin-x">
+      <a class="category-item 
+          list-group-item category-item-action col-10 col-md-11 col-xm-11" title="未分类"
+        id="heading-ecf7ebb59328ebf2369ce693a2423566" role="tab" data-toggle="collapse" href="#collapse-ecf7ebb59328ebf2369ce693a2423566"
+        aria-expanded="true"
+      >
+        未分类
+        <span class="list-group-count">(13)</span>
+        <i class="iconfont icon-arrowright"></i>
+      </a>
+      
+      <div class="category-collapse collapse show" id="collapse-ecf7ebb59328ebf2369ce693a2423566"
+           role="tabpanel" aria-labelledby="heading-ecf7ebb59328ebf2369ce693a2423566">
+        
+        
+          
+  <div class="category-post-list">
+    
+    
+      
+      
+        <a href="/C-%E7%9A%84%E4%B8%89%E7%A7%8D%E5%AE%9E%E7%8E%B0%E6%8E%A5%E5%8F%A3%E7%9A%84%E6%96%B9%E5%BC%8F/" title="C++ 的三种实现接口的方式"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">C++ 的三种实现接口的方式</span>
+        </a>
+      
+    
+      
+      
+        <a href="/I-Club/" title="I++俱乐部"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">I++俱乐部</span>
+        </a>
+      
+    
+      
+      
+        <a href="/Implementing-an-unique-ptr/" title="Implementing an unique_ptr"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">Implementing an unique_ptr</span>
+        </a>
+      
+    
+      
+      
+        <a href="/Random-Binary-Search-Tree-Treap/" title="Random Binary Search Tree - Treap"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">Random Binary Search Tree - Treap</span>
+        </a>
+      
+    
+      
+      
+        <a href="/React-Native-%E4%B8%8B%E4%B8%80%E4%BB%A3UI%E5%BC%80%E5%8F%91%E6%80%9D%E7%BB%B4/" title="React-Native -- 下一代UI开发思维"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">React-Native -- 下一代UI开发思维</span>
+        </a>
+      
+    
+      
+      
+        <a href="/Swift%E4%B9%8BAnyClass%E4%B8%8E%E5%8A%A8%E6%80%81%E7%B1%BB%E5%9E%8B/" title="Swift之AnyClass与动态类型"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">Swift之AnyClass与动态类型</span>
+        </a>
+      
+    
+      
+      
+        <a href="/mongo-%E6%BA%90%E7%A0%81%E9%98%85%E8%AF%BB%E6%84%9F%E6%82%9F%EF%BC%88%E4%B8%80%EF%BC%89/" title="mongo 源码阅读感悟（一）"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">mongo 源码阅读感悟（一）</span>
+        </a>
+      
+    
+      
+      
+        <a href="/%E5%85%B3%E4%BA%8E-Redis-3-0-%E4%B8%AD%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" title="关于 Redis 3.0 中的数据结构"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">关于 Redis 3.0 中的数据结构</span>
+        </a>
+      
+    
+      
+      
+        <a href="/%E5%85%B3%E4%BA%8E-boost-noncopyable-%E7%9A%84%E4%B8%80%E7%82%B9%E6%80%9D%E8%80%83/" title="关于 boost::noncopyable 的一点思考"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">关于 boost::noncopyable 的一点思考</span>
+        </a>
+      
+    
+      
+      
+        <a href="/%E6%88%91%E5%AF%B9C-%E7%9A%84%E7%BC%96%E7%A8%8B%E6%80%9D%E8%80%83/" title="我对C++的编程思考"
+           class="list-group-item list-group-item-action
+           active">
+          <span class="category-post">我对C++的编程思考</span>
+        </a>
+      
+    
+      
+      
+        <a href="/%E6%8F%90%E4%BA%A4%E6%96%87%E7%AB%A0%E6%A0%BC%E5%BC%8F%E8%A6%81%E6%B1%82/" title="提交文章格式要求"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">提交文章格式要求</span>
+        </a>
+      
+    
+      
+      
+        <a href="/%E7%94%A8-C-%E5%86%99%E4%B8%80%E4%B8%AA-Inet4Address-%E7%B1%BB/" title="用 C++ 写一个 Inet4Address 类"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">用 C++ 写一个 Inet4Address 类</span>
+        </a>
+      
+    
+      
+      
+        <a href="/%E8%AF%BB-leveldb-%E7%9A%84%E6%84%9F%E6%82%9F-%EF%BC%9ACache%E7%9A%84%E8%AE%BE%E8%AE%A1/" title="读 leveldb 的感悟 ：Cache的设计"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">读 leveldb 的感悟 ：Cache的设计</span>
+        </a>
+      
+    
+  </div>
+
+        
+      </div>
+    </div>
+  
+</div>
+
+
+  </aside>
+
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">我对C++的编程思考</h1>
+            
+              <p id="updated-time" class="note note-info" style="">
+                
+                  
+                    本文最后更新于 2026年4月16日 上午
+                  
+                
+              </p>
+            
+            
+              <div class="markdown-body">
+                
+                <p>我最近想要这样一个分享平台：它既可以作为我的笔记工具，记录一些文字不太多又不太少的技术知识，又可以作为一个社交平台让别人认识我，让我可以装逼。微博限制字数，朋友圈也不太合适，于是我还是在博客里开一个以后可能会继续更新的文章。现在 I++ 里的博文只有我在做 C++ 的分享，以后如果有人做同样的事情，甚至写了同名的文章，那就可能要给这整个博客做点修改了，比如在博客的 timeline 上加上作者头像和信息，以前一直想做，因为比较懒所以搁置了。</p>
+<h3 id="应该使用-Returned-Value-Optimization-还是-std-move"><a href="#应该使用-Returned-Value-Optimization-还是-std-move" class="headerlink" title="应该使用 Returned Value Optimization 还是 std::move"></a>应该使用 Returned Value Optimization 还是 <code>std::move</code></h3><hr>
+<p>分享一篇我读过的文章 <a target="_blank" rel="noopener" href="https://www.ibm.com/developerworks/community/blogs/5894415f-be62-4bc0-81c5-3956e82276f3/entry/RVO_V_S_std_move?lang=zh">RVO V.S. std::move</a></p>
+<p>这里讲到了几个以前我未曾求解的顾虑和疑惑：</p>
+<ul>
+<li><p>C++11 其实已经将 RVO 写在标准中并为大多数编译器支持。这样编写合适的代码就不会再有顾虑了。</p>
+</li>
+<li><p>std::move 的使用场景。实际上 std::move 还是会造成一定的开销，只是相比于复制，移动会更快。</p>
+</li>
+</ul>
+<h3 id="C-使用指针还是创建对象？"><a href="#C-使用指针还是创建对象？" class="headerlink" title="C++ 使用指针还是创建对象？"></a>C++ 使用指针还是创建对象？</h3><hr>
+<p>阅读这篇文章：<a target="_blank" rel="noopener" href="http://blog.jobbole.com/90147/">C++中为什么要用指针，而不直接使用对象？</a></p>
+<p>最近写一些代码的时候，仅仅只是因为写的顺了，没经过思考地使用了 <code>std::unique_ptr</code>，现在觉得有些后悔，因为这些地方完全可以用对象代替。但是因为除了代码稍微混乱一些之外，并无伤大雅，所以还在犹豫是否要对他们进行修改。以我现在比较浅薄的经验看来，指针能够让我感觉自然的使用场景大概有这些：</p>
+<ul>
+<li>延迟分配内存（动态分配内存）</li>
+</ul>
+<p>简单的情况是</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs css"><span class="hljs-selector-tag">Object</span>  arr<span class="hljs-selector-attr">[100]</span>;<br><span class="hljs-selector-tag">Object</span>* arr<span class="hljs-selector-attr">[100]</span>;<br></code></pre></td></tr></table></figure>
+<p>对比于上下两种情况，后者在数组初始化的时候开销更小，在有些时候是更好的做法。</p>
+<ul>
+<li>用于 forward declaration</li>
+</ul>
+<p>因为 C++ 要求声明对象必须要有类的定义，这就要求必须要 include 相关头文件，为了减少头文件依赖，有时候会用到指针。这种情况也不多。</p>
+<ul>
+<li>shared_ptr</li>
+</ul>
+<p>针对某一内存块会被多个使用者同时使用的情况。</p>
+<ul>
+<li>用于保留容器元素的继承属性</li>
+</ul>
+<p>假如有 <code>B: public A</code> 与集合 <code>std::set&lt;A&gt;</code>。现在我们需要把 B 放入 A 的集合中，在 Java 中，集合内存储的元素依然是 B，而在 C++ 中，编译器会将 B 复制给类型为 A 的集合元素。此时集合内实际存储的是 A。我们希望实现 Java 的效果，就要使用指针。显然 <code>std::unique_ptr</code> 在这里可以发挥作用。</p>
+<p>讲到这里，我想谈一谈我最近遇到的关于 <code>std::unique_ptr</code> 的几个小经历。</p>
+<p>###有关 <code>std::unique_ptr</code> 的编程经历</p>
+<hr>
+<p>语法多如 C++ 的语言总有很多隐形的坑，在编写代码的过程中有时会陷入困境，不知道如何解决，但是山重水复之后，往往会发现柳暗花明的方法。</p>
+<ul>
+<li>在 stl 容器中存储 unique_ptr</li>
+</ul>
+<p>我们以 <code>std::set</code> 来举例。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-keyword">template</span> &lt; <span class="hljs-keyword">class</span> <span class="hljs-title class_">T</span>,                        <span class="hljs-comment">// set::key_type/value_type</span><br>           <span class="hljs-keyword">class</span> <span class="hljs-title class_">Compare</span> = less&lt;T&gt;,        <span class="hljs-comment">// set::key_compare/value_compare</span><br>           <span class="hljs-keyword">class</span> Alloc = allocator&lt;T&gt;      <span class="hljs-comment">// set::allocator_type</span><br>           &gt; <span class="hljs-keyword">class</span> set;<br></code></pre></td></tr></table></figure>
+
+<p>这个接口告诉我们，用户需要在 <code>std::set</code> 声明处定义比较函数 comparator。换句话说，一个 <code>std::set</code> 由两个东西定义，一个是元素类型，一个是元素之间比较的方法（不考虑 allocator）。</p>
+<p>我们其实可以将 comparator 从 set 的定义中解耦出来。实际上 C++ 有多种实现自定义比较的方法。如这篇文章所讲 <a target="_blank" rel="noopener" href="http://fusharblog.com/3-ways-to-define-comparison-functions-in-cpp/">3 Ways to Define Comparison Functions in C++</a>。简单说就是通过重载 <code>operator&lt;</code> 来自定义比较方法，这样做就<strong>无需显式定义 comparator</strong>。当然，更多的时候，我还是喜欢显式定义 comparator，这样能更清楚的表明，<strong>一个 set 只允许一种comparator</strong>。</p>
+<p>然而，这与 Java 不同。Java 的模板类型会<a target="_blank" rel="noopener" href="http://www.infoq.com/cn/articles/cf-java-generics">在运行时用具体的类型代替</a>。也就是说，给定集合 <code>set&lt;T&gt;</code> 可以代表的不只是 T 的集合，也可以是 T 的子类 SubT1 的集合，SubT2 的集合等等，并且他们之间也互相 compatible（可以直接用等号赋值）。这对面向对象来说是十分自然的一种设计，这意味着当我们将 SubT 继承自 T 之后，我们也同时将 SubT 的 container 继承自 T 的 container。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">//Example Code</span><br>TreeSet&lt;E&gt; treeSet = <span class="hljs-keyword">new</span> <span class="hljs-title class_">TreeSet</span>&lt;E&gt;();<br><span class="hljs-type">SubE</span> <span class="hljs-variable">se</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">SubE</span>(<span class="hljs-number">1</span>, <span class="hljs-number">2</span>);<br>treeSet.add(se);<br><span class="hljs-comment">// E 的 print 会输出 E</span><br><span class="hljs-comment">// SubE 的 print 会输出 SubE</span><br><span class="hljs-comment">// 这里输出的是 SubE</span><br>treeSet.first().print();<br></code></pre></td></tr></table></figure>
+
+<p>而在 C++ 中，我们却需要显式地声明 <code>set&lt;T&gt;</code> 和 <code>set&lt;SubT1&gt;</code>, <code>set&lt;SubT2&gt;</code> … 遇到这个问题，我们可能会开始想到使用 <code>dynamic_cast</code>，然后随即又被<a target="_blank" rel="noopener" href="https://www.zhihu.com/question/22445339">它的低效率</a>（见 effective c++ 中的条款27）给吓跑。如果我们想要避免 <code>dynamic_cast</code>，本质上，我们就需要一些 workaround **避免 <code>dynamic_cast</code>**。</p>
+<p>整理一下思路，我们希望能在 <code>std::set</code> 中实现多态（Polymorphism），这其中的核心问题在于实现多态的 comparator。而我们又不希望通过 RTTI 实现 downcast(dynamic_cast)，这意味着，我们<strong>不能直接使用子类 SubT 进行自定义比较</strong>。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-comment">//Example Code</span><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">A</span> &#123;<br><span class="hljs-keyword">public</span>:<br>	<span class="hljs-type">int</span> a;<br>&#125;;<br><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">B</span> : <span class="hljs-keyword">public</span> A &#123;<br><span class="hljs-keyword">public</span>:<br>	<span class="hljs-type">int</span> b;<br>&#125;;<br><br><span class="hljs-keyword">inline</span> <span class="hljs-type">bool</span> <span class="hljs-keyword">operator</span>&lt;(<span class="hljs-type">const</span> std::unique_ptr&lt;A&gt; &amp;i1,<br>					  <span class="hljs-type">const</span> std::unique_ptr&lt;A&gt; &amp;i2) &#123;<br>	<span class="hljs-keyword">return</span> i1-&gt;a &lt; i2-&gt;a;<br>&#125;<br><br><br><span class="hljs-keyword">typedef</span> std::set&lt;std::unique_ptr&lt;A&gt; &gt; ASet;<br></code></pre></td></tr></table></figure>
+
+<p>上面的代码中，在 <code>ASet</code> 中插入 B 的指针时，不会对属性 <code>b</code> 的值进行比较。简单说，相同 <code>a</code> 值，不同 <code>b</code> 值的 B 会被视作相同。</p>
+<p>排除了几种选择之后，我们可以想到用 virtual function，利用指针保留继承链。最终我使用的方法是<em><strong>留后门</strong></em>：既然不能直接比较 <code>b</code> 的值，就只能绕弯路，<strong>间接地进行比较</strong>。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-keyword">class</span> <span class="hljs-title class_">A</span> &#123;<br><span class="hljs-keyword">public</span>:<br>	<span class="hljs-function"><span class="hljs-keyword">virtual</span> boost::any <span class="hljs-title">Others</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> </span>&#123;<br>		<span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>	&#125;<br><br>	<span class="hljs-function"><span class="hljs-keyword">virtual</span> <span class="hljs-type">bool</span> <span class="hljs-title">CompareOthers</span><span class="hljs-params">(<span class="hljs-type">const</span> A&amp; a)</span> <span class="hljs-type">const</span> </span>&#123;<br>		<span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;<br>	&#125;<br><br>	<span class="hljs-type">int</span> a;<br>&#125;;<br><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">B</span> : <span class="hljs-keyword">public</span> A &#123;<br><span class="hljs-keyword">public</span>:<br>	<span class="hljs-function"><span class="hljs-keyword">virtual</span> boost::any <span class="hljs-title">Others</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> </span>&#123;<br>		<span class="hljs-keyword">return</span> b;<br>	&#125;<br><br>	<span class="hljs-function"><span class="hljs-keyword">virtual</span> <span class="hljs-type">bool</span> <span class="hljs-title">CompareOthers</span><span class="hljs-params">(<span class="hljs-type">const</span> A&amp; a)</span> <span class="hljs-type">const</span> </span>&#123;<br>		<span class="hljs-keyword">return</span> b &lt; boost::<span class="hljs-built_in">any_cast</span>&lt;<span class="hljs-type">int</span>&gt;(rhs.<span class="hljs-built_in">Others</span>());<br>	&#125;<br><br>	<span class="hljs-type">int</span> b;<br>&#125;;<br></code></pre></td></tr></table></figure>
+<p>这里就可以看到我们留后门的两个函数 <code>Others</code> 和 <code>CompareOthers</code>，间接地利用类型转换来实现。最终的自定义比较函数就可以这么写：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-keyword">inline</span> <span class="hljs-type">bool</span> <span class="hljs-keyword">operator</span>&lt;(<span class="hljs-type">const</span> std::unique_ptr&lt;A&gt; &amp;i1,<br>					  <span class="hljs-type">const</span> std::unique_ptr&lt;A&gt; &amp;i2) &#123;<br>	<span class="hljs-keyword">if</span>(i1-&gt;a == i2-&gt;a) &#123;<br>		<span class="hljs-keyword">return</span> i1-&gt;<span class="hljs-built_in">CompareOthers</span>(*i2);<br>	&#125;<br>	<span class="hljs-keyword">return</span> i1-&gt;a &lt; i2-&gt;a;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>这样我们算是基本完成了需求的实现。</p>
+<p>还有一点。上面我们使用了 <code>boost::any</code> 表示可以接受任何值。这样写比较直观，但是<a target="_blank" rel="noopener" href="http://www.nullptr.me/2011/05/10/boostany/"><code>any_cast</code> 的实际性能上貌似与 <code>dynamic_cast</code> 相差不大</a>，都是使用 RTTI。在 benchmark 下，甚至可能出现 <a target="_blank" rel="noopener" href="https://felipedelamuerte.wordpress.com/2012/04/06/why-you-shouldnt-use-boostany-especially-not-in-time-critical-code/"><code>boost::any</code> 比 <code>void *</code> 性能相差近50倍的情况</a>。不过这里有充足的优化空间，我们可以完全不必使用 <code>boost::any_cast</code>，而是简单使用 <code>static_cast</code> 就可完成任务。所以这个方法可行。</p>
+<p>看上去，我们好像漂亮地完成了一个（可以不使用 RTTI 的）<a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Type_erasure"><em><strong>Type Erasure</strong></em></a>。然而，这意味着我们依然需要使用 downcast 来实现 <em><strong>Type inference</strong></em>，否则，我们的子类 SubT 将无法在任何使用了 <code>std::set&lt;std::unique_ptr&lt;T&gt; &gt;</code> 的地方使用。除非我们可以将 T 与其子类完全地从它们的 caller 中解耦出来，这种方案才有意义。换句话说，我们需要让 caller 完全不必在乎它们使用的类型是 T，还是 SubT1，SubT2，所有的细节都由虚函数来完成。如果可以做到这样，我们就能在不使用 RTTI 的情况下，像 Java 那样完成工作。</p>
+<p>当然，如果使用了 RTTI，那 C++ 和 Java 的区别就很小了。</p>
+<p>多数情况下，我们没有办法不使用 downcast。那么现在问题的核心在于，有没有其他的方法，可以在不使用 RTTI 的前提下，实现 downcast。</p>
+<p>如果在对象较小的情况下，我们可以使用 <a target="_blank" rel="noopener" href="http://www.cplusplus.com/forum/articles/18757/"><em><strong>the clone pattern</strong></em></a> 来实现，但在这里不是 clone，我们定义一个 DownCast 函数。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-keyword">template</span>&lt;<span class="hljs-keyword">class</span> <span class="hljs-title class_">T</span>&gt;<br><span class="hljs-keyword">typename</span> std::enable_if&lt;std::is_same&lt;T, B&gt;::value, B&gt;::<span class="hljs-function">type</span><br><span class="hljs-function"><span class="hljs-title">DownCast</span><span class="hljs-params">(<span class="hljs-type">const</span> std::unique_ptr&lt;A&gt; &amp;pA)</span> </span>&#123;<br>  <span class="hljs-function">B <span class="hljs-title">ret</span><span class="hljs-params">(pA-&gt;a, boost::any_cast&lt;<span class="hljs-type">int</span>&gt;(pA-&gt;Others()))</span></span>;<br>  <span class="hljs-keyword">return</span> ret;<br>&#125;<br><br><span class="hljs-comment">// 我们在这里利用复制来进行 downcast，不使用 RTTI</span><br>B b = <span class="hljs-built_in">DownCast</span>&lt;B&gt;(pA);<br></code></pre></td></tr></table></figure>
+<p>当然，我们这里依然假设 <code>boost::any_cast</code> 是一个 exception safe 且 without RTTI 的转换函数。因为我们在这里完全可以优化到这样。</p>
+<p>顺便扔出一个刚刚学会的名词：<a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Substitution_failure_is_not_an_error">SFINAE</a></p>
+<hr>
+<h3 id="更新一下"><a href="#更新一下" class="headerlink" title="更新一下"></a>更新一下</h3><p>之前在 <a target="_blank" rel="noopener" href="https://felipedelamuerte.wordpress.com/2012/04/06/why-you-shouldnt-use-boostany-especially-not-in-time-critical-code/"><code>boost::any</code> 比 <code>void *</code> 性能相差近50倍</a><br>的链接里，博主提供了测试代码。测试程序测试对基本类型<code>size_t</code>转换所用时长。</p>
+<p>benchmark的结果和我的差不太多。<br>在我的 MacBook Air (13-inch, Early 2014)，clang version 3.6.2 下</p>
+<p>debug mode 的数据是：</p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">boost</span>::any - <span class="hljs-number">18</span>.<span class="hljs-number">8269</span><br><span class="hljs-attribute">boost</span>::spirit::hold_any - <span class="hljs-number">3</span>.<span class="hljs-number">50993</span><br><span class="hljs-attribute">void</span> ptr - <span class="hljs-number">0</span>.<span class="hljs-number">860663</span><br></code></pre></td></tr></table></figure>
+<p>release mode 的数据是</p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">boost</span>::any - <span class="hljs-number">8</span>.<span class="hljs-number">41195</span><br><span class="hljs-attribute">boost</span>::spirit::hold_any - <span class="hljs-number">0</span>.<span class="hljs-number">499917</span><br><span class="hljs-attribute">void</span> ptr - <span class="hljs-number">0</span>.<span class="hljs-number">043697</span><br></code></pre></td></tr></table></figure>
+
+<p>公有变量 x 也用了 <code>volatile</code> 修饰，结果应该可靠，可见，<code>boost::any</code> 确实较慢。拖累性能的地方在于exception，可能还因为一部分中间的执行代码，但应该与代码中极少数使用 <code>typeid</code> 的地方无关，知乎上 R大 也曾经解释过，<a target="_blank" rel="noopener" href="https://www.zhihu.com/question/38997922/answer/79179526">而当typeid运算符应用在一个指向多态类型对象的指针上的时候，typeid的实现才需要有运行时行为。</a></p>
+<p>所以我们在上面实现 CompareOthers 和 DownCast 的时候，完全可以不用考虑异常，类型转换失败则程序应停止运行而不是抛出异常。</p>
+<hr>
+<p>###C++ 中指针的不便之处</p>
+<p>跑题了很多，将这次的经历归纳在 <code>std::unique_ptr</code> 下更多的是因为，C++ 中指针与对象之间被区分开，这就意味着，<br>我们在判断两个 <code>std::set&lt;std::unique_ptr&lt;A&gt; &gt;</code> 是否相同时，默认对指针进行比较，而不是对对象进行比较。<br>这个时候，我们要为此编写 <code>std::set</code> 的自定义比较函数。</p>
+<p>我们在使用 <code>std::unordered_set&lt;std::unique_ptr&lt;A&gt; &gt;</code> 时也会有相同的问题，同样的，我们也要编写自定义 hasher。</p>
+<p>如果这被 C++ 标准认为是自然的行为的话，那么，我们来看看它会带来的不便之处。</p>
+<p>不便之处在我们使用 <code>std::set&lt;std::set&lt;std::unique_ptr&gt; &gt;</code> 时尤为突出。虽然 <code>unique_ptr</code> 禁止 copy，但是 set<br>是允许 copy 的，这就意味这我们可能需要重新编写 set<unique_ptr> 的复制函数。这让我很疑惑为什么 unique_ptr<br>没有提供默认的 deep copy 接口来复制所指的对象。</p>
+<p>我们为了使用 <code>std::set&lt;std::unique_ptr&gt;</code>，编写了custom comparator。在使用 <code>std::set&lt;std::set&lt;std::unique_ptr&gt; &gt;</code> 时，我们无需再次编写 comparator（stl 为提供 <code>std::set</code> 了 rational operator）。然而，如果我们使用的是 <code>std::unordered_set&lt;std::set&lt;std::unique_ptr&lt;A&gt; &gt; &gt;</code>，我们可能会这么写：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-keyword">struct</span> <span class="hljs-title class_">AHasher</span> &#123;<br>  <span class="hljs-function"><span class="hljs-type">size_t</span></span><br><span class="hljs-function">  <span class="hljs-title">operator</span><span class="hljs-params">()</span><span class="hljs-params">(<span class="hljs-type">const</span> std::set&lt;std::unique_ptr&lt;A&gt; &amp;val)</span> <span class="hljs-type">const</span> </span>&#123;<br>    <span class="hljs-keyword">return</span> boost::<span class="hljs-built_in">hash_value</span>(val);<br>  &#125;<br>&#125;;<br></code></pre></td></tr></table></figure>
+<p>这里使用了 <code>boost/functional/hash.hpp</code>。这里看起来合理，但程序运行的时候，我们会发现这与我们预期的不符。这是因为，我们忽略了为 <code>std::unique_ptr&lt;A&gt;</code> 自定义 hasher。这里默认地是对指针的值进行 hash，而不是对对象进行 hash。</p>
+<p>重写一下：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-keyword">struct</span> <span class="hljs-title class_">AHasher</span> &#123;<br>  <span class="hljs-function"><span class="hljs-type">size_t</span></span><br><span class="hljs-function">  <span class="hljs-title">operator</span><span class="hljs-params">()</span><span class="hljs-params">(<span class="hljs-type">const</span> std::set&lt;std::unique_ptr&lt;A&gt; &amp;val)</span> <span class="hljs-type">const</span> </span>&#123;<br>    std::<span class="hljs-type">size_t</span> seed = <span class="hljs-number">0</span>;<br>    <span class="hljs-keyword">for</span> (<span class="hljs-type">const</span> <span class="hljs-keyword">auto</span> &amp;it : val) &#123;<br>      boost::<span class="hljs-built_in">hash_combine</span>(seed, it-&gt;<span class="hljs-built_in">HashValue</span>());<br>    &#125;<br>    <span class="hljs-keyword">return</span> seed;<br>  &#125;<br>&#125;;<br></code></pre></td></tr></table></figure>
+
+<p>原来我们在 set 中存储本来的对象，只需要定义好对象本身的 rational operator 和 copy function，亦或者是 <code>unordered_set</code><br>中的 hasher，就可以很自然地使用了。使用了 <code>unique_ptr</code> 之后，我们还需要重新定义 unique_ptr 的对应函数，才能将 <code>unique_ptr</code> 完全视作对象。</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E6%9C%AA%E5%88%86%E7%B1%BB/" class="category-chain-item">未分类</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/C/" class="print-no-link">#C++</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>我对C++的编程思考</div>
+      <div>http://ippclub.github.io/我对C-的编程思考/</div>
+    </div>
+    <div class="license-meta">
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2015年12月23日</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>更新于</div>
+          <div>2026年4月16日</div>
+        </div>
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="NC - 非商业性使用">
+                    <i class="iconfont icon-cc-nc"></i>
+                  </span>
+                </a>
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="SA - 相同方式共享">
+                    <i class="iconfont icon-cc-sa"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/Swift%E4%B9%8BAnyClass%E4%B8%8E%E5%8A%A8%E6%80%81%E7%B1%BB%E5%9E%8B/" title="Swift之AnyClass与动态类型">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Swift之AnyClass与动态类型</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/React-Native-%E4%B8%8B%E4%B8%80%E4%BB%A3UI%E5%BC%80%E5%8F%91%E6%80%9D%E7%BB%B4/" title="React-Native -- 下一代UI开发思维">
+                        <span class="hidden-mobile">React-Native -- 下一代UI开发思维</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+  <div id="waline"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#waline', function() {
+      Fluid.utils.createCssLink('https://registry.npmmirror.com/@waline/client/2.15.8/files/dist/waline.css')
+      Fluid.utils.createScript('https://registry.npmmirror.com/@waline/client/2.15.8/files/dist/waline.js', function() {
+        var options = Object.assign(
+          {"serverURL":"https://waline.harkerhand.cn/","path":"window.location.pathname","meta":["nick","mail","link"],"requiredMeta":["nick"],"lang":"zh-CN","emoji":["https://cdn.jsdelivr.net/gh/walinejs/emojis/weibo","https://cdn.jsdelivr.net/gh/walinejs/emojis/tieba","https://cdn.jsdelivr.net/gh/walinejs/emojis/bmoji","https://cdn.jsdelivr.net/gh/walinejs/emojis/bilibili"],"dark":"html[data-user-color-scheme=\"dark\"]","wordLimit":0,"pageSize":10,"search":false,"reaction":true},
+          {
+            el: '#waline',
+            path: window.location.pathname
+          }
+        )
+        Waline.init(options);
+        Fluid.utils.waitElementVisible('#waline .vcontent', () => {
+          var imgSelector = '#waline .vcontent img:not(.vemoji)';
+          Fluid.plugins.imageCaption(imgSelector);
+          Fluid.plugins.fancyBox(imgSelector);
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
